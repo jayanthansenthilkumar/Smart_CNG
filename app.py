@@ -689,10 +689,14 @@ def _read_stations_file():
                 elif isinstance(row, dict):
                     raw_name = row.get(name_col)
             name = str(raw_name).strip() if raw_name not in (None, '', 'nan') else 'CNG Station'
-            return jsonify({'stations': result})
+            stations.append({
+                'name': name,
+                'position': {'lat': lat, 'lng': lng}
+            })
+        return {'stations': stations}
     except Exception as e:
         app.logger.error(f"Error loading stations from file: {str(e)}")
-        return jsonify({'error': str(e)}), 500
+        return {'error': str(e), 'stations': []}
 
 # CNG Switch Calculator Routes
 @app.route('/cng-switch')
