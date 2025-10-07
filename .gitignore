@@ -1,0 +1,128 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+.env
+
+# Virtual Environment
+venv/
+env/
+ENV/
+
+# IDE specific files
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+*.sublime-workspace
+*.sublime-project
+
+# Project specific
+instance/
+.webassets-cache
+*.log
+logs/
+temp/
+
+# Database
+*.db
+*.sqlite3
+
+# Testing
+.coverage
+htmlcov/
+.tox/
+.nox/
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+
+# Documentation
+docs/_build/
+doc/build/
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+
+# MATLAB specific (for EV-Charging-Station-Location-Optimization-master)
+*.asv
+*.m~
+*.mex*
+*.mat
+slprj/
+sccprj/
+codegen/
+*.slxc
+
+# R specific (for Predicting-Patient-Wait-Time-main)
+.Rhistory
+.Rapp.history
+.RData
+.Ruserdata
+*.Rproj.user/
+*.Rproj
+.Rproj.user
+*.knit.md
+*.utf8.md
+.httr-oauth
+*_cache/
+/cache/
+*.rdb
+
+# Model files
+models/*.pkl
+models/*.h5
+models/*.joblib
+
+# Data files
+*.csv
+*.xlsx
+*.xls
+*.json
+*.xml
+
+# Temporary files
+*.tmp
+*.temp
+temp/
+tmp/
+
+# Exclude specific project files we want to keep
+!EV-Charging-Station-Location-Optimization-master/*.m
+!Predicting-Patient-Wait-Time-main/*.R

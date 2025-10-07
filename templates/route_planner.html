@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuickFill - CNG Route Planner</title>
+    <link rel="icon" href="{{ url_for('static', filename='images/logo.png') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/route_planner.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</head>
+<body>
+    <!-- Animated Background (same as home/dashboard) -->
+    <div class="animated-background">
+        <div class="floating-elements">
+            <div class="floating-shape shape-1"><div class="geometric-pump"></div></div>
+            <div class="floating-shape shape-2"><div class="geometric-pump"></div></div>
+            <div class="floating-shape shape-3"><div class="geometric-pump"></div></div>
+            <div class="floating-shape shape-4"><div class="geometric-pump"></div></div>
+            <div class="floating-shape shape-5"><div class="geometric-pump"></div></div>
+            <div class="floating-shape shape-6"><div class="geometric-pump"></div></div>
+        </div>
+        <div class="particle-container">
+            <div class="particle particle-1"></div>
+            <div class="particle particle-2"></div>
+            <div class="particle particle-3"></div>
+            <div class="particle particle-4"></div>
+            <div class="particle particle-5"></div>
+            <div class="particle particle-6"></div>
+            <div class="particle particle-7"></div>
+            <div class="particle particle-8"></div>
+        </div>
+        <div class="gradient-overlay"></div>
+        <div class="pattern-overlay">
+            <div class="pattern-grid">
+                <div class="grid-line horizontal line-1"></div>
+                <div class="grid-line horizontal line-2"></div>
+                <div class="grid-line horizontal line-3"></div>
+                <div class="grid-line vertical line-4"></div>
+                <div class="grid-line vertical line-5"></div>
+                <div class="grid-line vertical line-6"></div>
+            </div>
+            <div class="floating-dots">
+                <div class="dot dot-1"></div>
+                <div class="dot dot-2"></div>
+                <div class="dot dot-3"></div>
+                <div class="dot dot-4"></div>
+                <div class="dot dot-5"></div>
+                <div class="dot dot-6"></div>
+                <div class="dot dot-7"></div>
+                <div class="dot dot-8"></div>
+            </div>
+            <div class="dynamic-waves">
+                <div class="wave wave-1"></div>
+                <div class="wave wave-2"></div>
+                <div class="wave wave-3"></div>
+            </div>
+        </div>
+    </div>
+    <!-- Reuse the same header as main page -->
+    <div class="title-bar">
+        <div class="logo-container">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="QuickFill Logo" class="logo">
+        </div>
+        <nav class="nav-links">
+            <h1 class="nav-link active">Route Planner</h1>
+        </nav>
+        <div class="profile-section">
+            <button class="about-btn">
+                <i class="fas fa-info-circle"></i>
+            </button>
+            <div class="profile-menu">
+                <button class="profile-button" onclick="toggleProfileDropdown()">
+                    <i class="fas fa-user"></i>
+                    <span class="username">{{ username }}</span>
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="profile-dropdown" id="profileDropdown">
+                    <div class="dropdown-content">
+                        <div class="user-info">
+                            <i class="fas fa-user-circle"></i>
+                            <span>{{ username }}</span>
+                        </div>
+                        <a href="{{ url_for('logout') }}" class="dropdown-item logout">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Logout</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="route-planner-container">
+        <div class="route-form">
+            <h2>Plan Your Route</h2>
+            <form id="route-form">
+                <div class="input-group">
+                    <label for="start-location">Start Location</label>
+                    <div class="location-input-group">
+                        <input type="text" id="start-location" required placeholder="Enter coordinates (lat, lng) or place name">
+                        <button type="button" class="location-btn" onclick="getCurrentLocation()">
+                            <i class="fas fa-location-arrow"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <label for="end-location">Destination</label>
+                    <input type="text" id="end-location" required placeholder="Enter coordinates (lat, lng) or place name, or click map">
+                </div>
+                
+                <div class="input-group">
+                    <label for="cng-model">CNG Vehicle Model</label>
+                    <select id="cng-model" required>
+                        <option value="">Select your CNG vehicle model</option>
+                        <option value="maruti_wagonr_cng">Maruti WagonR CNG</option>
+                        <option value="hyundai_santro_cng">Hyundai Santro CNG</option>
+                        <option value="tata_tiago_cng">Tata Tiago CNG</option>
+                        <option value="maruti_ertiga_cng">Maruti Ertiga CNG</option>
+                        <option value="maruti_dzire_cng">Maruti Dzire S-CNG</option>
+                        <option value="hyundai_nios_cng">Hyundai Grand i10 Nios CNG</option>
+                        <option value="tata_tigor_cng">Tata Tigor CNG</option>
+                        <option value="toyota_glanza_cng">Toyota Glanza CNG</option>
+                        <!-- Add more CNG models -->
+                    </select>
+                </div>
+                
+                <div class="input-group">
+                    <label for="current-fuel">Current CNG Level (%)</label>
+                    <input type="number" id="current-fuel" min="0" max="100" required>
+                </div>
+                
+                <button type="submit" class="plan-route-btn">
+                    <i class="fas fa-route"></i> Plan Route
+                </button>
+            </form>
+        </div>
+        
+        <div class="route-results">
+            <div class="planner-stats">
+                <div class="stat-card">
+                    <i class="fas fa-road"></i>
+                    <div>
+                        <div class="label">Distance</div>
+                        <div class="value" id="summaryDistance">—</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-clock"></i>
+                    <div>
+                        <div class="label">Duration</div>
+                        <div class="value" id="summaryDuration">—</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-gas-pump"></i>
+                    <div>
+                        <div class="label">Stops</div>
+                        <div class="value" id="summaryStops">—</div>
+                    </div>
+                </div>
+            </div>
+            <div id="route-map"></div>
+            <div id="filling-stops">
+                <h3>Recommended CNG Filling Stops</h3>
+                <div id="stops-list"></div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="{{ url_for('static', filename='js/route_planner.js') }}"></script>
+</body>
+</html> 

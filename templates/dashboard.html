@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuickFill - CNG Dashboard</title>
+    <link rel="icon" href="{{ url_for('static', filename='images/logo.png') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="animated-background">
+        <div class="floating-elements">
+            <div class="floating-shape shape-1">
+                <div class="geometric-pump"></div>
+            </div>
+            <div class="floating-shape shape-2">
+                <div class="geometric-pump"></div>
+            </div>
+            <div class="floating-shape shape-3">
+                <div class="geometric-pump"></div>
+            </div>
+            <div class="floating-shape shape-4">
+                <div class="geometric-pump"></div>
+            </div>
+            <div class="floating-shape shape-5">
+                <div class="geometric-pump"></div>
+            </div>
+            <div class="floating-shape shape-6">
+                <div class="geometric-pump"></div>
+            </div>
+        </div>
+        <div class="particle-container">
+            <div class="particle particle-1"></div>
+            <div class="particle particle-2"></div>
+            <div class="particle particle-3"></div>
+            <div class="particle particle-4"></div>
+            <div class="particle particle-5"></div>
+            <div class="particle particle-6"></div>
+            <div class="particle particle-7"></div>
+            <div class="particle particle-8"></div>
+        </div>
+        <div class="gradient-overlay"></div>
+        <div class="pattern-overlay">
+            <div class="pattern-grid">
+                <div class="grid-line horizontal line-1"></div>
+                <div class="grid-line horizontal line-2"></div>
+                <div class="grid-line horizontal line-3"></div>
+                <div class="grid-line vertical line-4"></div>
+                <div class="grid-line vertical line-5"></div>
+                <div class="grid-line vertical line-6"></div>
+            </div>
+            <div class="floating-dots">
+                <div class="dot dot-1"></div>
+                <div class="dot dot-2"></div>
+                <div class="dot dot-3"></div>
+                <div class="dot dot-4"></div>
+                <div class="dot dot-5"></div>
+                <div class="dot dot-6"></div>
+                <div class="dot dot-7"></div>
+                <div class="dot dot-8"></div>
+            </div>
+            <div class="dynamic-waves">
+                <div class="wave wave-1"></div>
+                <div class="wave wave-2"></div>
+                <div class="wave wave-3"></div>
+            </div>
+        </div>
+    </div>
+    <div class="title-bar">
+        <div class="logo-container">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="QuickFill Logo" class="logo">
+        </div>
+        <div class="profile-section">
+            <button class="about-btn">
+                <i class="fas fa-info-circle"></i>
+            </button>
+            <div class="profile-menu">
+                <button class="profile-button" onclick="toggleProfileDropdown()">
+                    <i class="fas fa-user"></i>
+                    <span class="username">{{ username }}</span>
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="profile-dropdown" id="profileDropdown">
+                    <div class="dropdown-content">
+                        <div class="user-info">
+                            <i class="fas fa-user-circle"></i>
+                            <span>{{ username }}</span>
+                        </div>
+                        <a href="{{ url_for('logout') }}" class="dropdown-item logout">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Logout</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="dashboard-container">
+        <!-- Hero Section -->
+        <div class="hero-section animate__animated animate__fadeIn">
+            <div class="hero-content">
+                <h1 class="hero-title">Welcome back, <span class="highlight">{{ username }}</span>!</h1>
+                <p class="hero-subtitle">Your sustainable journey starts here with smart CNG solutions</p>
+                <div class="hero-actions">
+                    <a href="{{ url_for('stations') }}" class="hero-btn primary">
+                        <i class="fas fa-map-marker-alt"></i>
+                        Find Stations
+                    </a>
+                    <a href="{{ url_for('route_planner') }}" class="hero-btn secondary">
+                        <i class="fas fa-route"></i>
+                        Plan Route
+                    </a>
+                </div>
+            </div>
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <div class="stat-number">150+</div>
+                    <div class="stat-label">CNG Stations</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">50+</div>
+                    <div class="stat-label">Fast Fill Locations</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">24/7</div>
+                    <div class="stat-label">Availability</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Features Grid (Unified) -->
+        <div class="features-grid animate__animated animate__fadeInUp">
+            <a href="{{ url_for('stations') }}" class="feature-item">
+                <div class="feature-icon">
+                    <i class="fas fa-map-marker-alt"></i>
+                </div>
+                <div class="feature-content">
+                    <h3>Find CNG Stations</h3>
+                    <p>Locate nearby CNG stations with real-time availability and wait times</p>
+                    <span class="feature-badge">Popular</span>
+                </div>
+            </a>
+
+            <a href="{{ url_for('route_planner') }}" class="feature-item">
+                <div class="feature-icon">
+                    <i class="fas fa-route"></i>
+                </div>
+                <div class="feature-content">
+                    <h3>Smart Route Planning</h3>
+                    <p>Plan optimal routes with filling stops and time estimates</p>
+                    <span class="feature-badge">New</span>
+                </div>
+            </a>
+
+            <a href="{{ url_for('ev_switcher') }}" class="feature-item">
+                <div class="feature-icon">
+                    <i class="fas fa-bolt"></i>
+                </div>
+                <div class="feature-content">
+                    <h3>EV Switcher</h3>
+                    <p>Estimate savings and impact when switching to an EV</p>
+                    <span class="feature-badge">Tool</span>
+                </div>
+            </a>
+
+            <a href="{{ url_for('location_optimizer') }}" class="feature-item">
+                <div class="feature-icon">
+                    <i class="fas fa-map-marker-alt"></i>
+                </div>
+                <div class="feature-content">
+                    <h3>Location Optimizer</h3>
+                    <p>Find optimal locations for new CNG stations</p>
+                    <span class="feature-badge">New</span>
+                </div>
+            </a>
+        </div>
+
+        
+
+        <!-- Tips & Insights Section -->
+        <div class="insights-section animate__animated animate__fadeInUp" style="animation-delay: 0.3s;">
+            <h2 class="section-title">Tips & Insights</h2>
+            <div class="insights-grid">
+                <div class="insight-card">
+                    <div class="insight-icon">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <h3>Optimal Filling Time</h3>
+                    <p>CNG filling is most efficient when your tank is between 20% and 80% full. This ensures faster filling and better fuel economy.</p>
+                </div>
+                
+                <div class="insight-card">
+                    <div class="insight-icon">
+                        <i class="fas fa-leaf"></i>
+                    </div>
+                    <h3>Environmental Impact</h3>
+                    <p>CNG produces 25% fewer greenhouse gas emissions compared to gasoline, making it a cleaner fuel choice for the environment.</p>
+                </div>
+                
+                <div class="insight-card">
+                    <div class="insight-icon">
+                        <i class="fas fa-rupee-sign"></i>
+                    </div>
+                    <h3>Cost Savings</h3>
+                    <p>On average, CNG costs 40-50% less than gasoline, providing significant savings on your fuel expenses over time.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Section -->
+    <footer class="footer animate__animated animate__fadeInUp">
+        <div class="footer-container">
+            <!-- Company Info Section -->
+            <div class="footer-section">
+                <div class="footer-logo" >
+                    <img src="{{ url_for('static', filename='images/logo.png') }}" alt="QuickFill Logo" >
+                </div>
+                <p class="company-description">
+                    QuickFill is your trusted companion for finding CNG stations. 
+                    Making CNG vehicle refueling accessible and convenient for everyone.
+                </p>
+            </div>
+
+            <!-- Quick Links Section -->
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+                    <li><a href="{{ url_for('stations') }}">Find Stations</a></li>
+                    <li><a href="{{ url_for('route_planner') }}">Route Planner</a></li>
+                    <li><a href="{{ url_for('analytics') }}">Analytics</a></li>
+                    <li><a href="{{ url_for('cng_switch') }}">CNG Switch</a></li>
+                </ul>
+            </div>
+
+            <!-- Services Section -->
+            <div class="footer-section">
+                <h3>Services</h3>
+                <ul>
+                    <li><a href="{{ url_for('stations') }}">Find Stations</a></li>
+                    <li><a href="{{ url_for('route_planner') }}">Route Planning</a></li>
+                </ul>
+            </div>
+
+            <!-- Contact Info Section -->
+            <div class="footer-section">
+                <h3>Contact Us</h3>
+                <ul class="contact-info">
+                    <li><i class="fas fa-map-marker-alt"></i> Sharda University, Greater Noida</li>
+                    <li><i class="fas fa-phone"></i> +91 9412678204</li>
+                    <li><i class="fas fa-envelope"></i> aryansharma35x@gmail.com</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Bottom Footer -->
+        <div class="footer-bottom">
+            <div class="footer-bottom-content">
+                <div class="copyright">
+                    © 2024 QuickFill. All rights reserved.
+                </div>
+                <div class="legal-links">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Cookie Policy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- About Modal -->
+    <div class="about-modal" id="aboutModal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <div class="modal-header">
+                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="QuickFill Logo" class="modal-logo" style="width: 180px; height: auto;">
+            </div>
+            <p class="project-description">
+                QuickFill is a web application that provides users with a seamless experience for locating nearby CNG stations. 
+                The app accesses the user's current location and fetches real-time data for finding optimal CNG stations in the vicinity. 
+                Users can interact with the map to view station details and get directions to their chosen CNG station.
+            </p>
+            <h3>Development Team</h3>
+            <div class="team-grid">
+                <div class="team-row">
+                    <div class="team-card">
+                        <div class="profile-image">AS</div>
+                        <h4>Aryan Sharma</h4>
+                        <p class="role">Full Stack Developer</p>
+                        <div class="team-icon">
+                            <i class="fas fa-code"></i>
+                        </div>
+                    </div>
+                    <div class="team-card">
+                        <div class="profile-image">AK</div>
+                        <h4>Anand Kumar Mishra</h4>
+                        <p class="role">Backend Developer</p>
+                        <div class="team-icon">
+                            <i class="fas fa-server"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="team-row">
+                    <div class="team-card">
+                        <div class="profile-image">VD</div>
+                        <h4>Vishal Dubey</h4>
+                        <p class="role">UI/UX Developer</p>
+                        <div class="team-icon">
+                            <i class="fas fa-paint-brush"></i>
+                        </div>
+                    </div>
+                    <div class="team-card">
+                        <div class="profile-image">AP</div>
+                        <h4>Aparna Pandey</h4>
+                        <p class="role">Frontend Developer</p>
+                        <div class="team-icon">
+                            <i class="fas fa-laptop-code"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="team-row">
+                    <div class="team-card">
+                        <div class="profile-image">AG</div>
+                        <h4>Abhishek Gaur</h4>
+                        <p class="role">Backend Developer</p>
+                        <div class="team-icon">
+                            <i class="fas fa-server"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add JavaScript for modal functionality -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const aboutBtn = document.querySelector('.about-btn');
+            const modal = document.getElementById('aboutModal');
+            const closeBtn = document.querySelector('.close-modal');
+
+            aboutBtn.addEventListener('click', () => {
+                modal.style.display = 'block';
+            });
+
+            closeBtn.addEventListener('click', () => {
+                modal.style.display = 'none';
+            });
+
+            window.addEventListener('click', (event) => {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        });
+    </script>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    
+    <!-- New Interactive Functions -->
+    <script>
+        function getCurrentLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    function(position) {
+                        const lat = position.coords.latitude;
+                        const lng = position.coords.longitude;
+                        window.location.href = `/api/stations/${lat}/${lng}`;
+                    },
+                    function(error) {
+                        alert('Unable to get your location. Please enable location services.');
+                    }
+                );
+            } else {
+                alert('Geolocation is not supported by this browser.');
+            }
+        }
+
+        function checkWaitTimes() {
+            // Simulate checking wait times
+            alert('Checking real-time wait times at nearby stations...');
+            // In a real implementation, this would fetch and display wait times
+        }
+
+        function viewSavedStations() {
+            // Simulate viewing saved stations
+            alert('Loading your saved CNG stations...');
+            // In a real implementation, this would show saved stations
+        }
+
+        // Add smooth scrolling for better UX
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add click animations to action buttons
+            const actionBtns = document.querySelectorAll('.action-btn');
+            actionBtns.forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    // Create ripple effect
+                    const ripple = document.createElement('span');
+                    const rect = this.getBoundingClientRect();
+                    const size = Math.max(rect.width, rect.height);
+                    const x = e.clientX - rect.left - size / 2;
+                    const y = e.clientY - rect.top - size / 2;
+                    
+                    ripple.style.width = ripple.style.height = size + 'px';
+                    ripple.style.left = x + 'px';
+                    ripple.style.top = y + 'px';
+                    ripple.classList.add('ripple');
+                    
+                    this.appendChild(ripple);
+                    
+                    setTimeout(() => {
+                        ripple.remove();
+                    }, 600);
+                });
+            });
+        });
+    </script>
+    
+    <style>
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.6);
+            transform: scale(0);
+            animation: ripple-animation 0.6s linear;
+            pointer-events: none;
+        }
+        
+        @keyframes ripple-animation {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+    </style>
+</body>
+</html>

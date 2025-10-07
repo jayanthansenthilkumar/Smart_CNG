@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuickFill - Login</title>
+    <link rel="icon" href="{{ url_for('static', filename='images/logo.png') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</head>
+<body>
+    <!-- Animated Background (mirrors dashboard) -->
+    <div class="animated-background">
+        <div class="floating-elements">
+            <div class="floating-shape shape-1"><div class="geometric-pump"></div></div>
+            <div class="floating-shape shape-2"><div class="geometric-pump"></div></div>
+            <div class="floating-shape shape-3"><div class="geometric-pump"></div></div>
+            <div class="floating-shape shape-4"><div class="geometric-pump"></div></div>
+            <div class="floating-shape shape-5"><div class="geometric-pump"></div></div>
+            <div class="floating-shape shape-6"><div class="geometric-pump"></div></div>
+        </div>
+        <div class="particle-container">
+            <div class="particle particle-1"></div>
+            <div class="particle particle-2"></div>
+            <div class="particle particle-3"></div>
+            <div class="particle particle-4"></div>
+            <div class="particle particle-5"></div>
+            <div class="particle particle-6"></div>
+            <div class="particle particle-7"></div>
+            <div class="particle particle-8"></div>
+        </div>
+        <div class="gradient-overlay"></div>
+        <div class="pattern-overlay">
+            <div class="pattern-grid">
+                <div class="grid-line horizontal line-1"></div>
+                <div class="grid-line horizontal line-2"></div>
+                <div class="grid-line horizontal line-3"></div>
+                <div class="grid-line vertical line-4"></div>
+                <div class="grid-line vertical line-5"></div>
+                <div class="grid-line vertical line-6"></div>
+            </div>
+            <div class="floating-dots">
+                <div class="dot dot-1"></div>
+                <div class="dot dot-2"></div>
+                <div class="dot dot-3"></div>
+                <div class="dot dot-4"></div>
+                <div class="dot dot-5"></div>
+                <div class="dot dot-6"></div>
+                <div class="dot dot-7"></div>
+                <div class="dot dot-8"></div>
+            </div>
+            <div class="dynamic-waves">
+                <div class="wave wave-1"></div>
+                <div class="wave wave-2"></div>
+                <div class="wave wave-3"></div>
+            </div>
+        </div>
+    </div>
+    <div class="login-container">
+        <div class="login-card animate-in">
+            <div class="login-card-header">
+                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="QuickFill Logo" class="login-logo floating">
+                <h1 class="brand">QuickFill</h1>
+                <p class="subtitle">Sign in to continue</p>
+            </div>
+
+            {% if error %}
+            <div class="error-message">{{ error }}</div>
+            {% endif %}
+
+            <form action="{{ url_for('login') }}" method="POST" class="login-form">
+                <div class="input-group">
+                    <label>Username</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-user"></i>
+                        <input type="text" name="username" placeholder="Enter your username" required autofocus>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>Password</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-lock"></i>
+                        <input id="password" type="password" name="password" placeholder="Enter your password" required>
+                        <button type="button" class="toggle-password" aria-label="Show password">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <label class="remember">
+                        <input type="checkbox" name="remember"> Remember me
+                    </label>
+                    <a class="link muted" href="#" onclick="event.preventDefault();">Forgot password?</a>
+                </div>
+
+                <button type="submit" class="login-btn shimmer">
+                    <span><i class="fas fa-sign-in-alt"></i> Login</span>
+                </button>
+            </form>
+
+            <div class="login-footer">
+                <span class="muted">New here?</span>
+                <a class="link" href="#" onclick="event.preventDefault();">Create an account</a>
+            </div>
+        </div>
+        
+        <!-- Project Glimpse Panel -->
+        <aside class="preview-panel">
+            <div class="preview-header">
+                <i class="fas fa-charging-station"></i>
+                <div>
+                    <h2>Smart CNG Recommender</h2>
+                    <p>Find nearby CNG stations with real-time insights.</p>
+                </div>
+            </div>
+            <div class="preview-grid">
+                <div class="preview-card">
+                    <div class="mini-map">
+                        <span class="pin" style="--x:24%;--y:32%"></span>
+                        <span class="pin" style="--x:66%;--y:58%"></span>
+                        <span class="pin" style="--x:42%;--y:74%"></span>
+                    </div>
+                    <div class="card-meta">
+                        <strong>Nearby Stations</strong>
+                        <span>Live distance & wait times</span>
+                    </div>
+                </div>
+                <div class="preview-stats">
+                    <div class="stat">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <div>
+                            <strong>150+</strong>
+                            <span>Stations</span>
+                        </div>
+                    </div>
+                    <div class="stat">
+                        <i class="fas fa-route"></i>
+                        <div>
+                            <strong>Smart</strong>
+                            <span>Route planning</span>
+                        </div>
+                    </div>
+                    <div class="stat">
+                        <i class="fas fa-clock"></i>
+                        <div>
+                            <strong>Real-time</strong>
+                            <span>Wait estimates</span>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </aside>
+    </div>
+
+    <script>
+        // Reveal animation on load
+        window.addEventListener('load', function() {
+            document.querySelector('.login-card')?.classList.add('is-visible');
+        });
+
+        // Show/Hide password
+        const toggleBtn = document.querySelector('.toggle-password');
+        const pwd = document.getElementById('password');
+        if (toggleBtn && pwd) {
+            toggleBtn.addEventListener('click', () => {
+                const isText = pwd.type === 'text';
+                pwd.type = isText ? 'password' : 'text';
+                toggleBtn.innerHTML = isText ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
+            });
+        }
+
+        // Button ripple
+        const btn = document.querySelector('.login-btn');
+        if (btn) {
+            btn.addEventListener('click', function(e) {
+                const ripple = document.createElement('span');
+                ripple.className = 'btn-ripple';
+                const rect = this.getBoundingClientRect();
+                ripple.style.left = `${e.clientX - rect.left}px`;
+                ripple.style.top = `${e.clientY - rect.top}px`;
+                this.appendChild(ripple);
+                setTimeout(() => ripple.remove(), 600);
+            });
+        }
+    </script>
+</body>
+</html> 

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CNG Station Location Optimizer</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/location_optimizer.css') }}">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="CNG Logo" style="height: 35px; width: auto;">
+                <h1>Smart CNG Recommender</h1>
+            </div>
+            <nav class="nav">
+                <a href="{{ url_for('dashboard') }}" class="nav-link">Dashboard</a>
+                <a href="{{ url_for('nearby_stations') }}" class="nav-link">Find Stations</a>
+                <a href="{{ url_for('route_planner') }}" class="nav-link">Route Planner</a>
+                <a href="{{ url_for('location_optimizer') }}" class="nav-link active">Location Optimizer</a>
+                <a href="{{ url_for('analytics') }}" class="nav-link">Analytics</a>
+                <a href="{{ url_for('logout') }}" class="nav-link">Logout</a>
+            </nav>
+        </header>
+
+        <!-- Main Content -->
+        <div class="app-container">
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <div class="sidebar-header">
+                    <h2><i class="fas fa-map-marker-alt"></i> Location Optimizer</h2>
+                    <p>Find optimal locations for new CNG stations</p>
+                </div>
+                <div class="sidebar-content">
+                    <div class="top-controls">
+                        <button id="use-my-location">
+                            <i class="fas fa-location-arrow"></i> Use My Location
+                        </button>
+                        <button id="select-on-map">
+                            <i class="fas fa-map"></i> Select on Map
+                        </button>
+                    </div>
+                    
+                    <!-- Manual Input -->
+                    <div class="manual-input">
+                        <label>Or enter coordinates manually:</label>
+                        <div class="coordinate-inputs">
+                            <input type="number" id="center-lat" step="0.000001" value="28.6139" placeholder="Latitude">
+                            <input type="number" id="center-lng" step="0.000001" value="77.2090" placeholder="Longitude">
+                        </div>
+                    </div>
+                    
+                    <div class="radius-container">
+                        <label for="radius">Search Radius: <span id="radius-value">8</span> km</label>
+                        <input type="range" id="radius" min="2" max="15" value="8" class="slider">
+                    </div>
+                    
+                    <!-- Search Filters -->
+                    <div class="search-filters">
+                        <div class="filter-group">
+                            <label class="filter-label" for="num-stations">Number of Stations</label>
+                            <select id="num-stations" class="filter-select">
+                                <option value="1">1 Station</option>
+                                <option value="2">2 Stations</option>
+                                <option value="3" selected>3 Stations</option>
+                                <option value="4">4 Stations</option>
+                                <option value="5">5 Stations</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <!-- Find Locations Button -->
+                    <div class="find-locations-section">
+                        <button id="find-locations-btn" class="find-locations-btn">
+                            <i class="fas fa-search"></i> Find Optimal Locations
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Results List -->
+                <div id="results-list">
+                    <div class="results-fallback">
+                        <i class="fas fa-map-marked-alt"></i>
+                        <p>Your optimal locations will appear here</p>
+                        <small>Click "Use My Location" or select a point on the map to get started</small>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Main Content - Map -->
+            <div class="main-content">
+                <div class="map-container">
+                    <div id="map"></div>
+                    <div class="map-controls">
+                        <button class="map-control-btn" id="center-map" title="Center Map">
+                            <i class="fas fa-crosshairs"></i>
+                        </button>
+                        <button class="map-control-btn" id="toggle-layers" title="Toggle Layers">
+                            <i class="fas fa-layer-group"></i>
+                        </button>
+                        <button class="map-control-btn" id="find-locations" title="Find Locations">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="loading-overlay hidden">
+        <div class="loading-spinner"></div>
+        <p>Analyzing optimal locations...</p>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/location_optimizer.js') }}"></script>
+</body>
+</html>
