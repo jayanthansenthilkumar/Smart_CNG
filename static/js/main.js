@@ -88,13 +88,16 @@ function initMap() {
 
 function getCurrentLocation() {
     const button = document.getElementById('location-button');
-    button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Getting location...';
     button.disabled = true;
+    showLoading('Getting your location...');
 
-    const done = () => resetLocationButton(button);
+    const done = () => {
+        closeLoading();
+        button.disabled = false;
+    };
 
     if (!navigator.geolocation) {
-        alert("Geolocation is not supported by your browser");
+        showError("Location Error", "Geolocation is not supported by your browser");
         return done();
     }
 
@@ -133,7 +136,7 @@ function getCurrentLocation() {
                     }
                 } catch {}
             }
-            alert('Unable to determine your location. Click on the map to choose a point.');
+            showError('Location Error', 'Unable to determine your location. Click on the map to choose a point.');
             done();
         })();
     };
@@ -146,7 +149,7 @@ function getCurrentLocation() {
             } else if (err && err.code === err.POSITION_UNAVAILABLE) {
                 tryIpFallback();
             } else if (err && err.code === err.PERMISSION_DENIED) {
-                alert('Location permission denied. You can click on the map to select a point.');
+                showError('Location Permission Denied', 'Location permission denied. You can click on the map to select a point.');
                 done();
             } else {
                 tryIpFallback();
@@ -159,7 +162,7 @@ function getCurrentLocation() {
         if (navigator.permissions && navigator.permissions.query) {
             navigator.permissions.query({ name: 'geolocation' }).then((status) => {
                 if (status.state === 'denied') {
-                    alert('Location access is blocked for this site. Enable it in your browser settings, or click on the map to choose a point.');
+                    showWarning('Location Access Blocked', 'Location access is blocked for this site. Enable it in your browser settings, or click on the map to choose a point.');
                     return tryIpFallback();
                 }
                 startGeo();
@@ -220,8 +223,10 @@ function fetchNearbyStations(lat, lng) {
             }));
             if (stations.length === 0) {
                 stationList.innerHTML = '<div class="no-stations">No CNG stations found within ' + searchRadius + 'km radius</div>';
+                showInfo('No Stations Found', 'No CNG stations found within ' + searchRadius + 'km radius. Try increasing the search radius.');
             } else {
                 displayStations(stations);
+                showSuccess('Stations Found', `Found ${stations.length} CNG stations near you!`);
             }
         })
         .catch(error => {
@@ -244,6 +249,7 @@ function fetchNearbyStations(lat, lng) {
                 })
                 .catch(err => {
                     stationList.innerHTML = '<div class="no-stations">Unable to load stations data.</div>';
+                    showError('Data Loading Error', 'Unable to load stations data. Please try again later.');
                 });
         });
 }
@@ -259,6 +265,7 @@ function loadAllStationsFromFile() {
         .then(data => {
             if (data.error) {
                 console.error('Stations file error:', data.error);
+                showError('Data Loading Error', 'Unable to load stations data: ' + data.error);
                 return;
             }
             const stations = data.stations || [];
@@ -278,7 +285,10 @@ function loadAllStationsFromFile() {
                 map.fitBounds(bounds, { padding: [40, 40] });
             }
         })
-        .catch(err => console.error('Failed to load stations file:', err));
+        .catch(err => {
+            console.error('Failed to load stations file:', err);
+            showError('Data Loading Error', 'Failed to load stations data. Please check your connection and try again.');
+        });
 }
 
 function filterStationsWithinRadius(stations, center) {

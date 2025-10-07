@@ -2,7 +2,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: Roboto, sans-serif;
+    font-family: 'Poppins', sans-serif;
 }
 
 body, html {
@@ -611,7 +611,7 @@ button i {
 .footer-logo img,
 .login-logo,
 .logo-container img,
-img[alt="QuickFill Logo"] {
+img[alt="Fuelexa Logo"] {
     mix-blend-mode: multiply;
 }
 

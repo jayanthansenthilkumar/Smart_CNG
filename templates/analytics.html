@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fuelexa - Analytics Dashboard</title>
+    <link rel="icon" href="{{ url_for('static', filename='images/logo.png') }}">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/analytics.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/sweetalert-custom.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
+</head>
+<body>
+    <div class="title-bar">
+        <div class="logo-container">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Fuelexa Logo" class="logo">
+        </div>
+        <div class="profile-section">
+            <a href="{{ url_for('login') }}" class="login-button">
+                <i class="fas fa-sign-in-alt"></i>
+                <span>Login</span>
+            </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="analytics-container">
+        <div class="analytics-header">
+            <h1>Analytics Dashboard</h1>
+            <div class="header-actions">
+                <button class="refresh-btn" onclick="loadStationStatistics()">
+                    <i class="fas fa-sync-alt"></i>
+                    Refresh Data
+                </button>
+                <div class="date-range">
+                    <i class="fas fa-calendar"></i>
+                    <span>Last 30 Days</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="summary-cards">
+            <div class="summary-card">
+                <div class="card-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="card-content">
+                    <h3>Total Users</h3>
+                    <p id="totalUsers">0</p>
+                </div>
+            </div>
+            <div class="summary-card">
+                <div class="card-icon">
+                    <i class="fas fa-car"></i>
+                </div>
+                <div class="card-content">
+                    <h3>CNG Vehicles</h3>
+                    <p id="activeCNGVehicles">0</p>
+                </div>
+            </div>
+            <div class="summary-card">
+                <div class="card-icon">
+                    <i class="fas fa-gas-pump"></i>
+                </div>
+                <div class="card-content">
+                    <h3>Total Stations</h3>
+                    <p id="totalStations">0</p>
+                </div>
+            </div>
+            <div class="summary-card">
+                <div class="card-icon">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div class="card-content">
+                    <h3>Avg. Wait Time</h3>
+                    <p id="avgWaitTime">0 min</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="charts-grid">
+            <div class="chart-card usage-patterns">
+                <h3>Station Usage Patterns</h3>
+                <canvas id="usagePatternsChart"></canvas>
+            </div>
+
+            <div class="chart-card environmental-impact">
+                <h3>Environmental Impact</h3>
+                <canvas id="environmentalImpactChart"></canvas>
+            </div>
+
+            <div class="chart-card station-activity">
+                <h3>Station Activity Heatmap</h3>
+                <div id="stationActivityMap"></div>
+            </div>
+
+            <div class="chart-card cost-savings">
+                <h3>Cost Savings Impact</h3>
+                <div class="savings-stats">
+                    <div class="savings-item">
+                        <span>Monthly Community Savings</span>
+                        <h4 id="monthlySavings">₹0</h4>
+                    </div>
+                    <div class="savings-item">
+                        <span>Annual Projected Savings</span>
+                        <h4 id="annualSavings">₹0</h4>
+                    </div>
+                    <div class="savings-item">
+                        <span>CO₂ Reduced</span>
+                        <h4 id="co2Reduced">0 kg</h4>
+                    </div>
+                    <div class="savings-item">
+                        <span>Trees Equivalent</span>
+                        <h4 id="treesEquivalent">0</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <a href="{{ url_for('dashboard') }}" class="back-button">
+            <i class="fas fa-arrow-left"></i>
+            Back to Dashboard
+        </a>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/alerts.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/analytics.js') }}"></script>
+</body>
+</html> 

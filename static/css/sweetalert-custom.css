@@ -1,0 +1,58 @@
+/* SweetAlert2 Custom Styles */
+.swal2-popup {
+    font-family: 'Poppins', sans-serif;
+    border-radius: 15px;
+}
+
+.swal2-title {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+}
+
+.swal2-html-container {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+}
+
+.swal2-confirm, .swal2-cancel {
+    font-family: 'Poppins', sans-serif !important;
+    font-weight: 500 !important;
+    border-radius: 8px !important;
+    padding: 12px 24px !important;
+}
+
+.swal2-confirm {
+    background-color: #4CAF50 !important;
+}
+
+.swal2-cancel {
+    background-color: #f44336 !important;
+}
+
+/* Toast Styles */
+.colored-toast.swal2-icon-success {
+    background-color: #a5dc86 !important;
+}
+
+.colored-toast.swal2-icon-error {
+    background-color: #f27474 !important;
+}
+
+.colored-toast.swal2-icon-warning {
+    background-color: #f8bb86 !important;
+}
+
+.colored-toast.swal2-icon-info {
+    background-color: #3fc3ee !important;
+}
+
+.colored-toast .swal2-title,
+.colored-toast .swal2-close,
+.colored-toast .swal2-html-container {
+    color: white !important;
+}
+
+/* Loading Spinner */
+.swal2-loading {
+    border-color: #4CAF50 !important;
+}

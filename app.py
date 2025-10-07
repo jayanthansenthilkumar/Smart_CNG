@@ -1,4 +1,5 @@
 from flask import Flask, render_template, jsonify, send_from_directory, request, redirect, url_for, session
+from flask_cors import CORS
 import requests
 import json
 from datetime import datetime
@@ -9,6 +10,13 @@ from models.wait_time_predictor import WaitTimePredictor
 from dataclasses import dataclass
 from typing import Dict, Any
 from models.station_calculating_model import ChargingStationCalculator
+from models.cng_calculator import (
+    User, Vehicle, FuelLog, Station, WaitTime, UserPreference,
+    CNGConversionCost, FuelPrice, db
+)
+from services.cng_calculator import CNGCalculator
+from flask_sqlalchemy import SQLAlchemy
+from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 import os
 try:
     import pandas as pd
@@ -16,7 +24,23 @@ except Exception:
     pd = None
 import math
 
-app = Flask(__name__, static_url_path='/static')
+app = Flask(__name__)
+CORS(app)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///fuelexa.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SECRET_KEY'] = 'your-secret-key-here'  # Change this in production
+
+# Initialize SQLAlchemy
+db.init_app(app)
+
+# Configure Flask-Login
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'login'
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
 
 # Initialize models
 station_calculator = ChargingStationCalculator()
@@ -428,17 +452,8 @@ def stations():
 def favorites():
     return render_template('favorites.html')  # You'll need to create this
 
-@app.route('/analytics')
-def analytics():
-    if not session.get('logged_in'):
-        return redirect(url_for('login'))
-    return render_template('analytics_soon.html', username=session.get('username'))
 
-@app.route('/cng-switch')
-def cng_switch():
-    if not session.get('logged_in'):
-        return redirect(url_for('login'))
-    return render_template('cng_switch_soon.html', username=session.get('username'))
+
 
 @app.route('/ev-switcher')
 def ev_switcher():
@@ -674,8 +689,219 @@ def _read_stations_file():
                 elif isinstance(row, dict):
                     raw_name = row.get(name_col)
             name = str(raw_name).strip() if raw_name not in (None, '', 'nan') else 'CNG Station'
-            stations.append({ 'name': name, 'position': { 'lat': lat, 'lng': lng } })
+            return jsonify({'stations': result})
+    except Exception as e:
+        app.logger.error(f"Error loading stations from file: {str(e)}")
+        return jsonify({'error': str(e)}), 500
 
+# CNG Switch Calculator Routes
+@app.route('/cng-switch')
+@login_required
+def cng_switch():
+    """Route for the CNG switch calculator page"""
+    return render_template('cng_switch.html', username=current_user.username)
+
+@app.route('/api/calculate-cng-savings', methods=['POST'])
+@login_required
+def calculate_cng_savings():
+    """API endpoint for calculating CNG conversion savings"""
+    try:
+        data = request.get_json()
+        
+        # Validate required fields
+        required_fields = ['vehicleType', 'currentFuel', 'monthlyDistance', 'currentMileage', 'kitType']
+        for field in required_fields:
+            if field not in data:
+                return jsonify({'error': f'Missing required field: {field}'}), 400
+        
+        # Get current fuel prices for Delhi (hardcoded for now, should be fetched from DB)
+        fuel_prices = {
+            'petrol': 96.72,
+            'diesel': 89.62,
+            'cng': 74.59
+        }
+        
+        # Initialize calculator
+        calculator = CNGCalculator(fuel_prices)
+        
+        # Generate comprehensive report
+        report = calculator.generate_savings_report(
+            vehicle_type=data['vehicleType'],
+            monthly_distance=float(data['monthlyDistance']),
+            current_mileage=float(data['currentMileage']),
+            current_fuel_type=data['currentFuel'],
+            kit_type=data['kitType']
+        )
+        
+        # Store calculation in user's history
+        if current_user.is_authenticated:
+            # Check if user has a vehicle record
+            vehicle = Vehicle.query.filter_by(
+                user_id=current_user.id,
+                make=data['vehicleType']
+            ).first()
+            
+            if not vehicle:
+                # Create new vehicle record
+                vehicle = Vehicle(
+                    user_id=current_user.id,
+                    make=data['vehicleType'],
+                    model='Not specified',
+                    year=datetime.now().year,
+                    fuel_type=data['currentFuel'],
+                    avg_mileage=data['currentMileage'],
+                    monthly_usage=data['monthlyDistance']
+                )
+                db.session.add(vehicle)
+                db.session.commit()
+        
+        return jsonify(report)
+        
+    except Exception as e:
+        app.logger.error(f"Error calculating CNG savings: {str(e)}")
+        return jsonify({'error': 'Failed to calculate savings'}), 500
+
+@app.route('/api/fuel-prices')
+def get_fuel_prices():
+    """Get current fuel prices for a city"""
+    city = request.args.get('city', 'Delhi')
+    try:
+        prices = FuelPrice.get_latest_prices(city)
+        return jsonify({'prices': prices})
+    except Exception as e:
+        app.logger.error(f"Error fetching fuel prices: {str(e)}")
+        return jsonify({'error': 'Failed to fetch fuel prices'}), 500
+
+@app.route('/api/conversion-costs')
+def get_conversion_costs():
+    """Get CNG conversion costs for different vehicle types"""
+    try:
+        costs = CNGConversionCost.query.all()
+        return jsonify({
+            'costs': [
+                {
+                    'vehicle_type': cost.vehicle_type,
+                    'base_cost': cost.base_cost,
+                    'labor_cost': cost.labor_cost,
+                    'kit_type': cost.kit_type,
+                    'warranty_period': cost.warranty_period
+                }
+                for cost in costs
+            ]
+        })
+    except Exception as e:
+        app.logger.error(f"Error fetching conversion costs: {str(e)}")
+        return jsonify({'error': 'Failed to fetch conversion costs'}), 500
+
+@app.route('/api/user-vehicles')
+@login_required
+def get_user_vehicles():
+    """Get the current user's vehicles"""
+    try:
+        vehicles = Vehicle.query.filter_by(user_id=current_user.id).all()
+        return jsonify({
+            'vehicles': [
+                {
+                    'id': v.id,
+                    'make': v.make,
+                    'model': v.model,
+                    'year': v.year,
+                    'fuel_type': v.fuel_type,
+                    'avg_mileage': v.avg_mileage,
+                    'monthly_usage': v.monthly_usage,
+                    'is_cng_converted': v.is_cng_converted
+                }
+                for v in vehicles
+            ]
+        })
+    except Exception as e:
+        app.logger.error(f"Error fetching user vehicles: {str(e)}")
+        return jsonify({'error': 'Failed to fetch vehicles'}), 500
+
+@app.route('/analytics')
+def analytics():
+    """Route for the analytics dashboard"""
+    return render_template('analytics.html', username='Guest')
+
+@app.route('/api/station-statistics')
+def get_station_statistics():
+    """Get aggregated statistics for the analytics dashboard"""
+    try:
+        # Verify database connection and tables
+        try:
+            # Get total users
+            total_users = User.query.count()
+        except Exception as e:
+            app.logger.error(f"Error querying User table: {str(e)}")
+            return jsonify({
+                'error': 'Database error while fetching user data'
+            }), 500
+            
+        # Get active CNG vehicles
+        try:
+            active_cng_vehicles = Vehicle.query.filter_by(
+                is_cng_converted=True
+            ).count()
+        except Exception as e:
+            app.logger.error(f"Error querying Vehicle table: {str(e)}")
+            active_cng_vehicles = 0
+        
+        # Get total stations
+        total_stations = Station.query.count()
+        
+        # Calculate average wait time
+        avg_wait_time = db.session.query(
+            db.func.avg(WaitTime.wait_minutes)
+        ).scalar() or 0
+        
+        # Calculate monthly savings
+        monthly_savings = 0
+        vehicles = Vehicle.query.filter_by(is_cng_converted=True).all()
+        for vehicle in vehicles:
+            fuel_logs = FuelLog.query.filter_by(
+                vehicle_id=vehicle.id
+            ).order_by(
+                FuelLog.date.desc()
+            ).limit(2).all()
+            
+            if len(fuel_logs) >= 2:
+                savings = fuel_logs[0].cost - fuel_logs[1].cost
+                monthly_savings += savings
+        
+        # Calculate environmental impact
+        total_co2_reduced = 0
+        total_trees_equivalent = 0
+        
+        # Sum up the impact from all CNG vehicles
+        for vehicle in vehicles:
+            # Assuming average reduction of 25% in CO2 emissions per vehicle
+            monthly_co2_reduction = (vehicle.monthly_usage / vehicle.avg_mileage) * 0.25
+            total_co2_reduced += monthly_co2_reduction
+            
+            # Convert CO2 reduction to equivalent trees (1 tree absorbs about 22kg CO2 per year)
+            trees = (monthly_co2_reduction * 12) / 22
+            total_trees_equivalent += trees
+        
+        return jsonify({
+            'totalUsers': total_users,
+            'activeCNGVehicles': active_cng_vehicles,
+            'totalStations': total_stations,
+            'averageWaitTime': round(avg_wait_time, 1),
+            'monthlySavings': round(monthly_savings),
+            'annualSavings': round(monthly_savings * 12),
+            'co2Reduced': round(total_co2_reduced, 1),
+            'treesEquivalent': round(total_trees_equivalent)
+        })
+        
+    except Exception as e:
+        app.logger.error(f"Error fetching station statistics: {str(e)}")
+        return jsonify({'error': 'Failed to fetch statistics'}), 500
+        
+@app.route('/api/stations')
+def get_stations():
+    try:
+        stations = []
+        # Code to get stations data will go here
         return { 'stations': stations }
     except Exception as e:
         return { 'error': str(e), 'stations': [] }
@@ -694,5 +920,15 @@ def location_optimizer():
         return redirect(url_for('login'))
     return render_template('location_optimizer.html', username=session.get('username'))
 
+def init_db():
+    """Initialize database tables"""
+    try:
+        db.create_all()
+        app.logger.info("Database tables created successfully")
+    except Exception as e:
+        app.logger.error(f"Error creating database tables: {str(e)}")
+
 if __name__ == '__main__':
+    with app.app_context():
+        init_db()
     app.run(debug=True)
