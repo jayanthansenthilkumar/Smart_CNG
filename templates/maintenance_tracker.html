@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CNG Maintenance Tracker - Smart CNG</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .maintenance-container {
+            max-width: 1400px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .page-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 20px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+
+        .page-header h1 {
+            font-size: 36px;
+            margin: 0 0 10px 0;
+        }
+
+        .page-header p {
+            font-size: 18px;
+            opacity: 0.9;
+            margin: 0;
+        }
+
+        .tabs-container {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+            overflow-x: auto;
+        }
+
+        .tab-btn {
+            padding: 15px 30px;
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            color: #555;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: transparent;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .btn {
+            padding: 14px 32px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .records-list {
+            display: grid;
+            gap: 20px;
+        }
+
+        .record-item {
+            background: white;
+            padding: 25px;
+            border-radius: 14px;
+            border-left: 5px solid #667eea;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.08);
+            transition: transform 0.2s;
+        }
+
+        .record-item:hover {
+            transform: translateX(5px);
+        }
+
+        .record-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .record-type {
+            font-size: 20px;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .record-date {
+            font-size: 14px;
+            color: #888;
+        }
+
+        .record-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            padding: 15px 0;
+            border-top: 1px solid #eee;
+            border-bottom: 1px solid #eee;
+        }
+
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .detail-label {
+            font-size: 12px;
+            color: #888;
+            margin-bottom: 5px;
+        }
+
+        .detail-value {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .record-notes {
+            margin-top: 15px;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .reminder-card {
+            background: linear-gradient(135deg, #fff5e6 0%, #ffe6cc 100%);
+            padding: 20px;
+            border-radius: 14px;
+            border-left: 5px solid #ff9800;
+            margin-bottom: 20px;
+        }
+
+        .reminder-card.urgent {
+            background: linear-gradient(135deg, #ffe6e6 0%, #ffcccc 100%);
+            border-left-color: #f44336;
+        }
+
+        .reminder-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .reminder-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .reminder-badge {
+            padding: 6px 14px;
+            background: #ff9800;
+            color: white;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .reminder-badge.urgent {
+            background: #f44336;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 14px;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.08);
+            text-align: center;
+        }
+
+        .stat-icon {
+            font-size: 40px;
+            margin-bottom: 15px;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: #888;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #888;
+        }
+
+        .empty-state i {
+            font-size: 80px;
+            margin-bottom: 20px;
+            opacity: 0.3;
+        }
+
+        .empty-state h3 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .empty-state p {
+            font-size: 16px;
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="maintenance-container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1><i class="fas fa-wrench"></i> CNG Maintenance Tracker</h1>
+            <p>Track your CNG kit maintenance, service history, and upcoming reminders</p>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <div class="tabs-container">
+            <button class="tab-btn active" onclick="switchTab('add-record')">
+                <i class="fas fa-plus-circle"></i> Add Record
+            </button>
+            <button class="tab-btn" onclick="switchTab('history')">
+                <i class="fas fa-history"></i> Service History
+            </button>
+            <button class="tab-btn" onclick="switchTab('reminders')">
+                <i class="fas fa-bell"></i> Reminders
+            </button>
+            <button class="tab-btn" onclick="switchTab('statistics')">
+                <i class="fas fa-chart-line"></i> Statistics
+            </button>
+        </div>
+
+        <!-- Tab: Add Record -->
+        <div id="add-record" class="tab-content active">
+            <div class="card">
+                <h2><i class="fas fa-file-medical"></i> Add Maintenance Record</h2>
+                <form id="maintenanceForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="vehicle_id">Vehicle *</label>
+                            <select id="vehicle_id" required>
+                                <option value="">Select Vehicle</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="maintenance_type">Maintenance Type *</label>
+                            <select id="maintenance_type" required>
+                                <option value="">Select Type</option>
+                                <option value="CNG Kit Inspection">CNG Kit Inspection</option>
+                                <option value="Cylinder Hydro Test">Cylinder Hydro Test</option>
+                                <option value="Pressure Regulator">Pressure Regulator Service</option>
+                                <option value="Valve Replacement">Valve Replacement</option>
+                                <option value="Filter Change">Filter Change</option>
+                                <option value="Leak Test">Leak Test</option>
+                                <option value="General Service">General Service</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="date">Service Date *</label>
+                            <input type="date" id="date" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="odometer">Odometer Reading (km) *</label>
+                            <input type="number" id="odometer" placeholder="e.g., 50000" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="cost">Cost (₹) *</label>
+                            <input type="number" id="cost" step="0.01" placeholder="e.g., 2500" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="service_center">Service Center</label>
+                            <input type="text" id="service_center" placeholder="e.g., ABC CNG Service">
+                        </div>
+                        <div class="form-group">
+                            <label for="technician">Technician Name</label>
+                            <input type="text" id="technician" placeholder="e.g., John Doe">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="notes">Notes / Details</label>
+                        <textarea id="notes" rows="4" placeholder="Add any additional notes about this service..."></textarea>
+                    </div>
+
+                    <button type="submit" class="btn">
+                        <i class="fas fa-save"></i> Save Maintenance Record
+                    </button>
+                </form>
+            </div>
+
+            <!-- Quick Add Reminder -->
+            <div class="card">
+                <h2><i class="fas fa-bell-plus"></i> Set Maintenance Reminder</h2>
+                <form id="reminderForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="reminder_vehicle">Vehicle *</label>
+                            <select id="reminder_vehicle" required>
+                                <option value="">Select Vehicle</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="reminder_type">Reminder Type *</label>
+                            <select id="reminder_type" required>
+                                <option value="">Select Type</option>
+                                <option value="CNG Kit Inspection">CNG Kit Inspection</option>
+                                <option value="Cylinder Hydro Test">Cylinder Hydro Test (Every 3 Years)</option>
+                                <option value="Pressure Regulator">Pressure Regulator Check</option>
+                                <option value="Filter Change">Filter Change</option>
+                                <option value="General Service">General Service</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="due_date">Due Date</label>
+                            <input type="date" id="due_date">
+                        </div>
+                        <div class="form-group">
+                            <label for="due_odometer">Due at Odometer (km)</label>
+                            <input type="number" id="due_odometer" placeholder="e.g., 55000">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-secondary">
+                        <i class="fas fa-calendar-plus"></i> Set Reminder
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Tab: Service History -->
+        <div id="history" class="tab-content">
+            <div class="card">
+                <h2><i class="fas fa-history"></i> Service History</h2>
+                <div id="historyList" class="records-list">
+                    <!-- Records will be loaded here -->
+                    <div class="empty-state">
+                        <i class="fas fa-clipboard-list"></i>
+                        <h3>No Service Records Yet</h3>
+                        <p>Add your first maintenance record to start tracking</p>
+                        <button class="btn" onclick="switchTab('add-record')">Add First Record</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab: Reminders -->
+        <div id="reminders" class="tab-content">
+            <div class="card">
+                <h2><i class="fas fa-bell"></i> Upcoming Maintenance</h2>
+                <div id="remindersList">
+                    <!-- Reminders will be loaded here -->
+                    <div class="empty-state">
+                        <i class="fas fa-bell-slash"></i>
+                        <h3>No Active Reminders</h3>
+                        <p>Set reminders to never miss important maintenance</p>
+                        <button class="btn btn-secondary" onclick="switchTab('add-record')">Set First Reminder</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab: Statistics -->
+        <div id="statistics" class="tab-content">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon" style="color: #667eea;">
+                        <i class="fas fa-clipboard-check"></i>
+                    </div>
+                    <div class="stat-value" id="totalRecords">0</div>
+                    <div class="stat-label">Total Service Records</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="color: #f5576c;">
+                        <i class="fas fa-rupee-sign"></i>
+                    </div>
+                    <div class="stat-value" id="totalCost">₹0</div>
+                    <div class="stat-label">Total Maintenance Cost</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="color: #43e97b;">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <div class="stat-value" id="lastService">N/A</div>
+                    <div class="stat-label">Last Service Date</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="color: #fa709a;">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="stat-value" id="avgCost">₹0</div>
+                    <div class="stat-label">Average Cost per Service</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2><i class="fas fa-chart-pie"></i> Cost Analysis</h2>
+                <canvas id="costChart" height="80"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        let vehicles = [];
+        let maintenanceRecords = [];
+        let reminders = [];
+
+        // Tab Switching
+        function switchTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+
+            // Load data for specific tabs
+            if (tabName === 'history') {
+                loadServiceHistory();
+            } else if (tabName === 'reminders') {
+                loadReminders();
+            } else if (tabName === 'statistics') {
+                loadStatistics();
+            }
+        }
+
+        // Initialize
+        async function init() {
+            await loadVehicles();
+            setTodayDate();
+        }
+
+        // Load Vehicles
+        async function loadVehicles() {
+            try {
+                const response = await fetch('/api/vehicles');
+                if (response.ok) {
+                    vehicles = await response.json();
+                    populateVehicleSelects();
+                }
+            } catch (error) {
+                console.error('Error loading vehicles:', error);
+            }
+        }
+
+        function populateVehicleSelects() {
+            const selects = ['vehicle_id', 'reminder_vehicle'];
+            selects.forEach(selectId => {
+                const select = document.getElementById(selectId);
+                select.innerHTML = '<option value="">Select Vehicle</option>';
+                vehicles.forEach(vehicle => {
+                    const option = document.createElement('option');
+                    option.value = vehicle.id;
+                    option.textContent = `${vehicle.make} ${vehicle.model} (${vehicle.registration_number})`;
+                    select.appendChild(option);
+                });
+            });
+        }
+
+        function setTodayDate() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('date').value = today;
+        }
+
+        // Submit Maintenance Form
+        document.getElementById('maintenanceForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = {
+                vehicle_id: parseInt(document.getElementById('vehicle_id').value),
+                maintenance_type: document.getElementById('maintenance_type').value,
+                date: document.getElementById('date').value,
+                odometer_reading: parseInt(document.getElementById('odometer').value),
+                cost: parseFloat(document.getElementById('cost').value),
+                service_center: document.getElementById('service_center').value,
+                technician_name: document.getElementById('technician').value,
+                notes: document.getElementById('notes').value
+            };
+
+            try {
+                const response = await fetch('/api/maintenance/add', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                });
+
+                if (response.ok) {
+                    alert('Maintenance record added successfully!');
+                    document.getElementById('maintenanceForm').reset();
+                    setTodayDate();
+                } else {
+                    alert('Error adding maintenance record');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Failed to add maintenance record');
+            }
+        });
+
+        // Submit Reminder Form
+        document.getElementById('reminderForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = {
+                vehicle_id: parseInt(document.getElementById('reminder_vehicle').value),
+                reminder_type: document.getElementById('reminder_type').value,
+                due_date: document.getElementById('due_date').value || null,
+                due_odometer: document.getElementById('due_odometer').value ? parseInt(document.getElementById('due_odometer').value) : null
+            };
+
+            try {
+                const response = await fetch('/api/maintenance/reminder', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                });
+
+                if (response.ok) {
+                    alert('Reminder set successfully!');
+                    document.getElementById('reminderForm').reset();
+                } else {
+                    alert('Error setting reminder');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Failed to set reminder');
+            }
+        });
+
+        // Load Service History
+        async function loadServiceHistory() {
+            try {
+                const response = await fetch('/api/maintenance/history');
+                if (response.ok) {
+                    maintenanceRecords = await response.json();
+                    displayServiceHistory();
+                }
+            } catch (error) {
+                console.error('Error loading history:', error);
+            }
+        }
+
+        function displayServiceHistory() {
+            const listContainer = document.getElementById('historyList');
+            
+            if (maintenanceRecords.length === 0) {
+                listContainer.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-clipboard-list"></i>
+                        <h3>No Service Records Yet</h3>
+                        <p>Add your first maintenance record to start tracking</p>
+                        <button class="btn" onclick="switchTab('add-record')">Add First Record</button>
+                    </div>
+                `;
+                return;
+            }
+
+            listContainer.innerHTML = maintenanceRecords.map(record => `
+                <div class="record-item">
+                    <div class="record-header">
+                        <div class="record-type">
+                            <i class="fas fa-wrench"></i> ${record.maintenance_type}
+                        </div>
+                        <div class="record-date">
+                            <i class="fas fa-calendar"></i> ${new Date(record.date).toLocaleDateString()}
+                        </div>
+                    </div>
+                    <div class="record-details">
+                        <div class="detail-item">
+                            <div class="detail-label">Cost</div>
+                            <div class="detail-value">₹${record.cost.toFixed(2)}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Odometer</div>
+                            <div class="detail-value">${record.odometer_reading.toLocaleString()} km</div>
+                        </div>
+                        ${record.service_center ? `
+                        <div class="detail-item">
+                            <div class="detail-label">Service Center</div>
+                            <div class="detail-value">${record.service_center}</div>
+                        </div>
+                        ` : ''}
+                    </div>
+                    ${record.notes ? `
+                    <div class="record-notes">
+                        <i class="fas fa-sticky-note"></i> ${record.notes}
+                    </div>
+                    ` : ''}
+                </div>
+            `).join('');
+        }
+
+        // Load Reminders
+        async function loadReminders() {
+            try {
+                const response = await fetch('/api/maintenance/reminders');
+                if (response.ok) {
+                    reminders = await response.json();
+                    displayReminders();
+                }
+            } catch (error) {
+                console.error('Error loading reminders:', error);
+            }
+        }
+
+        function displayReminders() {
+            const listContainer = document.getElementById('remindersList');
+            
+            if (reminders.length === 0) {
+                listContainer.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-bell-slash"></i>
+                        <h3>No Active Reminders</h3>
+                        <p>Set reminders to never miss important maintenance</p>
+                        <button class="btn btn-secondary" onclick="switchTab('add-record')">Set First Reminder</button>
+                    </div>
+                `;
+                return;
+            }
+
+            listContainer.innerHTML = reminders.map(reminder => {
+                const isUrgent = reminder.is_urgent;
+                return `
+                    <div class="reminder-card ${isUrgent ? 'urgent' : ''}">
+                        <div class="reminder-header">
+                            <div class="reminder-title">
+                                <i class="fas fa-bell"></i> ${reminder.reminder_type}
+                            </div>
+                            <span class="reminder-badge ${isUrgent ? 'urgent' : ''}">
+                                ${isUrgent ? 'URGENT' : 'UPCOMING'}
+                            </span>
+                        </div>
+                        <div class="record-details">
+                            ${reminder.due_date ? `
+                            <div class="detail-item">
+                                <div class="detail-label">Due Date</div>
+                                <div class="detail-value">${new Date(reminder.due_date).toLocaleDateString()}</div>
+                            </div>
+                            ` : ''}
+                            ${reminder.due_odometer ? `
+                            <div class="detail-item">
+                                <div class="detail-label">Due at Odometer</div>
+                                <div class="detail-value">${reminder.due_odometer.toLocaleString()} km</div>
+                            </div>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Load Statistics
+        async function loadStatistics() {
+            try {
+                const response = await fetch('/api/maintenance/statistics');
+                if (response.ok) {
+                    const stats = await response.json();
+                    displayStatistics(stats);
+                }
+            } catch (error) {
+                console.error('Error loading statistics:', error);
+            }
+        }
+
+        function displayStatistics(stats) {
+            document.getElementById('totalRecords').textContent = stats.total_records || 0;
+            document.getElementById('totalCost').textContent = `₹${(stats.total_cost || 0).toFixed(2)}`;
+            document.getElementById('lastService').textContent = stats.last_service_date ? 
+                new Date(stats.last_service_date).toLocaleDateString() : 'N/A';
+            document.getElementById('avgCost').textContent = `₹${(stats.average_cost || 0).toFixed(2)}`;
+
+            // Create cost chart
+            if (stats.cost_breakdown) {
+                createCostChart(stats.cost_breakdown);
+            }
+        }
+
+        function createCostChart(breakdown) {
+            const ctx = document.getElementById('costChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: Object.keys(breakdown),
+                    datasets: [{
+                        data: Object.values(breakdown),
+                        backgroundColor: [
+                            '#667eea', '#764ba2', '#f093fb', '#f5576c',
+                            '#43e97b', '#38f9d7', '#fa709a', '#fee140'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        },
+                        title: {
+                            display: true,
+                            text: 'Maintenance Cost by Type'
+                        }
+                    }
+                }
+            });
+        }
+
+        // Initialize on page load
+        init();
+    </script>
+</body>
+</html>

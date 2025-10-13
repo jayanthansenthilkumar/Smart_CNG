@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fuel Log & Analytics - Smart CNG</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .fuel-container {
+            max-width: 1400px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .page-header {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 20px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(67, 233, 123, 0.3);
+        }
+
+        .page-header h1 {
+            font-size: 36px;
+            margin: 0 0 10px 0;
+        }
+
+        .page-header p {
+            font-size: 18px;
+            opacity: 0.9;
+            margin: 0;
+        }
+
+        .tabs-container {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            overflow-x: auto;
+            padding-bottom: 5px;
+        }
+
+        .tab-btn {
+            padding: 12px 24px;
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+            color: #555;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            color: white;
+            border-color: transparent;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            margin-bottom: 25px;
+        }
+
+        .card h2 {
+            margin-top: 0;
+            margin-bottom: 25px;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 14px;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.08);
+            text-align: center;
+            transition: transform 0.2s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-icon {
+            font-size: 40px;
+            margin-bottom: 15px;
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: #888;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 15px;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #43e97b;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .btn {
+            padding: 14px 32px;
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(67, 233, 123, 0.4);
+        }
+
+        .fuel-log-item {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 5px solid #43e97b;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+            margin-bottom: 15px;
+            transition: transform 0.2s;
+        }
+
+        .fuel-log-item:hover {
+            transform: translateX(5px);
+        }
+
+        .log-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .log-date {
+            font-size: 18px;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .fuel-type-badge {
+            padding: 6px 14px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .fuel-type-badge.petrol {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .fuel-type-badge.diesel {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        }
+
+        .log-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            padding: 15px 0;
+            border-top: 1px solid #eee;
+        }
+
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .detail-label {
+            font-size: 11px;
+            color: #888;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+
+        .detail-value {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin-top: 20px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #888;
+        }
+
+        .empty-state i {
+            font-size: 80px;
+            margin-bottom: 20px;
+            opacity: 0.3;
+        }
+
+        .empty-state h3 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .empty-state p {
+            font-size: 16px;
+            margin-bottom: 30px;
+        }
+
+        .filter-bar {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .filter-bar select {
+            padding: 10px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .insight-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 14px;
+            margin-bottom: 20px;
+        }
+
+        .insight-card h3 {
+            margin: 0 0 15px 0;
+            font-size: 20px;
+        }
+
+        .insight-card p {
+            margin: 0;
+            font-size: 15px;
+            opacity: 0.95;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        .comparison-table th {
+            background: #f8f9fa;
+            font-weight: 700;
+            color: #555;
+        }
+
+        .comparison-table tr:hover {
+            background: #f8f9fa;
+        }
+    </style>
+</head>
+<body>
+    <div class="fuel-container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1><i class="fas fa-gas-pump"></i> Fuel Log & Analytics</h1>
+            <p>Track your fuel consumption, costs, and efficiency over time</p>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon" style="color: #43e97b;">
+                    <i class="fas fa-gas-pump"></i>
+                </div>
+                <div class="stat-value" id="totalFuelUps">0</div>
+                <div class="stat-label">Total Fuel-ups</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon" style="color: #f5576c;">
+                    <i class="fas fa-rupee-sign"></i>
+                </div>
+                <div class="stat-value" id="totalSpent">₹0</div>
+                <div class="stat-label">Total Spent</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon" style="color: #667eea;">
+                    <i class="fas fa-tachometer-alt"></i>
+                </div>
+                <div class="stat-value" id="avgEfficiency">0 km/kg</div>
+                <div class="stat-label">Avg Efficiency (CNG)</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon" style="color: #fa709a;">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <div class="stat-value" id="totalDistance">0 km</div>
+                <div class="stat-label">Total Distance</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon" style="color: #38f9d7;">
+                    <i class="fas fa-coins"></i>
+                </div>
+                <div class="stat-value" id="costPerKm">₹0/km</div>
+                <div class="stat-label">Average Cost per KM</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon" style="color: #764ba2;">
+                    <i class="fas fa-leaf"></i>
+                </div>
+                <div class="stat-value" id="co2Saved">0 kg</div>
+                <div class="stat-label">CO₂ Saved (vs Petrol)</div>
+            </div>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <div class="tabs-container">
+            <button class="tab-btn active" onclick="switchTab('add-log')">
+                <i class="fas fa-plus-circle"></i> Add Fuel Log
+            </button>
+            <button class="tab-btn" onclick="switchTab('history')">
+                <i class="fas fa-list"></i> Fuel History
+            </button>
+            <button class="tab-btn" onclick="switchTab('analytics')">
+                <i class="fas fa-chart-bar"></i> Analytics
+            </button>
+            <button class="tab-btn" onclick="switchTab('insights')">
+                <i class="fas fa-lightbulb"></i> Insights
+            </button>
+        </div>
+
+        <!-- Tab: Add Fuel Log -->
+        <div id="add-log" class="tab-content active">
+            <div class="card">
+                <h2><i class="fas fa-file-plus"></i> Add Fuel Log Entry</h2>
+                <form id="fuelLogForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="vehicle_id">Vehicle *</label>
+                            <select id="vehicle_id" required>
+                                <option value="">Select Vehicle</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="fuel_type">Fuel Type *</label>
+                            <select id="fuel_type" required onchange="updateUnits()">
+                                <option value="">Select Fuel Type</option>
+                                <option value="CNG">CNG</option>
+                                <option value="Petrol">Petrol</option>
+                                <option value="Diesel">Diesel</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="date">Date *</label>
+                            <input type="date" id="date" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="odometer">Odometer Reading (km) *</label>
+                            <input type="number" id="odometer" placeholder="e.g., 50000" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="quantity">Quantity (<span id="unit">kg/L</span>) *</label>
+                            <input type="number" id="quantity" step="0.01" placeholder="e.g., 10.5" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="price_per_unit">Price per <span id="unit2">kg/L</span> (₹) *</label>
+                            <input type="number" id="price_per_unit" step="0.01" placeholder="e.g., 75.50" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="total_cost">Total Cost (₹) *</label>
+                            <input type="number" id="total_cost" step="0.01" placeholder="Auto-calculated" readonly>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="station_name">Station Name</label>
+                            <input type="text" id="station_name" placeholder="e.g., ABC CNG Station">
+                        </div>
+                        <div class="form-group">
+                            <label for="location">Location</label>
+                            <input type="text" id="location" placeholder="e.g., Mumbai, MH">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="is_full_tank"> Full Tank
+                        </label>
+                    </div>
+
+                    <button type="submit" class="btn">
+                        <i class="fas fa-save"></i> Save Fuel Log
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Tab: Fuel History -->
+        <div id="history" class="tab-content">
+            <div class="card">
+                <div class="filter-bar">
+                    <select id="filterVehicle" onchange="filterLogs()">
+                        <option value="">All Vehicles</option>
+                    </select>
+                    <select id="filterFuelType" onchange="filterLogs()">
+                        <option value="">All Fuel Types</option>
+                        <option value="CNG">CNG</option>
+                        <option value="Petrol">Petrol</option>
+                        <option value="Diesel">Diesel</option>
+                    </select>
+                    <select id="filterPeriod" onchange="filterLogs()">
+                        <option value="all">All Time</option>
+                        <option value="7">Last 7 Days</option>
+                        <option value="30">Last 30 Days</option>
+                        <option value="90">Last 3 Months</option>
+                        <option value="365">Last Year</option>
+                    </select>
+                </div>
+                
+                <div id="fuelLogsList">
+                    <div class="empty-state">
+                        <i class="fas fa-clipboard-list"></i>
+                        <h3>No Fuel Logs Yet</h3>
+                        <p>Start tracking your fuel consumption by adding your first entry</p>
+                        <button class="btn" onclick="switchTab('add-log')">Add First Entry</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab: Analytics -->
+        <div id="analytics" class="tab-content">
+            <div class="card">
+                <h2><i class="fas fa-chart-line"></i> Fuel Efficiency Over Time</h2>
+                <div class="chart-container">
+                    <canvas id="efficiencyChart"></canvas>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2><i class="fas fa-chart-bar"></i> Cost Analysis</h2>
+                <div class="chart-container">
+                    <canvas id="costChart"></canvas>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2><i class="fas fa-chart-pie"></i> Fuel Type Distribution</h2>
+                <div class="chart-container">
+                    <canvas id="fuelTypeChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab: Insights -->
+        <div id="insights" class="tab-content">
+            <div id="insightsContainer">
+                <div class="empty-state">
+                    <i class="fas fa-lightbulb"></i>
+                    <h3>Not Enough Data</h3>
+                    <p>Add more fuel logs to get personalized insights and recommendations</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        let vehicles = [];
+        let fuelLogs = [];
+        let filteredLogs = [];
+
+        // Tab Switching
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+
+            if (tabName === 'history') {
+                loadFuelHistory();
+            } else if (tabName === 'analytics') {
+                loadAnalytics();
+            } else if (tabName === 'insights') {
+                loadInsights();
+            }
+        }
+
+        // Initialize
+        async function init() {
+            await loadVehicles();
+            await loadStats();
+            setTodayDate();
+            setupFormCalculations();
+        }
+
+        async function loadVehicles() {
+            try {
+                const response = await fetch('/api/vehicles');
+                if (response.ok) {
+                    vehicles = await response.json();
+                    populateVehicleSelects();
+                }
+            } catch (error) {
+                console.error('Error loading vehicles:', error);
+            }
+        }
+
+        function populateVehicleSelects() {
+            const vehicleSelect = document.getElementById('vehicle_id');
+            const filterSelect = document.getElementById('filterVehicle');
+            
+            vehicleSelect.innerHTML = '<option value="">Select Vehicle</option>';
+            filterSelect.innerHTML = '<option value="">All Vehicles</option>';
+            
+            vehicles.forEach(vehicle => {
+                const option = document.createElement('option');
+                option.value = vehicle.id;
+                option.textContent = `${vehicle.make} ${vehicle.model} (${vehicle.registration_number})`;
+                vehicleSelect.appendChild(option.cloneNode(true));
+                filterSelect.appendChild(option);
+            });
+        }
+
+        function setTodayDate() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('date').value = today;
+        }
+
+        function updateUnits() {
+            const fuelType = document.getElementById('fuel_type').value;
+            const unit = fuelType === 'CNG' ? 'kg' : 'L';
+            document.getElementById('unit').textContent = unit;
+            document.getElementById('unit2').textContent = unit;
+        }
+
+        function setupFormCalculations() {
+            const quantity = document.getElementById('quantity');
+            const pricePerUnit = document.getElementById('price_per_unit');
+            const totalCost = document.getElementById('total_cost');
+
+            function calculateTotal() {
+                const q = parseFloat(quantity.value) || 0;
+                const p = parseFloat(pricePerUnit.value) || 0;
+                totalCost.value = (q * p).toFixed(2);
+            }
+
+            quantity.addEventListener('input', calculateTotal);
+            pricePerUnit.addEventListener('input', calculateTotal);
+        }
+
+        // Submit Form
+        document.getElementById('fuelLogForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = {
+                vehicle_id: parseInt(document.getElementById('vehicle_id').value),
+                fuel_type: document.getElementById('fuel_type').value,
+                date: document.getElementById('date').value,
+                odometer_reading: parseInt(document.getElementById('odometer').value),
+                quantity: parseFloat(document.getElementById('quantity').value),
+                price_per_unit: parseFloat(document.getElementById('price_per_unit').value),
+                total_cost: parseFloat(document.getElementById('total_cost').value),
+                station_name: document.getElementById('station_name').value,
+                location: document.getElementById('location').value,
+                is_full_tank: document.getElementById('is_full_tank').checked
+            };
+
+            try {
+                const response = await fetch('/api/fuel-log/add', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                });
+
+                if (response.ok) {
+                    alert('Fuel log added successfully!');
+                    document.getElementById('fuelLogForm').reset();
+                    setTodayDate();
+                    loadStats();
+                } else {
+                    alert('Error adding fuel log');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Failed to add fuel log');
+            }
+        });
+
+        async function loadStats() {
+            try {
+                const response = await fetch('/api/fuel-log/statistics');
+                if (response.ok) {
+                    const stats = await response.json();
+                    displayStats(stats);
+                }
+            } catch (error) {
+                console.error('Error loading stats:', error);
+            }
+        }
+
+        function displayStats(stats) {
+            document.getElementById('totalFuelUps').textContent = stats.total_entries || 0;
+            document.getElementById('totalSpent').textContent = `₹${(stats.total_cost || 0).toFixed(2)}`;
+            document.getElementById('avgEfficiency').textContent = `${(stats.avg_efficiency || 0).toFixed(2)} km/kg`;
+            document.getElementById('totalDistance').textContent = `${(stats.total_distance || 0).toLocaleString()} km`;
+            document.getElementById('costPerKm').textContent = `₹${(stats.cost_per_km || 0).toFixed(2)}/km`;
+            document.getElementById('co2Saved').textContent = `${(stats.co2_saved || 0).toFixed(2)} kg`;
+        }
+
+        async function loadFuelHistory() {
+            try {
+                const response = await fetch('/api/fuel-log/history');
+                if (response.ok) {
+                    fuelLogs = await response.json();
+                    filteredLogs = fuelLogs;
+                    displayFuelLogs();
+                }
+            } catch (error) {
+                console.error('Error loading history:', error);
+            }
+        }
+
+        function filterLogs() {
+            const vehicleFilter = document.getElementById('filterVehicle').value;
+            const fuelTypeFilter = document.getElementById('filterFuelType').value;
+            const periodFilter = parseInt(document.getElementById('filterPeriod').value);
+
+            filteredLogs = fuelLogs.filter(log => {
+                if (vehicleFilter && log.vehicle_id !== parseInt(vehicleFilter)) return false;
+                if (fuelTypeFilter && log.fuel_type !== fuelTypeFilter) return false;
+                if (periodFilter !== 'all') {
+                    const logDate = new Date(log.date);
+                    const cutoffDate = new Date();
+                    cutoffDate.setDate(cutoffDate.getDate() - periodFilter);
+                    if (logDate < cutoffDate) return false;
+                }
+                return true;
+            });
+
+            displayFuelLogs();
+        }
+
+        function displayFuelLogs() {
+            const container = document.getElementById('fuelLogsList');
+            
+            if (filteredLogs.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-clipboard-list"></i>
+                        <h3>No Fuel Logs Found</h3>
+                        <p>Try adjusting your filters or add new fuel logs</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = filteredLogs.map(log => `
+                <div class="fuel-log-item">
+                    <div class="log-header">
+                        <div class="log-date">
+                            <i class="fas fa-calendar"></i> ${new Date(log.date).toLocaleDateString()}
+                        </div>
+                        <span class="fuel-type-badge ${log.fuel_type.toLowerCase()}">
+                            ${log.fuel_type}
+                        </span>
+                    </div>
+                    <div class="log-details">
+                        <div class="detail-item">
+                            <div class="detail-label">Quantity</div>
+                            <div class="detail-value">${log.quantity} ${log.fuel_type === 'CNG' ? 'kg' : 'L'}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Cost</div>
+                            <div class="detail-value">₹${log.total_cost.toFixed(2)}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Price/Unit</div>
+                            <div class="detail-value">₹${log.price_per_unit.toFixed(2)}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Odometer</div>
+                            <div class="detail-value">${log.odometer_reading.toLocaleString()} km</div>
+                        </div>
+                        ${log.efficiency ? `
+                        <div class="detail-item">
+                            <div class="detail-label">Efficiency</div>
+                            <div class="detail-value">${log.efficiency.toFixed(2)} km/${log.fuel_type === 'CNG' ? 'kg' : 'L'}</div>
+                        </div>
+                        ` : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        async function loadAnalytics() {
+            // Create charts using Chart.js
+            try {
+                const response = await fetch('/api/fuel-log/analytics');
+                if (response.ok) {
+                    const data = await response.json();
+                    createCharts(data);
+                }
+            } catch (error) {
+                console.error('Error loading analytics:', error);
+            }
+        }
+
+        function createCharts(data) {
+            // Efficiency Chart
+            new Chart(document.getElementById('efficiencyChart'), {
+                type: 'line',
+                data: {
+                    labels: data.dates || [],
+                    datasets: [{
+                        label: 'Fuel Efficiency (km/unit)',
+                        data: data.efficiency || [],
+                        borderColor: '#43e97b',
+                        backgroundColor: 'rgba(67, 233, 123, 0.1)',
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom' }
+                    }
+                }
+            });
+
+            // Cost Chart
+            new Chart(document.getElementById('costChart'), {
+                type: 'bar',
+                data: {
+                    labels: data.dates || [],
+                    datasets: [{
+                        label: 'Cost (₹)',
+                        data: data.costs || [],
+                        backgroundColor: '#f5576c'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom' }
+                    }
+                }
+            });
+
+            // Fuel Type Chart
+            new Chart(document.getElementById('fuelTypeChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: Object.keys(data.fuel_distribution || {}),
+                    datasets: [{
+                        data: Object.values(data.fuel_distribution || {}),
+                        backgroundColor: ['#43e97b', '#f5576c', '#667eea']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom' }
+                    }
+                }
+            });
+        }
+
+        async function loadInsights() {
+            try {
+                const response = await fetch('/api/fuel-log/insights');
+                if (response.ok) {
+                    const insights = await response.json();
+                    displayInsights(insights);
+                }
+            } catch (error) {
+                console.error('Error loading insights:', error);
+            }
+        }
+
+        function displayInsights(insights) {
+            const container = document.getElementById('insightsContainer');
+            
+            if (!insights || insights.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-lightbulb"></i>
+                        <h3>Not Enough Data</h3>
+                        <p>Add more fuel logs to get personalized insights</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = insights.map(insight => `
+                <div class="insight-card">
+                    <h3><i class="fas ${insight.icon}"></i> ${insight.title}</h3>
+                    <p>${insight.description}</p>
+                </div>
+            `).join('');
+        }
+
+        // Initialize
+        init();
+    </script>
+</body>
+</html>
