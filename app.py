@@ -925,6 +925,34 @@ def location_optimizer():
         return redirect(url_for('login'))
     return render_template('location_optimizer.html', username=session.get('username'))
 
+@app.route('/vehicle-comparison')
+def vehicle_comparison():
+    """Route for vehicle comparison tool"""
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
+    return render_template('vehicle_comparison.html', username=session.get('username'))
+
+@app.route('/trip-calculator')
+def trip_calculator():
+    """Route for trip cost calculator"""
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
+    return render_template('trip_calculator.html', username=session.get('username'))
+
+@app.route('/maintenance-tracker')
+def maintenance_tracker():
+    """Route for maintenance tracking"""
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
+    return render_template('maintenance_tracker.html', username=session.get('username'))
+
+@app.route('/fuel-history')
+def fuel_history():
+    """Route for fuel history tracking"""
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
+    return render_template('fuel_history.html', username=session.get('username'))
+
 # ============ NEW REAL-TIME CNG FEATURES ============
 
 @app.route('/api/realtime-stations/<lat>/<lng>')
@@ -1266,6 +1294,679 @@ def compare_station_prices():
         return jsonify({'error': str(e)}), 500
 
 # ============ END NEW FEATURES ============
+
+# ============ VEHICLE COMPARISON FEATURES ============
+
+@app.route('/api/compare-vehicles', methods=['POST'])
+def compare_vehicles():
+    """Compare fuel costs across multiple vehicles"""
+    try:
+        data = request.get_json()
+        
+        from services.vehicle_comparison_service import VehicleComparisonService
+        
+        fuel_prices = FuelPrice.get_latest_prices(data.get('city', 'Delhi'))
+        comparison_service = VehicleComparisonService(fuel_prices)
+        
+        result = comparison_service.compare_vehicles(
+            vehicles_data=data['vehicles'],
+            monthly_distance=data['monthly_distance'],
+            period_months=data.get('period_months', 12)
+        )
+        
+        return jsonify(result)
+        
+    except Exception as e:
+        app.logger.error(f"Error comparing vehicles: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/compare-fuel-options', methods=['POST'])
+def compare_fuel_options():
+    """Compare different fuel options for the same vehicle"""
+    try:
+        data = request.get_json()
+        
+        from services.vehicle_comparison_service import VehicleComparisonService
+        
+        fuel_prices = FuelPrice.get_latest_prices(data.get('city', 'Delhi'))
+        comparison_service = VehicleComparisonService(fuel_prices)
+        
+        result = comparison_service.compare_fuel_types_same_vehicle(
+            base_vehicle=data['vehicle'],
+            monthly_distance=data['monthly_distance'],
+            include_conversion=data.get('include_conversion', True)
+        )
+        
+        return jsonify(result)
+        
+    except Exception as e:
+        app.logger.error(f"Error comparing fuel options: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/vehicle-recommendation', methods=['POST'])
+def get_vehicle_recommendation():
+    """Get personalized vehicle recommendation"""
+    try:
+        data = request.get_json()
+        
+        from services.vehicle_comparison_service import VehicleComparisonService
+        
+        fuel_prices = FuelPrice.get_latest_prices(data.get('city', 'Delhi'))
+        comparison_service = VehicleComparisonService(fuel_prices)
+        
+        result = comparison_service.get_best_vehicle_recommendation(
+            monthly_distance=data['monthly_distance'],
+            budget=data['budget'],
+            priorities=data.get('priorities', ['cost', 'environment'])
+        )
+        
+        return jsonify(result)
+        
+    except Exception as e:
+        app.logger.error(f"Error getting recommendation: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+
+# ============ TRIP COST CALCULATOR FEATURES ============
+
+@app.route('/api/calculate-trip-cost', methods=['POST'])
+def calculate_trip_cost():
+    """Calculate cost for a specific trip"""
+    try:
+        data = request.get_json()
+        
+        from services.trip_cost_calculator import TripCostCalculator
+        
+        fuel_prices = FuelPrice.get_latest_prices(data.get('city', 'Delhi'))
+        trip_calculator = TripCostCalculator(fuel_prices)
+        
+        result = trip_calculator.calculate_trip_cost(
+            distance_km=data['distance_km'],
+            vehicle_mileage=data['vehicle_mileage'],
+            fuel_type=data['fuel_type'],
+            toll_charges=data.get('toll_charges', 0),
+            parking_charges=data.get('parking_charges', 0),
+            additional_costs=data.get('additional_costs', 0)
+        )
+        
+        return jsonify(result)
+        
+    except Exception as e:
+        app.logger.error(f"Error calculating trip cost: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/compare-trip-options', methods=['POST'])
+def compare_trip_fuel_options():
+    """Compare fuel options for a specific trip"""
+    try:
+        data = request.get_json()
+        
+        from services.trip_cost_calculator import TripCostCalculator
+        
+        fuel_prices = FuelPrice.get_latest_prices(data.get('city', 'Delhi'))
+        trip_calculator = TripCostCalculator(fuel_prices)
+        
+        result = trip_calculator.compare_trip_fuel_options(
+            distance_km=data['distance_km'],
+            vehicle_data=data['vehicle'],
+            toll_charges=data.get('toll_charges', 0),
+            parking_charges=data.get('parking_charges', 0)
+        )
+        
+        return jsonify(result)
+        
+    except Exception as e:
+        app.logger.error(f"Error comparing trip options: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/calculate-round-trip', methods=['POST'])
+def calculate_round_trip():
+    """Calculate round trip costs"""
+    try:
+        data = request.get_json()
+        
+        from services.trip_cost_calculator import TripCostCalculator
+        
+        fuel_prices = FuelPrice.get_latest_prices(data.get('city', 'Delhi'))
+        trip_calculator = TripCostCalculator(fuel_prices)
+        
+        result = trip_calculator.calculate_round_trip(
+            one_way_distance=data['one_way_distance'],
+            vehicle_mileage=data['vehicle_mileage'],
+            fuel_type=data['fuel_type'],
+            stops=data.get('stops', 0),
+            parking_per_stop=data.get('parking_per_stop', 0)
+        )
+        
+        return jsonify(result)
+        
+    except Exception as e:
+        app.logger.error(f"Error calculating round trip: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/estimate-refueling-stops', methods=['POST'])
+def estimate_refueling_stops():
+    """Estimate refueling stops for a trip"""
+    try:
+        data = request.get_json()
+        
+        from services.trip_cost_calculator import TripCostCalculator
+        
+        fuel_prices = FuelPrice.get_latest_prices(data.get('city', 'Delhi'))
+        trip_calculator = TripCostCalculator(fuel_prices)
+        
+        result = trip_calculator.estimate_refueling_stops(
+            distance_km=data['distance_km'],
+            vehicle_mileage=data['vehicle_mileage'],
+            tank_capacity=data['tank_capacity'],
+            initial_fuel=data['initial_fuel']
+        )
+        
+        return jsonify(result)
+        
+    except Exception as e:
+        app.logger.error(f"Error estimating stops: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/compare-routes', methods=['POST'])
+def compare_routes():
+    """Compare costs for different route options"""
+    try:
+        data = request.get_json()
+        
+        from services.trip_cost_calculator import TripCostCalculator
+        
+        fuel_prices = FuelPrice.get_latest_prices(data.get('city', 'Delhi'))
+        trip_calculator = TripCostCalculator(fuel_prices)
+        
+        result = trip_calculator.compare_route_options(
+            routes=data['routes'],
+            vehicle_mileage=data['vehicle_mileage'],
+            fuel_type=data['fuel_type']
+        )
+        
+        return jsonify(result)
+        
+    except Exception as e:
+        app.logger.error(f"Error comparing routes: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+
+# ============ MAINTENANCE TRACKING FEATURES ============
+
+@app.route('/api/maintenance/add', methods=['POST'])
+@login_required
+def add_maintenance_record():
+    """Add a maintenance record"""
+    try:
+        data = request.get_json()
+        
+        from services.maintenance_service import MaintenanceService
+        
+        maintenance_service = MaintenanceService()
+        
+        record = maintenance_service.add_maintenance_record(
+            vehicle_id=data['vehicle_id'],
+            service_type=data['service_type'],
+            service_date=datetime.fromisoformat(data['service_date']),
+            cost=data['cost'],
+            odometer_reading=data.get('odometer_reading'),
+            service_center=data.get('service_center'),
+            notes=data.get('notes')
+        )
+        
+        return jsonify({
+            'message': 'Maintenance record added successfully',
+            'record_id': record.id
+        })
+        
+    except Exception as e:
+        db.session.rollback()
+        app.logger.error(f"Error adding maintenance record: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/maintenance/upcoming/<int:vehicle_id>')
+@login_required
+def get_upcoming_maintenance(vehicle_id):
+    """Get upcoming maintenance for a vehicle"""
+    try:
+        from services.maintenance_service import MaintenanceService
+        
+        maintenance_service = MaintenanceService()
+        
+        days_ahead = int(request.args.get('days', 30))
+        current_odometer = request.args.get('odometer', type=float)
+        
+        upcoming = maintenance_service.get_upcoming_maintenance(
+            vehicle_id=vehicle_id,
+            days_ahead=days_ahead,
+            current_odometer=current_odometer
+        )
+        
+        return jsonify({'upcoming_maintenance': upcoming})
+        
+    except Exception as e:
+        app.logger.error(f"Error fetching upcoming maintenance: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/maintenance/history/<int:vehicle_id>')
+@login_required
+def get_maintenance_history(vehicle_id):
+    """Get maintenance history for a vehicle"""
+    try:
+        from services.maintenance_service import MaintenanceService
+        
+        maintenance_service = MaintenanceService()
+        
+        limit = int(request.args.get('limit', 10))
+        history = maintenance_service.get_maintenance_history(vehicle_id, limit)
+        
+        return jsonify({'maintenance_history': history})
+        
+    except Exception as e:
+        app.logger.error(f"Error fetching maintenance history: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/maintenance/cost-projection/<int:vehicle_id>')
+@login_required
+def get_maintenance_cost_projection(vehicle_id):
+    """Get maintenance cost projection"""
+    try:
+        from services.maintenance_service import MaintenanceService
+        
+        maintenance_service = MaintenanceService()
+        
+        months = int(request.args.get('months', 12))
+        projection = maintenance_service.calculate_maintenance_cost_projection(
+            vehicle_id, months
+        )
+        
+        return jsonify(projection)
+        
+    except Exception as e:
+        app.logger.error(f"Error calculating projection: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/maintenance/statistics/<int:vehicle_id>')
+@login_required
+def get_maintenance_statistics(vehicle_id):
+    """Get maintenance statistics"""
+    try:
+        from services.maintenance_service import MaintenanceService
+        
+        maintenance_service = MaintenanceService()
+        stats = maintenance_service.get_maintenance_statistics(vehicle_id)
+        
+        return jsonify(stats)
+        
+    except Exception as e:
+        app.logger.error(f"Error fetching statistics: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/maintenance/reminder/<int:reminder_id>/complete', methods=['POST'])
+@login_required
+def complete_maintenance_reminder(reminder_id):
+    """Mark a maintenance reminder as completed"""
+    try:
+        from services.maintenance_service import MaintenanceService
+        
+        maintenance_service = MaintenanceService()
+        maintenance_service.mark_reminder_completed(reminder_id)
+        
+        return jsonify({'message': 'Reminder marked as completed'})
+        
+    except Exception as e:
+        app.logger.error(f"Error completing reminder: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+
+# ============ FUEL LOG & HISTORY TRACKING ============
+
+@app.route('/api/fuel-log/add', methods=['POST'])
+@login_required
+def add_fuel_log():
+    """Add a fuel log entry"""
+    try:
+        data = request.get_json()
+        
+        log = FuelLog(
+            vehicle_id=data['vehicle_id'],
+            fuel_type=data['fuel_type'],
+            amount=data['amount'],
+            cost=data['cost'],
+            odometer=data.get('odometer'),
+            station_id=data.get('station_id')
+        )
+        
+        db.session.add(log)
+        db.session.commit()
+        
+        return jsonify({
+            'message': 'Fuel log added successfully',
+            'log_id': log.id
+        })
+        
+    except Exception as e:
+        db.session.rollback()
+        app.logger.error(f"Error adding fuel log: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/fuel-log/history/<int:vehicle_id>')
+@login_required
+def get_fuel_log_history(vehicle_id):
+    """Get fuel log history for a vehicle"""
+    try:
+        limit = int(request.args.get('limit', 50))
+        
+        logs = FuelLog.query.filter_by(
+            vehicle_id=vehicle_id
+        ).order_by(
+            FuelLog.date.desc()
+        ).limit(limit).all()
+        
+        history = []
+        for log in logs:
+            history.append({
+                'id': log.id,
+                'date': log.date.isoformat(),
+                'fuel_type': log.fuel_type,
+                'amount': log.amount,
+                'cost': log.cost,
+                'cost_per_unit': round(log.cost / log.amount, 2) if log.amount > 0 else 0,
+                'odometer': log.odometer,
+                'station_id': log.station_id
+            })
+        
+        return jsonify({'fuel_history': history})
+        
+    except Exception as e:
+        app.logger.error(f"Error fetching fuel history: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/fuel-log/analytics/<int:vehicle_id>')
+@login_required
+def get_fuel_analytics(vehicle_id):
+    """Get fuel consumption analytics"""
+    try:
+        from datetime import timedelta
+        
+        # Get logs from last 6 months
+        six_months_ago = datetime.now() - timedelta(days=180)
+        
+        logs = FuelLog.query.filter(
+            FuelLog.vehicle_id == vehicle_id,
+            FuelLog.date >= six_months_ago
+        ).order_by(FuelLog.date).all()
+        
+        if not logs:
+            return jsonify({
+                'message': 'No fuel data available',
+                'analytics': None
+            })
+        
+        # Calculate analytics
+        total_spent = sum(log.cost for log in logs)
+        total_fuel = sum(log.amount for log in logs)
+        avg_price = total_spent / total_fuel if total_fuel > 0 else 0
+        
+        # Calculate mileage if odometer data available
+        logs_with_odo = [log for log in logs if log.odometer]
+        avg_mileage = None
+        
+        if len(logs_with_odo) >= 2:
+            logs_with_odo.sort(key=lambda x: x.date)
+            distance = logs_with_odo[-1].odometer - logs_with_odo[0].odometer
+            fuel_consumed = sum(log.amount for log in logs_with_odo)
+            avg_mileage = distance / fuel_consumed if fuel_consumed > 0 else None
+        
+        # Monthly breakdown
+        monthly_data = {}
+        for log in logs:
+            month_key = log.date.strftime('%Y-%m')
+            if month_key not in monthly_data:
+                monthly_data[month_key] = {
+                    'total_cost': 0,
+                    'total_fuel': 0,
+                    'fill_count': 0
+                }
+            monthly_data[month_key]['total_cost'] += log.cost
+            monthly_data[month_key]['total_fuel'] += log.amount
+            monthly_data[month_key]['fill_count'] += 1
+        
+        return jsonify({
+            'analytics': {
+                'total_spent': round(total_spent, 2),
+                'total_fuel': round(total_fuel, 2),
+                'average_price_per_unit': round(avg_price, 2),
+                'average_mileage': round(avg_mileage, 2) if avg_mileage else None,
+                'fill_count': len(logs),
+                'monthly_breakdown': monthly_data
+            }
+        })
+        
+    except Exception as e:
+        app.logger.error(f"Error calculating analytics: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+
+# ============ ECO SCORE & ENVIRONMENTAL TRACKING ============
+
+@app.route('/api/eco-score/<int:vehicle_id>')
+@login_required
+def get_eco_score(vehicle_id):
+    """Get environmental impact score for a vehicle"""
+    try:
+        vehicle = Vehicle.query.get_or_404(vehicle_id)
+        
+        # Calculate based on fuel logs
+        logs = FuelLog.query.filter_by(vehicle_id=vehicle_id).all()
+        
+        if not logs:
+            return jsonify({
+                'message': 'No data available for eco score calculation',
+                'eco_score': None
+            })
+        
+        # CO2 emission factors
+        emission_factors = {
+            'petrol': 2.31,
+            'diesel': 2.68,
+            'cng': 1.96
+        }
+        
+        total_co2 = 0
+        for log in logs:
+            factor = emission_factors.get(log.fuel_type, 2.31)
+            total_co2 += log.amount * factor
+        
+        # Calculate savings if CNG converted
+        co2_savings = 0
+        if vehicle.is_cng_converted and vehicle.conversion_date:
+            # Get logs before and after conversion
+            logs_after = [l for l in logs if l.date >= vehicle.conversion_date]
+            
+            # Estimate what emissions would have been with petrol
+            total_cng = sum(l.amount for l in logs_after if l.fuel_type == 'cng')
+            would_be_co2 = total_cng * emission_factors['petrol'] * 1.2
+            actual_co2 = total_cng * emission_factors['cng']
+            co2_savings = would_be_co2 - actual_co2
+        
+        # Calculate eco score (0-100)
+        # Lower emissions = higher score
+        eco_score = max(0, 100 - (total_co2 / 100))
+        
+        trees_equivalent = total_co2 / 22  # Trees needed to offset
+        
+        return jsonify({
+            'eco_score': round(eco_score, 1),
+            'total_co2_emitted': round(total_co2, 2),
+            'co2_savings': round(co2_savings, 2),
+            'trees_equivalent': round(trees_equivalent, 1),
+            'is_cng_converted': vehicle.is_cng_converted,
+            'grade': (
+                'Excellent' if eco_score >= 80 else
+                'Good' if eco_score >= 60 else
+                'Average' if eco_score >= 40 else
+                'Poor'
+            )
+        })
+        
+    except Exception as e:
+        app.logger.error(f"Error calculating eco score: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+
+# ============ MULTI-VEHICLE MANAGEMENT ============
+
+@app.route('/api/vehicles/add', methods=['POST'])
+@login_required
+def add_vehicle():
+    """Add a new vehicle for the user"""
+    try:
+        data = request.get_json()
+        
+        vehicle = Vehicle(
+            user_id=current_user.id,
+            make=data['make'],
+            model=data['model'],
+            year=data['year'],
+            fuel_type=data['fuel_type'],
+            avg_mileage=data.get('avg_mileage'),
+            monthly_usage=data.get('monthly_usage'),
+            is_cng_converted=data.get('is_cng_converted', False)
+        )
+        
+        db.session.add(vehicle)
+        db.session.commit()
+        
+        return jsonify({
+            'message': 'Vehicle added successfully',
+            'vehicle_id': vehicle.id
+        })
+        
+    except Exception as e:
+        db.session.rollback()
+        app.logger.error(f"Error adding vehicle: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/vehicles/<int:vehicle_id>', methods=['PUT'])
+@login_required
+def update_vehicle(vehicle_id):
+    """Update vehicle information"""
+    try:
+        vehicle = Vehicle.query.get_or_404(vehicle_id)
+        
+        # Verify ownership
+        if vehicle.user_id != current_user.id:
+            return jsonify({'error': 'Unauthorized'}), 403
+        
+        data = request.get_json()
+        
+        if 'make' in data:
+            vehicle.make = data['make']
+        if 'model' in data:
+            vehicle.model = data['model']
+        if 'year' in data:
+            vehicle.year = data['year']
+        if 'fuel_type' in data:
+            vehicle.fuel_type = data['fuel_type']
+        if 'avg_mileage' in data:
+            vehicle.avg_mileage = data['avg_mileage']
+        if 'monthly_usage' in data:
+            vehicle.monthly_usage = data['monthly_usage']
+        if 'is_cng_converted' in data:
+            vehicle.is_cng_converted = data['is_cng_converted']
+            if data['is_cng_converted'] and not vehicle.conversion_date:
+                vehicle.conversion_date = datetime.now()
+        
+        db.session.commit()
+        
+        return jsonify({'message': 'Vehicle updated successfully'})
+        
+    except Exception as e:
+        db.session.rollback()
+        app.logger.error(f"Error updating vehicle: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/vehicles/<int:vehicle_id>', methods=['DELETE'])
+@login_required
+def delete_vehicle(vehicle_id):
+    """Delete a vehicle"""
+    try:
+        vehicle = Vehicle.query.get_or_404(vehicle_id)
+        
+        # Verify ownership
+        if vehicle.user_id != current_user.id:
+            return jsonify({'error': 'Unauthorized'}), 403
+        
+        db.session.delete(vehicle)
+        db.session.commit()
+        
+        return jsonify({'message': 'Vehicle deleted successfully'})
+        
+    except Exception as e:
+        db.session.rollback()
+        app.logger.error(f"Error deleting vehicle: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/vehicles/summary')
+@login_required
+def get_vehicles_summary():
+    """Get summary of all user's vehicles"""
+    try:
+        vehicles = Vehicle.query.filter_by(user_id=current_user.id).all()
+        
+        summary = []
+        for vehicle in vehicles:
+            # Get recent fuel log
+            recent_log = FuelLog.query.filter_by(
+                vehicle_id=vehicle.id
+            ).order_by(FuelLog.date.desc()).first()
+            
+            # Get upcoming maintenance count
+            from services.maintenance_service import MaintenanceService
+            maintenance_service = MaintenanceService()
+            upcoming = maintenance_service.get_upcoming_maintenance(vehicle.id, days_ahead=30)
+            
+            summary.append({
+                'id': vehicle.id,
+                'make': vehicle.make,
+                'model': vehicle.model,
+                'year': vehicle.year,
+                'fuel_type': vehicle.fuel_type,
+                'is_cng_converted': vehicle.is_cng_converted,
+                'avg_mileage': vehicle.avg_mileage,
+                'monthly_usage': vehicle.monthly_usage,
+                'last_fill_date': recent_log.date.isoformat() if recent_log else None,
+                'upcoming_maintenance_count': len(upcoming)
+            })
+        
+        return jsonify({
+            'vehicles': summary,
+            'total_vehicles': len(vehicles),
+            'cng_vehicles': sum(1 for v in vehicles if v.is_cng_converted)
+        })
+        
+    except Exception as e:
+        app.logger.error(f"Error fetching vehicles summary: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
 
 def init_db():
     """Initialize database tables"""
