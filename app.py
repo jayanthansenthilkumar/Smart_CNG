@@ -12,7 +12,8 @@ from typing import Dict, Any
 from models.station_calculating_model import ChargingStationCalculator
 from models.cng_calculator import (
     User, Vehicle, FuelLog, Station, WaitTime, UserPreference,
-    CNGConversionCost, FuelPrice, db
+    CNGConversionCost, FuelPrice, StationPrice, StationAvailability,
+    StationReview, StationBooking, PriceAlert, FavoriteStation, PriceTrend, db
 )
 from services.cng_calculator import CNGCalculator
 from flask_sqlalchemy import SQLAlchemy
@@ -923,6 +924,348 @@ def location_optimizer():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
     return render_template('location_optimizer.html', username=session.get('username'))
+
+# ============ NEW REAL-TIME CNG FEATURES ============
+
+@app.route('/api/realtime-stations/<lat>/<lng>')
+def get_realtime_stations(lat, lng):
+    """Fetch real-time CNG stations from multiple sources"""
+    try:
+        from services.realtime_station_fetcher import realtime_fetcher
+        
+        lat, lng = float(lat), float(lng)
+        radius_km = float(request.args.get('radius', 50))
+        
+        # Fetch from all sources
+        stations = realtime_fetcher.fetch_all_sources(lat, lng, radius_km)
+        
+        # Enrich with database information if available
+        for station in stations:
+            db_station = Station.query.filter_by(
+                latitude=station['lat'],
+                longitude=station['lng']
+            ).first()
+            
+            if db_station:
+                station['id'] = db_station.id
+                station['rating'] = db_station.average_rating
+                station['total_reviews'] = db_station.total_reviews
+                
+                # Get current availability
+                if db_station.availability:
+                    station['is_operational'] = db_station.availability.is_operational
+                    station['queue_length'] = db_station.availability.current_queue_length
+                    station['wait_time'] = db_station.availability.estimated_wait_minutes
+                    station['stock_level'] = db_station.availability.cng_stock_level
+        
+        return jsonify({'stations': stations, 'count': len(stations)})
+        
+    except Exception as e:
+        app.logger.error(f"Error fetching realtime stations: {str(e)}")
+        return jsonify({'error': str(e), 'stations': []}), 500
+
+
+@app.route('/api/station-details/<int:station_id>')
+def get_station_details(station_id):
+    """Get detailed information about a specific station"""
+    try:
+        station = Station.query.get_or_404(station_id)
+        
+        # Get current prices
+        prices = {}
+        for price in station.prices:
+            prices[price.fuel_type] = {
+                'price': price.price,
+                'currency': price.currency,
+                'updated': price.updated_at.isoformat()
+            }
+        
+        # Get recent reviews
+        recent_reviews = []
+        for review in station.reviews[-10:]:  # Last 10 reviews
+            recent_reviews.append({
+                'id': review.id,
+                'rating': review.rating,
+                'text': review.review_text,
+                'user': review.user.username,
+                'created': review.created_at.isoformat()
+            })
+        
+        # Get availability
+        availability = None
+        if station.availability:
+            availability = {
+                'operational': station.availability.is_operational,
+                'queue_length': station.availability.current_queue_length,
+                'wait_minutes': station.availability.estimated_wait_minutes,
+                'available_pumps': station.availability.available_pumps,
+                'total_pumps': station.availability.total_pumps,
+                'stock_level': station.availability.cng_stock_level
+            }
+        
+        return jsonify({
+            'id': station.id,
+            'name': station.name,
+            'latitude': station.latitude,
+            'longitude': station.longitude,
+            'address': station.address,
+            'city': station.city,
+            'operating_hours': station.operating_hours,
+            'is_24x7': station.is_24x7,
+            'operator': station.operator,
+            'phone': station.phone,
+            'website': station.website,
+            'amenities': station.amenities,
+            'rating': station.average_rating,
+            'total_reviews': station.total_reviews,
+            'prices': prices,
+            'availability': availability,
+            'recent_reviews': recent_reviews
+        })
+        
+    except Exception as e:
+        app.logger.error(f"Error fetching station details: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/station-review', methods=['POST'])
+@login_required
+def add_station_review():
+    """Add a review for a station"""
+    try:
+        data = request.get_json()
+        
+        review = StationReview(
+            station_id=data['station_id'],
+            user_id=current_user.id,
+            rating=data['rating'],
+            review_text=data.get('text', ''),
+            service_quality=data.get('service_quality'),
+            wait_time_rating=data.get('wait_time_rating'),
+            price_rating=data.get('price_rating'),
+            cleanliness_rating=data.get('cleanliness_rating')
+        )
+        
+        db.session.add(review)
+        
+        # Update station average rating
+        station = Station.query.get(data['station_id'])
+        if station:
+            reviews = StationReview.query.filter_by(station_id=station.id).all()
+            station.average_rating = sum(r.rating for r in reviews) / len(reviews)
+            station.total_reviews = len(reviews)
+        
+        db.session.commit()
+        
+        return jsonify({'message': 'Review added successfully', 'review_id': review.id})
+        
+    except Exception as e:
+        db.session.rollback()
+        app.logger.error(f"Error adding review: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/station-booking', methods=['POST'])
+@login_required
+def create_station_booking():
+    """Create a booking/queue slot at a station"""
+    try:
+        data = request.get_json()
+        
+        booking = StationBooking(
+            station_id=data['station_id'],
+            user_id=current_user.id,
+            booking_time=datetime.now(),
+            estimated_arrival=datetime.fromisoformat(data['estimated_arrival']),
+            vehicle_id=data.get('vehicle_id'),
+            estimated_fill_amount=data.get('estimated_fill_amount')
+        )
+        
+        # Assign queue number
+        existing_bookings = StationBooking.query.filter_by(
+            station_id=data['station_id'],
+            status='pending'
+        ).count()
+        booking.queue_number = existing_bookings + 1
+        
+        db.session.add(booking)
+        db.session.commit()
+        
+        return jsonify({
+            'message': 'Booking created successfully',
+            'booking_id': booking.id,
+            'queue_number': booking.queue_number
+        })
+        
+    except Exception as e:
+        db.session.rollback()
+        app.logger.error(f"Error creating booking: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/price-alert', methods=['POST'])
+@login_required
+def create_price_alert():
+    """Create a price drop alert"""
+    try:
+        data = request.get_json()
+        
+        alert = PriceAlert(
+            user_id=current_user.id,
+            fuel_type=data['fuel_type'],
+            city=data.get('city'),
+            station_id=data.get('station_id'),
+            alert_threshold=data['threshold'],
+            notification_method=data.get('notification_method', 'email')
+        )
+        
+        db.session.add(alert)
+        db.session.commit()
+        
+        return jsonify({
+            'message': 'Price alert created successfully',
+            'alert_id': alert.id
+        })
+        
+    except Exception as e:
+        db.session.rollback()
+        app.logger.error(f"Error creating price alert: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/favorite-station/<int:station_id>', methods=['POST', 'DELETE'])
+@login_required
+def toggle_favorite_station(station_id):
+    """Add or remove a station from favorites"""
+    try:
+        if request.method == 'POST':
+            favorite = FavoriteStation(
+                user_id=current_user.id,
+                station_id=station_id,
+                notes=request.get_json().get('notes', '')
+            )
+            db.session.add(favorite)
+            db.session.commit()
+            return jsonify({'message': 'Station added to favorites'})
+        else:
+            favorite = FavoriteStation.query.filter_by(
+                user_id=current_user.id,
+                station_id=station_id
+            ).first()
+            if favorite:
+                db.session.delete(favorite)
+                db.session.commit()
+            return jsonify({'message': 'Station removed from favorites'})
+            
+    except Exception as e:
+        db.session.rollback()
+        app.logger.error(f"Error toggling favorite: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/price-trends/<fuel_type>')
+def get_price_trends(fuel_type):
+    """Get historical price trends for analytics"""
+    try:
+        city = request.args.get('city', 'Delhi')
+        days = int(request.args.get('days', 30))
+        
+        from datetime import timedelta
+        start_date = datetime.now() - timedelta(days=days)
+        
+        trends = PriceTrend.query.filter(
+            PriceTrend.fuel_type == fuel_type,
+            PriceTrend.city == city,
+            PriceTrend.date >= start_date
+        ).order_by(PriceTrend.date).all()
+        
+        data = [{
+            'date': t.date.isoformat(),
+            'price': t.price,
+            'city': t.city
+        } for t in trends]
+        
+        return jsonify({'trends': data})
+        
+    except Exception as e:
+        app.logger.error(f"Error fetching price trends: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/user/favorites')
+@login_required
+def get_user_favorites():
+    """Get user's favorite stations"""
+    try:
+        favorites = FavoriteStation.query.filter_by(user_id=current_user.id).all()
+        
+        stations = []
+        for fav in favorites:
+            station = fav.station
+            stations.append({
+                'id': station.id,
+                'name': station.name,
+                'latitude': station.latitude,
+                'longitude': station.longitude,
+                'address': station.address,
+                'rating': station.average_rating,
+                'notes': fav.notes,
+                'added_on': fav.created_at.isoformat()
+            })
+        
+        return jsonify({'favorites': stations})
+        
+    except Exception as e:
+        app.logger.error(f"Error fetching favorites: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/compare-prices')
+def compare_station_prices():
+    """Compare CNG prices across multiple stations"""
+    try:
+        lat = float(request.args.get('lat'))
+        lng = float(request.args.get('lng'))
+        radius_km = float(request.args.get('radius', 10))
+        
+        # Find nearby stations
+        from sqlalchemy import func
+        
+        # Haversine formula for distance calculation
+        stations = Station.query.filter(
+            Station.latitude.between(lat - radius_km/111, lat + radius_km/111),
+            Station.longitude.between(lng - radius_km/111, lng + radius_km/111)
+        ).all()
+        
+        comparison = []
+        for station in stations:
+            # Get latest CNG price
+            cng_price = StationPrice.query.filter_by(
+                station_id=station.id,
+                fuel_type='cng'
+            ).order_by(StationPrice.updated_at.desc()).first()
+            
+            if cng_price:
+                comparison.append({
+                    'station_id': station.id,
+                    'name': station.name,
+                    'latitude': station.latitude,
+                    'longitude': station.longitude,
+                    'price': cng_price.price,
+                    'updated': cng_price.updated_at.isoformat(),
+                    'rating': station.average_rating
+                })
+        
+        # Sort by price
+        comparison.sort(key=lambda x: x['price'])
+        
+        return jsonify({'stations': comparison})
+        
+    except Exception as e:
+        app.logger.error(f"Error comparing prices: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+# ============ END NEW FEATURES ============
 
 def init_db():
     """Initialize database tables"""
