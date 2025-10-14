@@ -8,11 +8,8 @@ from flask_login import UserMixin
 db = SQLAlchemy()
 
 
-# ============================================================================
-# USER & AUTH
-# ============================================================================
-
 class User(UserMixin, db.Model):
+    """User model"""
     __tablename__ = 'users'
     
     id = db.Column(db.Integer, primary_key=True)
@@ -23,11 +20,8 @@ class User(UserMixin, db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
 
-# ============================================================================
-# VEHICLE & LOGS
-# ============================================================================
-
 class Vehicle(db.Model):
+    """Vehicle model"""
     __tablename__ = 'vehicles'
     
     id = db.Column(db.Integer, primary_key=True)
@@ -41,6 +35,7 @@ class Vehicle(db.Model):
 
 
 class FuelLog(db.Model):
+    """Fuel log model"""
     __tablename__ = 'fuel_logs'
     
     id = db.Column(db.Integer, primary_key=True)
@@ -52,11 +47,8 @@ class FuelLog(db.Model):
     odometer = db.Column(db.Float)
 
 
-# ============================================================================
-# STATION
-# ============================================================================
-
 class Station(db.Model):
+    """Station model"""
     __tablename__ = 'stations'
     
     id = db.Column(db.Integer, primary_key=True)
@@ -67,17 +59,3 @@ class Station(db.Model):
     state = db.Column(db.String(100))
     rating = db.Column(db.Float)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
-
-
-# ============================================================================
-# PREFERENCES
-# ============================================================================
-
-class UserPreference(db.Model):
-    __tablename__ = 'preferences'
-    
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    preferred_fuel = db.Column(db.String(20))
-    max_wait_time = db.Column(db.Integer)
-    max_distance = db.Column(db.Float)
