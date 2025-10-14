@@ -287,49 +287,49 @@
     }
   ],
   "fuel_prices": {
-    "CNG": {
+    "cng": {
       "current_price": 75.61,
       "unit": "kg",
       "last_updated": "2025-10-13",
       "city_prices": {
         "Delhi": 75.61,
-        "Mumbai": 78.50,
-        "Pune": 77.80,
-        "Bangalore": 79.20,
-        "Hyderabad": 76.90,
-        "Ahmedabad": 74.50,
-        "Lucknow": 76.20,
-        "Kanpur": 75.80
+        "Mumbai": 82.0,
+        "Pune": 83.5,
+        "Bangalore": 81.0,
+        "Hyderabad": 79.0,
+        "Ahmedabad": 77.0,
+        "Lucknow": 78.5,
+        "Kanpur": 78.0
       }
     },
-    "Petrol": {
+    "petrol": {
       "current_price": 96.72,
       "unit": "liter",
       "last_updated": "2025-10-13",
       "city_prices": {
         "Delhi": 96.72,
         "Mumbai": 106.31,
-        "Pune": 104.50,
-        "Bangalore": 101.94,
+        "Pune": 104.24,
+        "Bangalore": 102.86,
         "Hyderabad": 109.66,
-        "Ahmedabad": 96.63,
+        "Ahmedabad": 96.48,
         "Lucknow": 96.57,
-        "Kanpur": 96.45
+        "Kanpur": 101.19
       }
     },
-    "Diesel": {
+    "diesel": {
       "current_price": 89.62,
       "unit": "liter",
       "last_updated": "2025-10-13",
       "city_prices": {
         "Delhi": 89.62,
         "Mumbai": 94.27,
-        "Pune": 92.80,
-        "Bangalore": 87.89,
+        "Pune": 90.96,
+        "Bangalore": 88.94,
         "Hyderabad": 97.82,
-        "Ahmedabad": 92.17,
-        "Lucknow": 89.50,
-        "Kanpur": 89.38
+        "Ahmedabad": 91.26,
+        "Lucknow": 89.76,
+        "Kanpur": 91.88
       }
     }
   },
@@ -359,6 +359,54 @@
       "suitable_for": ["Sedan", "SUV", "MUV"]
     }
   },
+  "cng_conversion_kits": [
+    {
+      "type": "Sequential Kit",
+      "price": 45000,
+      "warranty": "5 years / 75,000 km",
+      "pros": [
+        "Best fuel efficiency",
+        "Smooth performance",
+        "Precise fuel injection",
+        "Longer engine life"
+      ],
+      "cons": [
+        "Higher initial cost",
+        "Complex installation"
+      ]
+    },
+    {
+      "type": "Venturi Kit",
+      "price": 35000,
+      "warranty": "3 years / 45,000 km",
+      "pros": [
+        "Lower cost",
+        "Simple technology",
+        "Easy maintenance",
+        "Reliable performance"
+      ],
+      "cons": [
+        "Slightly lower efficiency",
+        "Older technology"
+      ]
+    },
+    {
+      "type": "Premium Sequential Kit",
+      "price": 65000,
+      "warranty": "7 years / 100,000 km",
+      "pros": [
+        "Best-in-class performance",
+        "Advanced ECU",
+        "Maximum efficiency",
+        "Premium build quality",
+        "Extended warranty"
+      ],
+      "cons": [
+        "Highest cost",
+        "Requires expert installation"
+      ]
+    }
+  ],
   "maintenance_schedule": {
     "cng_specific": [
       {
