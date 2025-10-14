@@ -1,10 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CNG Maintenance Tracker - Smart CNG</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         .maintenance-container {
@@ -365,7 +365,7 @@
                             <input type="number" id="odometer" placeholder="e.g., 50000" required>
                         </div>
                         <div class="form-group">
-                            <label for="cost">Cost (₹) *</label>
+                            <label for="cost">Cost (â‚¹) *</label>
                             <input type="number" id="cost" step="0.01" placeholder="e.g., 2500" required>
                         </div>
                     </div>
@@ -480,7 +480,7 @@
                     <div class="stat-icon" style="color: #f5576c;">
                         <i class="fas fa-rupee-sign"></i>
                     </div>
-                    <div class="stat-value" id="totalCost">₹0</div>
+                    <div class="stat-value" id="totalCost">â‚¹0</div>
                     <div class="stat-label">Total Maintenance Cost</div>
                 </div>
                 <div class="stat-card">
@@ -494,7 +494,7 @@
                     <div class="stat-icon" style="color: #fa709a;">
                         <i class="fas fa-chart-line"></i>
                     </div>
-                    <div class="stat-value" id="avgCost">₹0</div>
+                    <div class="stat-value" id="avgCost">â‚¹0</div>
                     <div class="stat-label">Average Cost per Service</div>
                 </div>
             </div>
@@ -681,7 +681,7 @@
                     <div class="record-details">
                         <div class="detail-item">
                             <div class="detail-label">Cost</div>
-                            <div class="detail-value">₹${record.cost.toFixed(2)}</div>
+                            <div class="detail-value">â‚¹${record.cost.toFixed(2)}</div>
                         </div>
                         <div class="detail-item">
                             <div class="detail-label">Odometer</div>
@@ -777,10 +777,10 @@
 
         function displayStatistics(stats) {
             document.getElementById('totalRecords').textContent = stats.total_records || 0;
-            document.getElementById('totalCost').textContent = `₹${(stats.total_cost || 0).toFixed(2)}`;
+            document.getElementById('totalCost').textContent = `â‚¹${(stats.total_cost || 0).toFixed(2)}`;
             document.getElementById('lastService').textContent = stats.last_service_date ? 
                 new Date(stats.last_service_date).toLocaleDateString() : 'N/A';
-            document.getElementById('avgCost').textContent = `₹${(stats.average_cost || 0).toFixed(2)}`;
+            document.getElementById('avgCost').textContent = `â‚¹${(stats.average_cost || 0).toFixed(2)}`;
 
             // Create cost chart
             if (stats.cost_breakdown) {
@@ -822,3 +822,4 @@
     </script>
 </body>
 </html>
+

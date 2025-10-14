@@ -1,10 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vehicle Comparison - Smart CNG</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <style>
         .comparison-container {
             max-width: 1200px;
@@ -171,7 +171,7 @@
 </head>
 <body>
     <div class="comparison-container">
-        <h1>🚗 Vehicle Comparison Tool</h1>
+        <h1>ðŸš— Vehicle Comparison Tool</h1>
         <p>Compare fuel costs across different vehicles and fuel types</p>
 
         <div class="vehicle-form">
@@ -326,7 +326,7 @@
                 html += `
                     <div class="vehicle-card ${isBest ? 'best' : ''}">
                         <span class="rank-badge rank-${comp.rank}">Rank #${comp.rank}</span>
-                        ${isBest ? '<span style="color: #4CAF50; font-weight: bold; margin-left: 10px;">✓ Most Economical</span>' : ''}
+                        ${isBest ? '<span style="color: #4CAF50; font-weight: bold; margin-left: 10px;">âœ“ Most Economical</span>' : ''}
                         
                         <h3>${comp.vehicle.make} ${comp.vehicle.model}</h3>
                         <p>Fuel Type: ${comp.vehicle.fuel_type.toUpperCase()} | Mileage: ${comp.vehicle.mileage} km/${comp.consumption.unit}</p>
@@ -334,26 +334,26 @@
                         <div class="stats-grid">
                             <div class="stat-box">
                                 <div class="stat-label">Monthly Cost</div>
-                                <div class="stat-value">₹${comp.costs.monthly}</div>
+                                <div class="stat-value">â‚¹${comp.costs.monthly}</div>
                             </div>
                             <div class="stat-box">
                                 <div class="stat-label">Total Cost (${data.period_months}m)</div>
-                                <div class="stat-value">₹${comp.costs.total}</div>
+                                <div class="stat-value">â‚¹${comp.costs.total}</div>
                             </div>
                             <div class="stat-box">
                                 <div class="stat-label">Cost per KM</div>
-                                <div class="stat-value">₹${comp.costs.per_km}</div>
+                                <div class="stat-value">â‚¹${comp.costs.per_km}</div>
                             </div>
                             <div class="stat-box">
                                 <div class="stat-label">Savings vs Highest</div>
-                                <div class="stat-value" style="color: #4CAF50;">₹${comp.cost_savings_vs_highest}</div>
+                                <div class="stat-value" style="color: #4CAF50;">â‚¹${comp.cost_savings_vs_highest}</div>
                             </div>
                         </div>
 
                         <div class="environmental-impact">
-                            <h4>🌱 Environmental Impact</h4>
-                            <p>Monthly CO₂: ${comp.environmental.monthly_co2} kg</p>
-                            <p>Total CO₂: ${comp.environmental.total_co2} kg</p>
+                            <h4>ðŸŒ± Environmental Impact</h4>
+                            <p>Monthly COâ‚‚: ${comp.environmental.monthly_co2} kg</p>
+                            <p>Total COâ‚‚: ${comp.environmental.total_co2} kg</p>
                             <p>Trees needed to offset: ${comp.environmental.trees_equivalent}</p>
                         </div>
                     </div>
@@ -365,3 +365,4 @@
     </script>
 </body>
 </html>
+

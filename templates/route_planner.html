@@ -1,16 +1,16 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fuelexa - CNG Route Planner</title>
-    <link rel="icon" href="{{ url_for('static', filename='images/logo.png') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/route_planner.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='logo.png') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script src="{{ url_for('static', filename='scripts.js') }}"></script>
 </head>
 <body>
     <!-- Animated Background (same as home/dashboard) -->
@@ -63,7 +63,7 @@
     <!-- Reuse the same header as main page -->
     <div class="title-bar">
         <div class="logo-container">
-            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Fuelexa Logo" class="logo">
+            <img src="{{ url_for('static', filename='logo.png') }}" alt="Fuelexa Logo" class="logo">
         </div>
         <nav class="nav-links">
             <h1 class="nav-link active">Route Planner</h1>
@@ -146,21 +146,21 @@
                     <i class="fas fa-road"></i>
                     <div>
                         <div class="label">Distance</div>
-                        <div class="value" id="summaryDistance">—</div>
+                        <div class="value" id="summaryDistance">â€”</div>
                     </div>
                 </div>
                 <div class="stat-card">
                     <i class="fas fa-clock"></i>
                     <div>
                         <div class="label">Duration</div>
-                        <div class="value" id="summaryDuration">—</div>
+                        <div class="value" id="summaryDuration">â€”</div>
                     </div>
                 </div>
                 <div class="stat-card">
                     <i class="fas fa-gas-pump"></i>
                     <div>
                         <div class="label">Stops</div>
-                        <div class="value" id="summaryStops">—</div>
+                        <div class="value" id="summaryStops">â€”</div>
                     </div>
                 </div>
             </div>
@@ -173,6 +173,6 @@
     </div>
     
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-    <script src="{{ url_for('static', filename='js/route_planner.js') }}"></script>
+    <script src="{{ url_for('static', filename='scripts.js') }}"></script>
 </body>
 </html> 

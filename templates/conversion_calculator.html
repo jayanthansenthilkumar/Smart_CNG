@@ -1,11 +1,11 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CNG Conversion Calculator - Smart CNG</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <style>
         .calculator-container {
             max-width: 1200px;
@@ -305,7 +305,7 @@
 <body>
     <nav class="navbar">
         <div class="nav-container">
-            <a href="/" class="logo">⚡ Smart CNG</a>
+            <a href="/" class="logo">âš¡ Smart CNG</a>
             <ul class="nav-menu">
                 <li><a href="/dashboard">Dashboard</a></li>
                 <li><a href="/conversion-calculator" class="active">Conversion Calculator</a></li>
@@ -316,7 +316,7 @@
     </nav>
 
     <div class="calculator-container">
-        <h1>🔄 CNG Conversion ROI Calculator</h1>
+        <h1>ðŸ”„ CNG Conversion ROI Calculator</h1>
         <p style="color: #666; margin-bottom: 30px;">Calculate if converting to CNG is worth it based on your driving patterns and get personalized recommendations</p>
 
         <!-- Calculator Form -->
@@ -378,7 +378,7 @@
                     </div>
                 </div>
 
-                <button type="submit" class="calculate-btn">🔍 Calculate ROI & Get Recommendations</button>
+                <button type="submit" class="calculate-btn">ðŸ” Calculate ROI & Get Recommendations</button>
             </form>
         </div>
 
@@ -393,7 +393,7 @@
             <!-- Monthly Savings -->
             <div class="result-card">
                 <div class="result-header">
-                    <h3>💰 Your Savings Potential</h3>
+                    <h3>ðŸ’° Your Savings Potential</h3>
                     <span class="verdict-badge" id="verdictBadge"></span>
                 </div>
                 
@@ -423,7 +423,7 @@
 
             <!-- Conversion Kit Options -->
             <div class="result-card">
-                <h3>🔧 Conversion Kit Options</h3>
+                <h3>ðŸ”§ Conversion Kit Options</h3>
                 <div class="kit-options" id="kitOptions">
                     <!-- Kit options will be inserted here -->
                 </div>
@@ -431,7 +431,7 @@
 
             <!-- Additional Considerations -->
             <div class="result-card">
-                <h3>📋 Things to Consider</h3>
+                <h3>ðŸ“‹ Things to Consider</h3>
                 <div class="considerations" id="considerations">
                     <!-- Considerations will be inserted here -->
                 </div>
@@ -500,8 +500,8 @@
             else verdictBadge.classList.add('not-recommended');
             
             // Stats
-            document.getElementById('monthlySavings').textContent = '₹' + data.monthly_analysis.monthly_savings;
-            document.getElementById('yearlySavings').textContent = '₹' + data.yearly_analysis.yearly_savings;
+            document.getElementById('monthlySavings').textContent = 'â‚¹' + data.monthly_analysis.monthly_savings;
+            document.getElementById('yearlySavings').textContent = 'â‚¹' + data.yearly_analysis.yearly_savings;
             document.getElementById('savingsPercent').textContent = data.monthly_analysis.savings_percentage + '%';
             document.getElementById('paybackPeriod').textContent = data.conversion_options[0].payback_period.months + ' mo';
             
@@ -522,22 +522,22 @@
                 <div class="kit-card">
                     <div class="kit-header">
                         <span class="kit-name">${kit.kit_type}</span>
-                        <span class="kit-price">₹${kit.kit_cost.toLocaleString()}</span>
+                        <span class="kit-price">â‚¹${kit.kit_cost.toLocaleString()}</span>
                     </div>
                     <p style="font-size: 13px; color: #666; margin: 10px 0;">Warranty: ${kit.warranty}</p>
                     
                     <table class="roi-table">
                         <tr>
                             <td>1 Year ROI</td>
-                            <td>₹${kit.roi_analysis['1_year'].net_benefit.toLocaleString()}</td>
+                            <td>â‚¹${kit.roi_analysis['1_year'].net_benefit.toLocaleString()}</td>
                         </tr>
                         <tr>
                             <td>3 Year ROI</td>
-                            <td>₹${kit.roi_analysis['3_years'].net_benefit.toLocaleString()}</td>
+                            <td>â‚¹${kit.roi_analysis['3_years'].net_benefit.toLocaleString()}</td>
                         </tr>
                         <tr>
                             <td>5 Year ROI</td>
-                            <td>₹${kit.roi_analysis['5_years'].net_benefit.toLocaleString()}</td>
+                            <td>â‚¹${kit.roi_analysis['5_years'].net_benefit.toLocaleString()}</td>
                         </tr>
                         <tr style="border-top: 2px solid #667eea;">
                             <td>Payback Period</td>
@@ -547,13 +547,13 @@
                     
                     <div class="pros-cons">
                         <div class="pros">
-                            <h4>✓ Pros</h4>
+                            <h4>âœ“ Pros</h4>
                             <ul>
                                 ${kit.pros.map(p => `<li>${p}</li>`).join('')}
                             </ul>
                         </div>
                         <div class="cons">
-                            <h4>✗ Cons</h4>
+                            <h4>âœ— Cons</h4>
                             <ul>
                                 ${kit.cons.map(c => `<li>${c}</li>`).join('')}
                             </ul>
@@ -567,25 +567,25 @@
             const consid = data.additional_considerations;
             considerations.innerHTML = `
                 <div class="consideration-box positive">
-                    <h4>✓ Positive Factors</h4>
+                    <h4>âœ“ Positive Factors</h4>
                     <ul>
                         ${consid.positive_factors.map(f => `<li>${f}</li>`).join('')}
                     </ul>
                 </div>
                 <div class="consideration-box negative">
-                    <h4>⚠ Things to Know</h4>
+                    <h4>âš  Things to Know</h4>
                     <ul>
                         ${consid.negative_factors.map(f => `<li>${f}</li>`).join('')}
                     </ul>
                 </div>
                 <div class="consideration-box">
-                    <h4>📋 Requirements</h4>
+                    <h4>ðŸ“‹ Requirements</h4>
                     <ul>
                         ${consid.requirements.map(r => `<li>${r}</li>`).join('')}
                     </ul>
                 </div>
                 <div class="consideration-box">
-                    <h4>🔧 Maintenance Info</h4>
+                    <h4>ðŸ”§ Maintenance Info</h4>
                     <p><strong>Additional Costs:</strong> ${consid.maintenance.additional_costs}/year</p>
                     <p><strong>Service Interval:</strong> ${consid.maintenance.service_interval}</p>
                     <ul>
@@ -597,3 +597,4 @@
     </script>
 </body>
 </html>
+

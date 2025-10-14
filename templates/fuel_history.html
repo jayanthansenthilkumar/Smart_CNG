@@ -1,10 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fuel Log & Analytics - Smart CNG</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         .fuel-container {
@@ -355,7 +355,7 @@
                 <div class="stat-icon" style="color: #f5576c;">
                     <i class="fas fa-rupee-sign"></i>
                 </div>
-                <div class="stat-value" id="totalSpent">₹0</div>
+                <div class="stat-value" id="totalSpent">â‚¹0</div>
                 <div class="stat-label">Total Spent</div>
             </div>
             <div class="stat-card">
@@ -376,7 +376,7 @@
                 <div class="stat-icon" style="color: #38f9d7;">
                     <i class="fas fa-coins"></i>
                 </div>
-                <div class="stat-value" id="costPerKm">₹0/km</div>
+                <div class="stat-value" id="costPerKm">â‚¹0/km</div>
                 <div class="stat-label">Average Cost per KM</div>
             </div>
             <div class="stat-card">
@@ -384,7 +384,7 @@
                     <i class="fas fa-leaf"></i>
                 </div>
                 <div class="stat-value" id="co2Saved">0 kg</div>
-                <div class="stat-label">CO₂ Saved (vs Petrol)</div>
+                <div class="stat-label">COâ‚‚ Saved (vs Petrol)</div>
             </div>
         </div>
 
@@ -444,11 +444,11 @@
                             <input type="number" id="quantity" step="0.01" placeholder="e.g., 10.5" required>
                         </div>
                         <div class="form-group">
-                            <label for="price_per_unit">Price per <span id="unit2">kg/L</span> (₹) *</label>
+                            <label for="price_per_unit">Price per <span id="unit2">kg/L</span> (â‚¹) *</label>
                             <input type="number" id="price_per_unit" step="0.01" placeholder="e.g., 75.50" required>
                         </div>
                         <div class="form-group">
-                            <label for="total_cost">Total Cost (₹) *</label>
+                            <label for="total_cost">Total Cost (â‚¹) *</label>
                             <input type="number" id="total_cost" step="0.01" placeholder="Auto-calculated" readonly>
                         </div>
                     </div>
@@ -689,10 +689,10 @@
 
         function displayStats(stats) {
             document.getElementById('totalFuelUps').textContent = stats.total_entries || 0;
-            document.getElementById('totalSpent').textContent = `₹${(stats.total_cost || 0).toFixed(2)}`;
+            document.getElementById('totalSpent').textContent = `â‚¹${(stats.total_cost || 0).toFixed(2)}`;
             document.getElementById('avgEfficiency').textContent = `${(stats.avg_efficiency || 0).toFixed(2)} km/kg`;
             document.getElementById('totalDistance').textContent = `${(stats.total_distance || 0).toLocaleString()} km`;
-            document.getElementById('costPerKm').textContent = `₹${(stats.cost_per_km || 0).toFixed(2)}/km`;
+            document.getElementById('costPerKm').textContent = `â‚¹${(stats.cost_per_km || 0).toFixed(2)}/km`;
             document.getElementById('co2Saved').textContent = `${(stats.co2_saved || 0).toFixed(2)} kg`;
         }
 
@@ -760,11 +760,11 @@
                         </div>
                         <div class="detail-item">
                             <div class="detail-label">Cost</div>
-                            <div class="detail-value">₹${log.total_cost.toFixed(2)}</div>
+                            <div class="detail-value">â‚¹${log.total_cost.toFixed(2)}</div>
                         </div>
                         <div class="detail-item">
                             <div class="detail-label">Price/Unit</div>
-                            <div class="detail-value">₹${log.price_per_unit.toFixed(2)}</div>
+                            <div class="detail-value">â‚¹${log.price_per_unit.toFixed(2)}</div>
                         </div>
                         <div class="detail-item">
                             <div class="detail-label">Odometer</div>
@@ -823,7 +823,7 @@
                 data: {
                     labels: data.dates || [],
                     datasets: [{
-                        label: 'Cost (₹)',
+                        label: 'Cost (â‚¹)',
                         data: data.costs || [],
                         backgroundColor: '#f5576c'
                     }]
@@ -896,3 +896,4 @@
     </script>
 </body>
 </html>
+

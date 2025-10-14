@@ -1,10 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trip Cost Calculator - Smart CNG</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <style>
         .trip-calculator {
             max-width: 900px;
@@ -154,7 +154,7 @@
 </head>
 <body>
     <div class="trip-calculator">
-        <h1>🗺️ Trip Cost Calculator</h1>
+        <h1>ðŸ—ºï¸ Trip Cost Calculator</h1>
         <p>Calculate and compare costs for your trips</p>
 
         <div class="tab-container">
@@ -189,17 +189,17 @@
                     </div>
                     
                     <div class="form-group">
-                        <label>Toll Charges (₹)</label>
+                        <label>Toll Charges (â‚¹)</label>
                         <input type="number" id="toll" value="0" min="0">
                     </div>
                     
                     <div class="form-group">
-                        <label>Parking Charges (₹)</label>
+                        <label>Parking Charges (â‚¹)</label>
                         <input type="number" id="parking" value="0" min="0">
                     </div>
                     
                     <div class="form-group">
-                        <label>Other Costs (₹)</label>
+                        <label>Other Costs (â‚¹)</label>
                         <input type="number" id="other-costs" value="0" min="0">
                     </div>
                 </div>
@@ -239,7 +239,7 @@
                     </div>
                     
                     <div class="form-group">
-                        <label>Parking per Stop (₹)</label>
+                        <label>Parking per Stop (â‚¹)</label>
                         <input type="number" id="parking-per-stop" value="0" min="0">
                     </div>
                 </div>
@@ -254,7 +254,7 @@
                 <h2>Compare Fuel Options</h2>
                 
                 <div class="info-box">
-                    <strong>💡 Tip:</strong> See how much you can save by using different fuel types for the same trip!
+                    <strong>ðŸ’¡ Tip:</strong> See how much you can save by using different fuel types for the same trip!
                 </div>
 
                 <div class="form-grid">
@@ -277,7 +277,7 @@
                     </div>
                     
                     <div class="form-group">
-                        <label>Toll Charges (₹)</label>
+                        <label>Toll Charges (â‚¹)</label>
                         <input type="number" id="compare-toll" value="0" min="0">
                     </div>
                 </div>
@@ -384,25 +384,25 @@
             resultsDiv.innerHTML = `
                 <div class="result-card">
                     <h2>Trip Cost Breakdown</h2>
-                    <div class="total-cost">₹${data.total_cost}</div>
+                    <div class="total-cost">â‚¹${data.total_cost}</div>
                     <p style="text-align: center; font-size: 18px;">Total Trip Cost</p>
                     
                     <div class="breakdown-grid">
                         <div class="breakdown-item">
                             <div class="breakdown-label">Fuel Cost</div>
-                            <div class="breakdown-value">₹${data.breakdown.fuel}</div>
+                            <div class="breakdown-value">â‚¹${data.breakdown.fuel}</div>
                         </div>
                         <div class="breakdown-item">
                             <div class="breakdown-label">Tolls</div>
-                            <div class="breakdown-value">₹${data.breakdown.tolls}</div>
+                            <div class="breakdown-value">â‚¹${data.breakdown.tolls}</div>
                         </div>
                         <div class="breakdown-item">
                             <div class="breakdown-label">Parking</div>
-                            <div class="breakdown-value">₹${data.breakdown.parking}</div>
+                            <div class="breakdown-value">â‚¹${data.breakdown.parking}</div>
                         </div>
                         <div class="breakdown-item">
                             <div class="breakdown-label">Other Costs</div>
-                            <div class="breakdown-value">₹${data.breakdown.other}</div>
+                            <div class="breakdown-value">â‚¹${data.breakdown.other}</div>
                         </div>
                     </div>
                 </div>
@@ -411,8 +411,8 @@
                     <h3>Trip Details</h3>
                     <p><strong>Distance:</strong> ${data.distance_km} km</p>
                     <p><strong>Fuel Needed:</strong> ${data.fuel.needed} ${data.fuel.unit}</p>
-                    <p><strong>Fuel Price:</strong> ₹${data.fuel.price_per_unit} per ${data.fuel.unit}</p>
-                    <p><strong>Cost per KM:</strong> ₹${data.cost_per_km}</p>
+                    <p><strong>Fuel Price:</strong> â‚¹${data.fuel.price_per_unit} per ${data.fuel.unit}</p>
+                    <p><strong>Cost per KM:</strong> â‚¹${data.cost_per_km}</p>
                 </div>
             `;
         }
@@ -425,7 +425,7 @@
                 <div class="comparison-table">
                     <h2>Fuel Option Comparison</h2>
                     <p><strong>Cheapest Option:</strong> ${data.cheapest_option}</p>
-                    <p><strong>Maximum Savings:</strong> ₹${data.max_savings}</p>
+                    <p><strong>Maximum Savings:</strong> â‚¹${data.max_savings}</p>
                 </div>
             `;
 
@@ -433,14 +433,14 @@
                 html += `
                     <div class="result-card" style="${index === 0 ? 'border: 3px solid #4CAF50;' : ''}">
                         <h3>${option.scenario}</h3>
-                        ${option.savings ? `<p style="color: #4CAF50; font-size: 18px; font-weight: bold;">💰 Save ₹${option.savings}</p>` : ''}
+                        ${option.savings ? `<p style="color: #4CAF50; font-size: 18px; font-weight: bold;">ðŸ’° Save â‚¹${option.savings}</p>` : ''}
                         
-                        <div class="total-cost">₹${option.total_cost}</div>
+                        <div class="total-cost">â‚¹${option.total_cost}</div>
                         
                         <div class="breakdown-grid">
                             <div class="breakdown-item">
                                 <div class="breakdown-label">Fuel Cost</div>
-                                <div class="breakdown-value">₹${option.breakdown.fuel}</div>
+                                <div class="breakdown-value">â‚¹${option.breakdown.fuel}</div>
                             </div>
                             <div class="breakdown-item">
                                 <div class="breakdown-label">Fuel Needed</div>
@@ -448,7 +448,7 @@
                             </div>
                             <div class="breakdown-item">
                                 <div class="breakdown-label">Cost/KM</div>
-                                <div class="breakdown-value">₹${option.cost_per_km}</div>
+                                <div class="breakdown-value">â‚¹${option.cost_per_km}</div>
                             </div>
                         </div>
                     </div>
@@ -460,3 +460,4 @@
     </script>
 </body>
 </html>
+
