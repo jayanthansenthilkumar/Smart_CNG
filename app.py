@@ -1,7 +1,4 @@
-﻿"""
-Smart CNG - Ultra Simple Flask App
-"""
-from flask import Flask, render_template, jsonify, request, redirect, url_for
+﻿from flask import Flask, render_template, jsonify, request, redirect, url_for
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 import os
 from lib import Data, Calculator
