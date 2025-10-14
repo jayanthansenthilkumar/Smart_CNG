@@ -4,7 +4,10 @@ import os
 from lib import Data, Calculator
 from model import User, db
 
-app = Flask(__name__)
+app = Flask(__name__, 
+            template_folder='public',
+            static_folder='public',
+            static_url_path='')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///smart_cng.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = 'dev-secret-key'

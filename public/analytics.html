@@ -4,13 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fuelexa - Analytics Dashboard</title>
-    <link rel="icon" href="{{ url_for('static', filename='logo.png') }}">
+    <link rel="icon" href="/logo.png">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- Stylesheets -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <!-- Scripts -->
@@ -22,7 +22,7 @@
 <body>
     <div class="title-bar">
         <div class="logo-container">
-            <img src="{{ url_for('static', filename='logo.png') }}" alt="Fuelexa Logo" class="logo">
+            <img src="/logo.png" alt="Fuelexa Logo" class="logo">
         </div>
         <div class="profile-section">
             <a href="{{ url_for('login') }}" class="login-button">
@@ -132,7 +132,8 @@
         </a>
     </div>
 
-    <script src="{{ url_for('static', filename='scripts.js') }}"></script>
-    <script src="{{ url_for('static', filename='scripts.js') }}"></script>
+    <script src="/scripts.js"></script>
+    <script src="/scripts.js"></script>
 </body>
 </html> 
+
