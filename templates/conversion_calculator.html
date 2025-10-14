@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CNG Conversion Calculator - Smart CNG</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+    <style>
+        .calculator-container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+        
+        .calculator-form {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #333;
+        }
+        
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .calculate-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+        }
+        
+        .calculate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .results-container {
+            display: none;
+        }
+        
+        .results-container.show {
+            display: block;
+        }
+        
+        .result-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .result-header h3 {
+            margin: 0;
+            color: #333;
+        }
+        
+        .verdict-badge {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        .verdict-badge.recommended {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .verdict-badge.consider {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .verdict-badge.not-recommended {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .stat-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .stat-box.green {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+        }
+        
+        .stat-box.orange {
+            background: linear-gradient(135deg, #f2994a 0%, #f2c94c 100%);
+        }
+        
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .kit-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .kit-card {
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 20px;
+            transition: all 0.3s;
+        }
+        
+        .kit-card:hover {
+            border-color: #667eea;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+        }
+        
+        .kit-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .kit-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .kit-price {
+            font-size: 20px;
+            font-weight: 700;
+            color: #667eea;
+        }
+        
+        .roi-table {
+            width: 100%;
+            margin: 15px 0;
+        }
+        
+        .roi-table td {
+            padding: 10px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .roi-table td:first-child {
+            font-weight: 600;
+            color: #666;
+        }
+        
+        .roi-table td:last-child {
+            text-align: right;
+            font-weight: 600;
+            color: #11998e;
+        }
+        
+        .pros-cons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .pros-cons ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+        
+        .pros-cons li {
+            margin: 5px 0;
+            font-size: 13px;
+        }
+        
+        .pros h4 {
+            color: #11998e;
+            margin-bottom: 10px;
+        }
+        
+        .cons h4 {
+            color: #e74c3c;
+            margin-bottom: 10px;
+        }
+        
+        .considerations {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .consideration-box {
+            padding: 15px;
+            border-radius: 8px;
+            background: #f8f9fa;
+        }
+        
+        .consideration-box h4 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        
+        .consideration-box ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+        
+        .consideration-box li {
+            margin: 8px 0;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        .positive {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+        }
+        
+        .negative {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+            display: none;
+        }
+        
+        .loading.show {
+            display: block;
+        }
+        
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="logo">⚡ Smart CNG</a>
+            <ul class="nav-menu">
+                <li><a href="/dashboard">Dashboard</a></li>
+                <li><a href="/conversion-calculator" class="active">Conversion Calculator</a></li>
+                <li><a href="/nearby-stations">Find Stations</a></li>
+                <li><a href="/logout">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="calculator-container">
+        <h1>🔄 CNG Conversion ROI Calculator</h1>
+        <p style="color: #666; margin-bottom: 30px;">Calculate if converting to CNG is worth it based on your driving patterns and get personalized recommendations</p>
+
+        <!-- Calculator Form -->
+        <div class="calculator-form">
+            <h3>Enter Your Details</h3>
+            <form id="conversionForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="vehicle">Your Vehicle</label>
+                        <select id="vehicle" name="vehicle" required>
+                            <option value="">Select your vehicle</option>
+                            <option value="Maruti Suzuki WagonR">Maruti Suzuki WagonR</option>
+                            <option value="Maruti Suzuki Alto">Maruti Suzuki Alto</option>
+                            <option value="Maruti Suzuki Swift">Maruti Suzuki Swift</option>
+                            <option value="Maruti Suzuki Ertiga">Maruti Suzuki Ertiga</option>
+                            <option value="Maruti Suzuki Dzire">Maruti Suzuki Dzire</option>
+                            <option value="Hyundai Grand i10 Nios">Hyundai Grand i10 Nios</option>
+                            <option value="Hyundai i20">Hyundai i20</option>
+                            <option value="Hyundai Aura">Hyundai Aura</option>
+                            <option value="Tata Tiago">Tata Tiago</option>
+                            <option value="Tata Tigor">Tata Tigor</option>
+                            <option value="Tata Altroz">Tata Altroz</option>
+                            <option value="Honda Amaze">Honda Amaze</option>
+                            <option value="Honda City">Honda City</option>
+                            <option value="Volkswagen Polo">Volkswagen Polo</option>
+                            <option value="Volkswagen Vento">Volkswagen Vento</option>
+                            <option value="Mahindra XUV300">Mahindra XUV300</option>
+                            <option value="Mahindra Scorpio">Mahindra Scorpio</option>
+                            <option value="Mahindra Bolero">Mahindra Bolero</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="city">Your City</label>
+                        <select id="city" name="city" required>
+                            <option value="">Select your city</option>
+                            <option value="Delhi">Delhi</option>
+                            <option value="Mumbai">Mumbai</option>
+                            <option value="Pune">Pune</option>
+                            <option value="Bangalore">Bangalore</option>
+                            <option value="Hyderabad">Hyderabad</option>
+                            <option value="Ahmedabad">Ahmedabad</option>
+                            <option value="Lucknow">Lucknow</option>
+                            <option value="Kanpur">Kanpur</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="monthlyKm">Monthly Kilometers</label>
+                        <input type="number" id="monthlyKm" name="monthlyKm" placeholder="e.g., 2000" min="500" max="10000" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="currentFuel">Current Fuel Type</label>
+                        <select id="currentFuel" name="currentFuel" required>
+                            <option value="petrol">Petrol</option>
+                            <option value="diesel">Diesel</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button type="submit" class="calculate-btn">🔍 Calculate ROI & Get Recommendations</button>
+            </form>
+        </div>
+
+        <!-- Loading Spinner -->
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p style="margin-top: 20px; color: #666;">Calculating your personalized conversion analysis...</p>
+        </div>
+
+        <!-- Results Container -->
+        <div class="results-container" id="results">
+            <!-- Monthly Savings -->
+            <div class="result-card">
+                <div class="result-header">
+                    <h3>💰 Your Savings Potential</h3>
+                    <span class="verdict-badge" id="verdictBadge"></span>
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-box green">
+                        <div class="stat-value" id="monthlySavings">-</div>
+                        <div class="stat-label">Monthly Savings</div>
+                    </div>
+                    <div class="stat-box green">
+                        <div class="stat-value" id="yearlySavings">-</div>
+                        <div class="stat-label">Yearly Savings</div>
+                    </div>
+                    <div class="stat-box orange">
+                        <div class="stat-value" id="savingsPercent">-</div>
+                        <div class="stat-label">Cost Reduction</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value" id="paybackPeriod">-</div>
+                        <div class="stat-label">Payback Period</div>
+                    </div>
+                </div>
+
+                <div id="recommendationText" style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-top: 20px;">
+                    <!-- Recommendation will be inserted here -->
+                </div>
+            </div>
+
+            <!-- Conversion Kit Options -->
+            <div class="result-card">
+                <h3>🔧 Conversion Kit Options</h3>
+                <div class="kit-options" id="kitOptions">
+                    <!-- Kit options will be inserted here -->
+                </div>
+            </div>
+
+            <!-- Additional Considerations -->
+            <div class="result-card">
+                <h3>📋 Things to Consider</h3>
+                <div class="considerations" id="considerations">
+                    <!-- Considerations will be inserted here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('conversionForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // Show loading
+            document.getElementById('loading').classList.add('show');
+            document.getElementById('results').classList.remove('show');
+            
+            // Get form data
+            const formData = {
+                vehicle: document.getElementById('vehicle').value,
+                city: document.getElementById('city').value,
+                monthlyKm: parseInt(document.getElementById('monthlyKm').value),
+                currentFuel: document.getElementById('currentFuel').value
+            };
+            
+            try {
+                const response = await fetch('/api/conversion/calculate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                const data = await response.json();
+                
+                if (data.error) {
+                    alert(data.error);
+                    document.getElementById('loading').classList.remove('show');
+                    return;
+                }
+                
+                // Display results
+                displayResults(data);
+                
+                // Hide loading, show results
+                document.getElementById('loading').classList.remove('show');
+                document.getElementById('results').classList.add('show');
+                
+                // Scroll to results
+                document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error calculating ROI. Please try again.');
+                document.getElementById('loading').classList.remove('show');
+            }
+        });
+        
+        function displayResults(data) {
+            // Verdict badge
+            const verdictBadge = document.getElementById('verdictBadge');
+            const verdict = data.recommendation.verdict;
+            verdictBadge.textContent = verdict;
+            verdictBadge.className = 'verdict-badge';
+            if (verdict.includes('Highly')) verdictBadge.classList.add('recommended');
+            else if (verdict.includes('Consider')) verdictBadge.classList.add('consider');
+            else verdictBadge.classList.add('not-recommended');
+            
+            // Stats
+            document.getElementById('monthlySavings').textContent = '₹' + data.monthly_analysis.monthly_savings;
+            document.getElementById('yearlySavings').textContent = '₹' + data.yearly_analysis.yearly_savings;
+            document.getElementById('savingsPercent').textContent = data.monthly_analysis.savings_percentage + '%';
+            document.getElementById('paybackPeriod').textContent = data.conversion_options[0].payback_period.months + ' mo';
+            
+            // Recommendation
+            const recText = document.getElementById('recommendationText');
+            recText.innerHTML = `
+                <h4 style="margin-top: 0;">${verdict}</h4>
+                <p style="font-size: 16px; margin: 10px 0;">${data.recommendation.reason}</p>
+                ${data.recommendation.best_kit ? `<p><strong>Best Kit:</strong> ${data.recommendation.best_kit}</p>` : ''}
+                <ul style="margin-top: 10px;">
+                    ${data.recommendation.conditions.map(c => `<li>${c}</li>`).join('')}
+                </ul>
+            `;
+            
+            // Kit options
+            const kitOptions = document.getElementById('kitOptions');
+            kitOptions.innerHTML = data.conversion_options.map(kit => `
+                <div class="kit-card">
+                    <div class="kit-header">
+                        <span class="kit-name">${kit.kit_type}</span>
+                        <span class="kit-price">₹${kit.kit_cost.toLocaleString()}</span>
+                    </div>
+                    <p style="font-size: 13px; color: #666; margin: 10px 0;">Warranty: ${kit.warranty}</p>
+                    
+                    <table class="roi-table">
+                        <tr>
+                            <td>1 Year ROI</td>
+                            <td>₹${kit.roi_analysis['1_year'].net_benefit.toLocaleString()}</td>
+                        </tr>
+                        <tr>
+                            <td>3 Year ROI</td>
+                            <td>₹${kit.roi_analysis['3_years'].net_benefit.toLocaleString()}</td>
+                        </tr>
+                        <tr>
+                            <td>5 Year ROI</td>
+                            <td>₹${kit.roi_analysis['5_years'].net_benefit.toLocaleString()}</td>
+                        </tr>
+                        <tr style="border-top: 2px solid #667eea;">
+                            <td>Payback Period</td>
+                            <td>${kit.payback_period.years} years</td>
+                        </tr>
+                    </table>
+                    
+                    <div class="pros-cons">
+                        <div class="pros">
+                            <h4>✓ Pros</h4>
+                            <ul>
+                                ${kit.pros.map(p => `<li>${p}</li>`).join('')}
+                            </ul>
+                        </div>
+                        <div class="cons">
+                            <h4>✗ Cons</h4>
+                            <ul>
+                                ${kit.cons.map(c => `<li>${c}</li>`).join('')}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            
+            // Considerations
+            const considerations = document.getElementById('considerations');
+            const consid = data.additional_considerations;
+            considerations.innerHTML = `
+                <div class="consideration-box positive">
+                    <h4>✓ Positive Factors</h4>
+                    <ul>
+                        ${consid.positive_factors.map(f => `<li>${f}</li>`).join('')}
+                    </ul>
+                </div>
+                <div class="consideration-box negative">
+                    <h4>⚠ Things to Know</h4>
+                    <ul>
+                        ${consid.negative_factors.map(f => `<li>${f}</li>`).join('')}
+                    </ul>
+                </div>
+                <div class="consideration-box">
+                    <h4>📋 Requirements</h4>
+                    <ul>
+                        ${consid.requirements.map(r => `<li>${r}</li>`).join('')}
+                    </ul>
+                </div>
+                <div class="consideration-box">
+                    <h4>🔧 Maintenance Info</h4>
+                    <p><strong>Additional Costs:</strong> ${consid.maintenance.additional_costs}/year</p>
+                    <p><strong>Service Interval:</strong> ${consid.maintenance.service_interval}</p>
+                    <ul>
+                        ${consid.maintenance.major_services.map(s => `<li>${s}</li>`).join('')}
+                    </ul>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>

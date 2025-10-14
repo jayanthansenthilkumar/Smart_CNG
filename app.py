@@ -329,6 +329,36 @@ def dashboard():
         return redirect(url_for('login'))
     return render_template('dashboard.html', username=session.get('username'))
 
+@app.route('/conversion-calculator')
+def conversion_calculator():
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
+    return render_template('conversion_calculator.html', username=session.get('username'))
+
+@app.route('/api/conversion/calculate', methods=['POST'])
+def calculate_conversion():
+    """Calculate CNG conversion ROI"""
+    try:
+        from services.conversion_calculator_service import conversion_calculator_service
+        
+        data = request.json
+        vehicle = data.get('vehicle')
+        city = data.get('city')
+        monthly_km = data.get('monthlyKm')
+        current_fuel = data.get('currentFuel', 'petrol')
+        
+        if not all([vehicle, city, monthly_km]):
+            return jsonify({'error': 'Missing required parameters'}), 400
+        
+        result = conversion_calculator_service.calculate_conversion_roi(
+            vehicle, city, monthly_km, current_fuel
+        )
+        
+        return jsonify(result)
+    except Exception as e:
+        print(f"Error in conversion calculation: {e}")
+        return jsonify({'error': str(e)}), 500
+
 @app.route('/static/<path:path>')
 def send_static(path):
     return send_from_directory('static', path)
