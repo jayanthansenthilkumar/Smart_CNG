@@ -37,7 +37,6 @@ ENV/
 *.sublime-project
 
 # Project specific
-instance/
 .webassets-cache
 *.log
 logs/
