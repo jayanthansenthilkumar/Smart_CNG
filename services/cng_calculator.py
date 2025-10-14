@@ -1,9 +1,22 @@
+"""
+Legacy CNGCalculator - Redirects to new core services
+This file is kept for backward compatibility
+"""
 from datetime import datetime, timedelta
 from typing import Dict, Optional, Tuple
+import sys
+import os
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
-class CNGCalculator:
+from core.services import FuelCostCalculator
+from core.data_models import Vehicle, FuelType
+
+
+class CNGCalculator(FuelCostCalculator):
+    """Legacy wrapper for backward compatibility"""
+    
     def __init__(self, fuel_prices: Dict[str, float]):
-        self.fuel_prices = fuel_prices
+        super().__init__(fuel_prices)
         
     def calculate_conversion_cost(self, vehicle_type: str, kit_type: str = "standard") -> float:
         """Calculate the total cost of CNG conversion"""
