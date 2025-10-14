@@ -1,0 +1,497 @@
+{
+  "driving_tips": [
+    {
+      "id": 1,
+      "category": "fuel_efficiency",
+      "title": "Maintain Optimal Speed",
+      "description": "Drive at 60-80 kmph on highways for maximum CNG efficiency. Speeds above 100 kmph can reduce efficiency by 20-30%.",
+      "impact": "high",
+      "savings_potential": "15-20%",
+      "difficulty": "easy"
+    },
+    {
+      "id": 2,
+      "category": "fuel_efficiency",
+      "title": "Smooth Acceleration",
+      "description": "Avoid sudden acceleration and hard braking. Gradual speed changes can improve fuel efficiency significantly.",
+      "impact": "high",
+      "savings_potential": "10-15%",
+      "difficulty": "easy"
+    },
+    {
+      "id": 3,
+      "category": "fuel_efficiency",
+      "title": "Proper Tire Pressure",
+      "description": "Check tire pressure monthly. Under-inflated tires increase rolling resistance and reduce efficiency by 3-5%.",
+      "impact": "medium",
+      "savings_potential": "3-5%",
+      "difficulty": "easy"
+    },
+    {
+      "id": 4,
+      "category": "fuel_efficiency",
+      "title": "Reduce Idle Time",
+      "description": "Turn off engine if waiting more than 1 minute. Idling wastes fuel and increases emissions.",
+      "impact": "medium",
+      "savings_potential": "5-8%",
+      "difficulty": "easy"
+    },
+    {
+      "id": 5,
+      "category": "fuel_efficiency",
+      "title": "Use AC Wisely",
+      "description": "AC usage can reduce efficiency by 10-15%. Use it judiciously and prefer windows at low speeds.",
+      "impact": "high",
+      "savings_potential": "10-15%",
+      "difficulty": "medium"
+    },
+    {
+      "id": 6,
+      "category": "maintenance",
+      "title": "Regular Service",
+      "description": "Service your CNG vehicle every 5,000 km or 6 months. Regular maintenance ensures optimal performance.",
+      "impact": "high",
+      "savings_potential": "15-20%",
+      "difficulty": "easy"
+    },
+    {
+      "id": 7,
+      "category": "maintenance",
+      "title": "CNG Filter Replacement",
+      "description": "Replace CNG filter every 10,000-15,000 km. Clogged filters reduce engine performance and efficiency.",
+      "impact": "high",
+      "savings_potential": "8-12%",
+      "difficulty": "medium"
+    },
+    {
+      "id": 8,
+      "category": "maintenance",
+      "title": "Check Spark Plugs",
+      "description": "Inspect and replace spark plugs every 20,000 km. Worn plugs reduce combustion efficiency.",
+      "impact": "medium",
+      "savings_potential": "5-10%",
+      "difficulty": "medium"
+    },
+    {
+      "id": 9,
+      "category": "maintenance",
+      "title": "CNG Kit Inspection",
+      "description": "Get CNG kit inspected annually by authorized centers. Check for leaks, pressure regulators, and valves.",
+      "impact": "high",
+      "savings_potential": "10-15%",
+      "difficulty": "medium"
+    },
+    {
+      "id": 10,
+      "category": "maintenance",
+      "title": "Engine Oil Quality",
+      "description": "Use manufacturer-recommended oil. Good quality oil reduces friction and improves engine life.",
+      "impact": "medium",
+      "savings_potential": "3-5%",
+      "difficulty": "easy"
+    },
+    {
+      "id": 11,
+      "category": "safety",
+      "title": "Regular Leak Checks",
+      "description": "Check for CNG leaks monthly. Apply soap water on connections and look for bubbles.",
+      "impact": "critical",
+      "savings_potential": "Prevents accidents",
+      "difficulty": "easy"
+    },
+    {
+      "id": 12,
+      "category": "safety",
+      "title": "Cylinder Hydrotesting",
+      "description": "Get CNG cylinder hydrotested every 3 years as per regulations. This ensures structural integrity.",
+      "impact": "critical",
+      "savings_potential": "Prevents accidents",
+      "difficulty": "medium"
+    },
+    {
+      "id": 13,
+      "category": "safety",
+      "title": "Ventilation Parking",
+      "description": "Park in well-ventilated areas. Avoid basement parking if possible due to gas being lighter than air.",
+      "impact": "high",
+      "savings_potential": "Prevents gas accumulation",
+      "difficulty": "easy"
+    },
+    {
+      "id": 14,
+      "category": "cost_saving",
+      "title": "Compare Station Prices",
+      "description": "CNG prices can vary by ₹2-5 per kg between stations. Use app to find cheaper options.",
+      "impact": "medium",
+      "savings_potential": "₹200-500/month",
+      "difficulty": "easy"
+    },
+    {
+      "id": 15,
+      "category": "cost_saving",
+      "title": "Off-Peak Refueling",
+      "description": "Refuel during off-peak hours to avoid long queues and save time.",
+      "impact": "low",
+      "savings_potential": "Saves 15-30 min/refill",
+      "difficulty": "easy"
+    },
+    {
+      "id": 16,
+      "category": "cost_saving",
+      "title": "Trip Planning",
+      "description": "Combine multiple errands into one trip. Better route planning reduces overall fuel consumption.",
+      "impact": "medium",
+      "savings_potential": "10-15%",
+      "difficulty": "easy"
+    },
+    {
+      "id": 17,
+      "category": "cost_saving",
+      "title": "Carpooling",
+      "description": "Share rides for regular commutes. Reduces per-person cost and environmental impact.",
+      "impact": "high",
+      "savings_potential": "50% on commute",
+      "difficulty": "medium"
+    },
+    {
+      "id": 18,
+      "category": "eco_friendly",
+      "title": "Reduce Load",
+      "description": "Remove unnecessary weight from vehicle. Every 50 kg reduces efficiency by 1-2%.",
+      "impact": "low",
+      "savings_potential": "2-3%",
+      "difficulty": "easy"
+    },
+    {
+      "id": 19,
+      "category": "eco_friendly",
+      "title": "Regular Emission Checks",
+      "description": "Get emission tests done during servicing. CNG vehicles should have minimal emissions.",
+      "impact": "medium",
+      "savings_potential": "Environmental benefit",
+      "difficulty": "easy"
+    },
+    {
+      "id": 20,
+      "category": "eco_friendly",
+      "title": "Eco-Driving Mode",
+      "description": "Use eco-mode if available. It optimizes engine performance for better efficiency.",
+      "impact": "medium",
+      "savings_potential": "5-8%",
+      "difficulty": "easy"
+    }
+  ],
+  "cng_facts": [
+    {
+      "title": "Cost Savings",
+      "description": "CNG costs 50-60% less than petrol, saving ₹40,000-60,000 annually for average users.",
+      "icon": "💰"
+    },
+    {
+      "title": "Environmental Benefits",
+      "description": "CNG reduces CO2 emissions by 25%, NOx by 70%, and particulate matter by 95% compared to diesel.",
+      "icon": "🌱"
+    },
+    {
+      "title": "Engine Life",
+      "description": "CNG burns cleaner, reducing engine wear and potentially extending engine life by 20-30%.",
+      "icon": "⚙️"
+    },
+    {
+      "title": "Safety",
+      "description": "CNG is lighter than air and disperses quickly. Tanks undergo rigorous safety testing.",
+      "icon": "🛡️"
+    },
+    {
+      "title": "Performance",
+      "description": "Modern CNG kits maintain 95-98% of original engine performance with proper tuning.",
+      "icon": "🚗"
+    },
+    {
+      "title": "Range",
+      "description": "Typical CNG tank provides 200-300 km range. Sequential kits allow seamless petrol backup.",
+      "icon": "📍"
+    }
+  ],
+  "maintenance_schedule": {
+    "daily": [
+      "Visual inspection for leaks",
+      "Check dashboard warning lights",
+      "Observe any unusual sounds or smells"
+    ],
+    "weekly": [
+      "Check tire pressure",
+      "Inspect CNG kit connections",
+      "Clean air filter if dusty conditions"
+    ],
+    "monthly": [
+      "Detailed leak check with soap water",
+      "Check all fluid levels (oil, coolant, brake fluid)",
+      "Inspect battery terminals",
+      "Clean fuel injectors if needed"
+    ],
+    "every_3_months": [
+      "Full vehicle service",
+      "CNG filter inspection",
+      "Spark plug check",
+      "Brake system inspection"
+    ],
+    "every_6_months": [
+      "Replace engine oil and oil filter",
+      "Replace CNG filter",
+      "Check valve clearances",
+      "Wheel alignment and balancing"
+    ],
+    "annually": [
+      "Comprehensive CNG kit inspection",
+      "Replace spark plugs",
+      "Replace air filter",
+      "Timing belt inspection (if applicable)",
+      "Brake fluid replacement",
+      "Coolant replacement"
+    ],
+    "every_3_years": [
+      "CNG cylinder hydrotesting (mandatory)",
+      "Complete CNG system overhaul",
+      "Replace all CNG hoses and connections"
+    ]
+  },
+  "common_issues": [
+    {
+      "issue": "Engine Starts on Petrol but Not CNG",
+      "causes": [
+        "CNG cylinder empty",
+        "Faulty CNG selector switch",
+        "Blocked CNG filter",
+        "Pressure regulator issue"
+      ],
+      "solutions": [
+        "Check CNG gauge",
+        "Inspect selector switch",
+        "Replace CNG filter",
+        "Get regulator serviced"
+      ],
+      "severity": "medium",
+      "estimated_cost": "₹500-2000"
+    },
+    {
+      "issue": "Reduced Power on CNG",
+      "causes": [
+        "Improper kit tuning",
+        "Clogged CNG filter",
+        "Weak spark plugs",
+        "Air filter blocked"
+      ],
+      "solutions": [
+        "Get kit re-tuned",
+        "Replace CNG filter",
+        "Replace spark plugs",
+        "Clean or replace air filter"
+      ],
+      "severity": "medium",
+      "estimated_cost": "₹1000-3000"
+    },
+    {
+      "issue": "Poor Fuel Efficiency",
+      "causes": [
+        "Improper driving habits",
+        "Under-inflated tires",
+        "Dirty air filter",
+        "CNG leak",
+        "Engine timing issues"
+      ],
+      "solutions": [
+        "Adopt eco-driving practices",
+        "Inflate tires to recommended pressure",
+        "Replace air filter",
+        "Check for leaks",
+        "Get engine timing adjusted"
+      ],
+      "severity": "low",
+      "estimated_cost": "₹500-4000"
+    },
+    {
+      "issue": "CNG Kit Making Noise",
+      "causes": [
+        "Loose mounting brackets",
+        "Pressure regulator vibration",
+        "Loose pipes or fittings"
+      ],
+      "solutions": [
+        "Tighten all mounting points",
+        "Add rubber dampers",
+        "Secure all connections"
+      ],
+      "severity": "low",
+      "estimated_cost": "₹300-1000"
+    },
+    {
+      "issue": "Difficulty in Starting (Cold Weather)",
+      "causes": [
+        "CNG doesn't vaporize well in cold",
+        "Weak battery",
+        "Improper choke adjustment"
+      ],
+      "solutions": [
+        "Start on petrol, switch after warm-up",
+        "Replace battery if old",
+        "Adjust choke settings"
+      ],
+      "severity": "low",
+      "estimated_cost": "₹500-2000"
+    },
+    {
+      "issue": "Gas Smell Inside Vehicle",
+      "causes": [
+        "CNG leak in engine bay",
+        "Faulty seals",
+        "Loose pipe connections"
+      ],
+      "solutions": [
+        "Immediate inspection required",
+        "Stop using vehicle until fixed",
+        "Get professional leak detection"
+      ],
+      "severity": "critical",
+      "estimated_cost": "₹1000-5000"
+    }
+  ],
+  "conversion_guide": {
+    "when_to_convert": [
+      "Monthly running > 1500 km",
+      "Daily commute > 50 km",
+      "Vehicle age < 8 years",
+      "Good mechanical condition",
+      "CNG stations easily accessible"
+    ],
+    "kit_types": [
+      {
+        "type": "Sequential Kit",
+        "price_range": "₹40,000-55,000",
+        "best_for": "High usage, better performance",
+        "pros": ["Better fuel efficiency", "Smooth performance", "Longer engine life"],
+        "cons": ["Higher initial cost", "Complex installation"]
+      },
+      {
+        "type": "Venturi Kit",
+        "price_range": "₹30,000-40,000",
+        "best_for": "Budget-conscious, moderate usage",
+        "pros": ["Lower cost", "Simple technology", "Easy maintenance"],
+        "cons": ["Slight power loss", "Lower efficiency than sequential"]
+      },
+      {
+        "type": "Premium Sequential",
+        "price_range": "₹60,000-80,000",
+        "best_for": "Premium cars, maximum performance",
+        "pros": ["Best performance", "OEM-like experience", "Advanced ECU"],
+        "cons": ["Highest cost", "Requires expert installation"]
+      }
+    ],
+    "payback_calculation": {
+      "assumptions": {
+        "conversion_cost": 45000,
+        "monthly_running": 2000,
+        "petrol_price": 105,
+        "cng_price": 75,
+        "petrol_mileage": 15,
+        "cng_mileage": 20
+      },
+      "monthly_savings": 4625,
+      "payback_period_months": 10,
+      "annual_savings": 55500,
+      "five_year_savings": 232500
+    },
+    "documents_required": [
+      "RC (Registration Certificate) original",
+      "Valid insurance papers",
+      "PUC (Pollution Under Control) certificate",
+      "Address proof",
+      "ID proof",
+      "Vehicle fitness certificate (for commercial)"
+    ],
+    "conversion_process": [
+      "Choose authorized CNG kit installer",
+      "Vehicle inspection and suitability check",
+      "Select appropriate CNG kit type",
+      "Installation (4-6 hours)",
+      "Initial testing and tuning",
+      "RTO endorsement application",
+      "RC update with CNG endorsement",
+      "Collect updated RC (15-30 days)"
+    ]
+  },
+  "best_practices": [
+    {
+      "category": "Daily Driving",
+      "practices": [
+        "Plan routes to minimize distance",
+        "Combine multiple trips when possible",
+        "Avoid rush hour traffic",
+        "Use GPS for optimal routing",
+        "Maintain steady speeds"
+      ]
+    },
+    {
+      "category": "Refueling",
+      "practices": [
+        "Don't wait for tank to be completely empty",
+        "Refuel during off-peak hours",
+        "Check prices before refueling",
+        "Ensure proper cylinder closure after filling",
+        "Keep track of refueling history"
+      ]
+    },
+    {
+      "category": "Maintenance",
+      "practices": [
+        "Follow manufacturer's service schedule",
+        "Use authorized service centers",
+        "Keep all service records",
+        "Address issues promptly",
+        "Use quality spare parts"
+      ]
+    },
+    {
+      "category": "Safety",
+      "practices": [
+        "Regular leak inspections",
+        "Don't ignore gas smell",
+        "Keep fire extinguisher in car",
+        "Follow hydrotesting schedule",
+        "Park in ventilated areas"
+      ]
+    }
+  ],
+  "myths_vs_facts": [
+    {
+      "myth": "CNG vehicles are unsafe and prone to explosions",
+      "fact": "CNG is one of the safest fuels. Cylinders undergo rigorous testing at 300+ bar pressure. CNG disperses quickly being lighter than air.",
+      "verified": true
+    },
+    {
+      "myth": "CNG significantly reduces engine power",
+      "fact": "Modern sequential kits maintain 95-98% of original power. Any loss is negligible for regular driving.",
+      "verified": true
+    },
+    {
+      "myth": "CNG reduces engine life",
+      "fact": "CNG actually extends engine life by 20-30% due to cleaner combustion and less carbon deposits.",
+      "verified": true
+    },
+    {
+      "myth": "CNG conversion is not worth it for less usage",
+      "fact": "Break-even typically achieved in 8-15 months even with moderate usage of 1200-1500 km/month.",
+      "verified": true
+    },
+    {
+      "myth": "CNG quality varies significantly between stations",
+      "fact": "All CNG stations follow strict quality standards. Variations are minimal and regulated by government.",
+      "verified": true
+    },
+    {
+      "myth": "CNG vehicles can't be used in cold weather",
+      "fact": "Modern CNG systems work well in cold weather. Simple practice is to start on petrol and switch after warm-up.",
+      "verified": true
+    }
+  ]
+}

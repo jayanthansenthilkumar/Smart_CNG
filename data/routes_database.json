@@ -1,0 +1,278 @@
+{
+  "popular_routes": [
+    {
+      "id": 1,
+      "name": "Delhi to Agra",
+      "start_city": "Delhi",
+      "end_city": "Agra",
+      "distance": 233,
+      "estimated_time": "3.5 hours",
+      "toll_cost": 265,
+      "route_type": "highway",
+      "road_condition": "excellent",
+      "traffic_level": "moderate",
+      "cng_stations_count": 12,
+      "scenic_rating": 3,
+      "difficulty": "easy",
+      "via_points": ["Faridabad", "Palwal", "Mathura"],
+      "best_time": "early morning",
+      "highlights": ["Taj Mahal", "Agra Fort", "Yamuna Expressway"],
+      "refueling_points": [
+        {"name": "CNG Station Faridabad", "distance_from_start": 30, "avg_price": 75.5},
+        {"name": "CNG Station Palwal", "distance_from_start": 75, "avg_price": 76.0},
+        {"name": "CNG Station Mathura", "distance_from_start": 145, "avg_price": 77.0}
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Mumbai to Pune",
+      "start_city": "Mumbai",
+      "end_city": "Pune",
+      "distance": 148,
+      "estimated_time": "2.5 hours",
+      "toll_cost": 385,
+      "route_type": "expressway",
+      "road_condition": "excellent",
+      "traffic_level": "moderate",
+      "cng_stations_count": 8,
+      "scenic_rating": 5,
+      "difficulty": "moderate",
+      "via_points": ["Lonavala", "Khandala"],
+      "best_time": "early morning or evening",
+      "highlights": ["Mumbai-Pune Expressway", "Khandala Ghat", "Western Ghats"],
+      "refueling_points": [
+        {"name": "CNG Station Panvel", "distance_from_start": 40, "avg_price": 82.0},
+        {"name": "CNG Station Lonavala", "distance_from_start": 90, "avg_price": 83.5}
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Bangalore to Mysore",
+      "start_city": "Bangalore",
+      "end_city": "Mysore",
+      "distance": 143,
+      "estimated_time": "3 hours",
+      "toll_cost": 145,
+      "route_type": "highway",
+      "road_condition": "good",
+      "traffic_level": "low",
+      "cng_stations_count": 5,
+      "scenic_rating": 4,
+      "difficulty": "easy",
+      "via_points": ["Ramanagara", "Mandya"],
+      "best_time": "any time",
+      "highlights": ["Mysore Palace", "Chamundi Hills", "Srirangapatna"],
+      "refueling_points": [
+        {"name": "CNG Station Ramanagara", "distance_from_start": 50, "avg_price": 81.0},
+        {"name": "CNG Station Mandya", "distance_from_start": 95, "avg_price": 80.5}
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Hyderabad to Vijayawada",
+      "start_city": "Hyderabad",
+      "end_city": "Vijayawada",
+      "distance": 272,
+      "estimated_time": "4.5 hours",
+      "toll_cost": 320,
+      "route_type": "highway",
+      "road_condition": "good",
+      "traffic_level": "moderate",
+      "cng_stations_count": 7,
+      "scenic_rating": 3,
+      "difficulty": "easy",
+      "via_points": ["Suryapet", "Kodad"],
+      "best_time": "early morning",
+      "highlights": ["Krishna River", "Prakasam Barrage"],
+      "refueling_points": [
+        {"name": "CNG Station Choutuppal", "distance_from_start": 70, "avg_price": 79.0},
+        {"name": "CNG Station Suryapet", "distance_from_start": 140, "avg_price": 78.5}
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Ahmedabad to Vadodara",
+      "start_city": "Ahmedabad",
+      "end_city": "Vadodara",
+      "distance": 112,
+      "estimated_time": "2 hours",
+      "toll_cost": 155,
+      "route_type": "expressway",
+      "road_condition": "excellent",
+      "traffic_level": "low",
+      "cng_stations_count": 6,
+      "scenic_rating": 2,
+      "difficulty": "easy",
+      "via_points": ["Anand"],
+      "best_time": "any time",
+      "highlights": ["Sardar Patel University", "Laxmi Vilas Palace"],
+      "refueling_points": [
+        {"name": "CNG Station Nadiad", "distance_from_start": 50, "avg_price": 77.0},
+        {"name": "CNG Station Anand", "distance_from_start": 65, "avg_price": 76.5}
+      ]
+    },
+    {
+      "id": 6,
+      "name": "Delhi to Jaipur",
+      "start_city": "Delhi",
+      "end_city": "Jaipur",
+      "distance": 280,
+      "estimated_time": "5 hours",
+      "toll_cost": 455,
+      "route_type": "highway",
+      "road_condition": "excellent",
+      "traffic_level": "moderate",
+      "cng_stations_count": 15,
+      "scenic_rating": 3,
+      "difficulty": "easy",
+      "via_points": ["Gurgaon", "Dharuhera", "Shahjahanpur", "Behror"],
+      "best_time": "early morning",
+      "highlights": ["Pink City", "Amber Fort", "Hawa Mahal"],
+      "refueling_points": [
+        {"name": "CNG Station Gurgaon", "distance_from_start": 35, "avg_price": 75.5},
+        {"name": "CNG Station Dharuhera", "distance_from_start": 85, "avg_price": 76.5},
+        {"name": "CNG Station Shahjahanpur", "distance_from_start": 135, "avg_price": 77.0},
+        {"name": "CNG Station Behror", "distance_from_start": 185, "avg_price": 77.5}
+      ]
+    },
+    {
+      "id": 7,
+      "name": "Pune to Goa",
+      "start_city": "Pune",
+      "end_city": "Goa",
+      "distance": 452,
+      "estimated_time": "8 hours",
+      "toll_cost": 675,
+      "route_type": "highway",
+      "road_condition": "good",
+      "traffic_level": "low",
+      "cng_stations_count": 4,
+      "scenic_rating": 5,
+      "difficulty": "moderate",
+      "via_points": ["Kolhapur", "Belgaum", "Ponda"],
+      "best_time": "early morning",
+      "highlights": ["Konkan Coast", "Western Ghats", "Beach Paradise"],
+      "refueling_points": [
+        {"name": "CNG Station Kolhapur", "distance_from_start": 230, "avg_price": 83.0},
+        {"name": "CNG Station Belgaum", "distance_from_start": 340, "avg_price": 82.5}
+      ]
+    },
+    {
+      "id": 8,
+      "name": "Delhi to Chandigarh",
+      "start_city": "Delhi",
+      "end_city": "Chandigarh",
+      "distance": 248,
+      "estimated_time": "4 hours",
+      "toll_cost": 305,
+      "route_type": "highway",
+      "road_condition": "excellent",
+      "traffic_level": "high",
+      "cng_stations_count": 10,
+      "scenic_rating": 3,
+      "difficulty": "easy",
+      "via_points": ["Panipat", "Karnal", "Ambala"],
+      "best_time": "early morning or late evening",
+      "highlights": ["Rock Garden", "Sukhna Lake", "Rose Garden"],
+      "refueling_points": [
+        {"name": "CNG Station Panipat", "distance_from_start": 90, "avg_price": 76.0},
+        {"name": "CNG Station Karnal", "distance_from_start": 125, "avg_price": 76.5},
+        {"name": "CNG Station Ambala", "distance_from_start": 200, "avg_price": 77.0}
+      ]
+    },
+    {
+      "id": 9,
+      "name": "Mumbai to Nashik",
+      "start_city": "Mumbai",
+      "end_city": "Nashik",
+      "distance": 165,
+      "estimated_time": "3.5 hours",
+      "toll_cost": 285,
+      "route_type": "highway",
+      "road_condition": "good",
+      "traffic_level": "moderate",
+      "cng_stations_count": 6,
+      "scenic_rating": 4,
+      "difficulty": "moderate",
+      "via_points": ["Thane", "Bhiwandi", "Igatpuri"],
+      "best_time": "morning",
+      "highlights": ["Wine Capital", "Sula Vineyard", "Trimbakeshwar Temple"],
+      "refueling_points": [
+        {"name": "CNG Station Thane", "distance_from_start": 30, "avg_price": 82.0},
+        {"name": "CNG Station Bhiwandi", "distance_from_start": 55, "avg_price": 82.5},
+        {"name": "CNG Station Igatpuri", "distance_from_start": 120, "avg_price": 83.0}
+      ]
+    },
+    {
+      "id": 10,
+      "name": "Lucknow to Kanpur",
+      "start_city": "Lucknow",
+      "end_city": "Kanpur",
+      "distance": 85,
+      "estimated_time": "1.5 hours",
+      "toll_cost": 85,
+      "route_type": "highway",
+      "road_condition": "good",
+      "traffic_level": "moderate",
+      "cng_stations_count": 8,
+      "scenic_rating": 2,
+      "difficulty": "easy",
+      "via_points": ["Unnao"],
+      "best_time": "any time",
+      "highlights": ["Industrial Hub", "Ganga River"],
+      "refueling_points": [
+        {"name": "CNG Station Unnao", "distance_from_start": 40, "avg_price": 78.5},
+        {"name": "CNG Station Kanpur Outer", "distance_from_start": 70, "avg_price": 78.0}
+      ]
+    }
+  ],
+  "route_tips": [
+    {
+      "category": "fuel_efficiency",
+      "tips": [
+        "Plan refueling stops at stations with better prices",
+        "Maintain steady speed on highways (60-80 kmph optimal)",
+        "Use cruise control on expressways to save fuel",
+        "Avoid unnecessary idling at toll plazas",
+        "Check tire pressure before long trips"
+      ]
+    },
+    {
+      "category": "safety",
+      "tips": [
+        "Take breaks every 2 hours during long drives",
+        "Check weather conditions before starting",
+        "Keep emergency contact numbers handy",
+        "Carry basic toolkit and spare tire",
+        "Plan route with multiple CNG stations"
+      ]
+    },
+    {
+      "category": "cost_optimization",
+      "tips": [
+        "Travel during off-peak hours to avoid traffic",
+        "Use FASTag for faster toll payments",
+        "Compare CNG prices across stations on route",
+        "Plan trips to minimize toll costs",
+        "Combine multiple errands into single trip"
+      ]
+    }
+  ],
+  "seasonal_recommendations": {
+    "summer": {
+      "best_time": "Early morning (5 AM - 9 AM) or evening (after 6 PM)",
+      "precautions": ["Carry extra water", "Check AC refrigerant", "Avoid midday travel"],
+      "fuel_impact": "10-15% reduced efficiency due to AC usage"
+    },
+    "monsoon": {
+      "best_time": "Late morning (10 AM - 2 PM)",
+      "precautions": ["Check wiper blades", "Test brakes", "Avoid waterlogged areas", "Reduce speed on wet roads"],
+      "fuel_impact": "5-10% reduced efficiency due to wet roads"
+    },
+    "winter": {
+      "best_time": "Mid-morning (9 AM - 4 PM)",
+      "precautions": ["Check fog lights", "Warm up engine", "Be cautious in fog"],
+      "fuel_impact": "Normal efficiency, slight improvement in CNG performance"
+    }
+  }
+}

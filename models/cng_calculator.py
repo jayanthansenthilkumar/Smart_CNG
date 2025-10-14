@@ -30,11 +30,21 @@ class Vehicle(db.Model):
     make = Column(String(50), nullable=False)
     model = Column(String(50), nullable=False)
     year = Column(Integer, nullable=False)
+    registration_number = Column(String(20), unique=True)
     fuel_type = Column(String(20), nullable=False)  # petrol, diesel, cng, hybrid
-    avg_mileage = Column(Float)  # km per liter
+    efficiency = Column(Float)  # km per kg/liter
+    avg_mileage = Column(Float)  # km per liter (deprecated, use efficiency)
     monthly_usage = Column(Float)  # km per month
+    tank_capacity = Column(Float)  # liters or kg
+    current_odometer = Column(Integer)  # current odometer reading
+    purchase_date = Column(DateTime)
+    purchase_price = Column(Float)
+    insurance_expiry = Column(DateTime)
     is_cng_converted = Column(Boolean, default=False)
     conversion_date = Column(DateTime)
+    conversion_cost = Column(Float)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     user = relationship('User', back_populates='vehicles')
     fuel_logs = relationship('FuelLog', back_populates='vehicle')
 
@@ -264,3 +274,51 @@ class PriceTrend(db.Model):
     date = Column(DateTime, default=datetime.utcnow)
     
     station = relationship('Station')
+
+
+class MaintenanceRecord(db.Model):
+    """CNG vehicle maintenance records"""
+    __tablename__ = 'maintenance_records'
+    
+    id = Column(Integer, primary_key=True)
+    vehicle_id = Column(Integer, ForeignKey('vehicles.id'), nullable=False)
+    user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
+    maintenance_type = Column(String(100), nullable=False)
+    date = Column(DateTime, nullable=False)
+    odometer_reading = Column(Integer)
+    cost = Column(Float, nullable=False)
+    service_center = Column(String(200))
+    technician_name = Column(String(100))
+    parts_replaced = Column(Text)
+    notes = Column(Text)
+    next_service_due = Column(DateTime)
+    next_service_odometer = Column(Integer)
+    invoice_number = Column(String(50))
+    warranty_applicable = Column(Boolean, default=False)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    
+    vehicle = relationship('Vehicle')
+    user = relationship('User')
+
+
+class MaintenanceReminder(db.Model):
+    """Maintenance reminders for CNG vehicles"""
+    __tablename__ = 'maintenance_reminders'
+    
+    id = Column(Integer, primary_key=True)
+    vehicle_id = Column(Integer, ForeignKey('vehicles.id'), nullable=False)
+    user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
+    reminder_type = Column(String(100), nullable=False)
+    due_date = Column(DateTime)
+    due_odometer = Column(Integer)
+    reminder_sent = Column(Boolean, default=False)
+    is_completed = Column(Boolean, default=False)
+    is_urgent = Column(Boolean, default=False)
+    notification_days_before = Column(Integer, default=7)
+    notes = Column(Text)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    completed_at = Column(DateTime)
+    
+    vehicle = relationship('Vehicle')
+    user = relationship('User')

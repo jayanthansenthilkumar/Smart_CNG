@@ -1,0 +1,435 @@
+{
+  "vehicles": [
+    {
+      "make": "Maruti Suzuki",
+      "model": "Alto",
+      "year": 2024,
+      "fuel_types": ["CNG", "Petrol"],
+      "cng_efficiency": 31.59,
+      "petrol_efficiency": 22.05,
+      "price": 350000,
+      "insurance_annual": 12000,
+      "maintenance_annual_cng": 8000,
+      "maintenance_annual_petrol": 10000,
+      "depreciation_rate": 0.15,
+      "co2_per_km_petrol": 0.12,
+      "co2_per_km_cng": 0.08,
+      "category": "Hatchback"
+    },
+    {
+      "make": "Maruti Suzuki",
+      "model": "WagonR",
+      "year": 2024,
+      "fuel_types": ["CNG", "Petrol"],
+      "cng_efficiency": 34.05,
+      "petrol_efficiency": 23.56,
+      "price": 550000,
+      "insurance_annual": 15000,
+      "maintenance_annual_cng": 9000,
+      "maintenance_annual_petrol": 11000,
+      "depreciation_rate": 0.14,
+      "co2_per_km_petrol": 0.115,
+      "co2_per_km_cng": 0.075,
+      "category": "Hatchback"
+    },
+    {
+      "make": "Maruti Suzuki",
+      "model": "Swift",
+      "year": 2024,
+      "fuel_types": ["CNG", "Petrol"],
+      "cng_efficiency": 30.90,
+      "petrol_efficiency": 23.20,
+      "price": 750000,
+      "insurance_annual": 18000,
+      "maintenance_annual_cng": 10000,
+      "maintenance_annual_petrol": 12000,
+      "depreciation_rate": 0.13,
+      "co2_per_km_petrol": 0.118,
+      "co2_per_km_cng": 0.078,
+      "category": "Hatchback"
+    },
+    {
+      "make": "Maruti Suzuki",
+      "model": "Dzire",
+      "year": 2024,
+      "fuel_types": ["CNG", "Petrol"],
+      "cng_efficiency": 31.12,
+      "petrol_efficiency": 24.12,
+      "price": 850000,
+      "insurance_annual": 20000,
+      "maintenance_annual_cng": 11000,
+      "maintenance_annual_petrol": 13000,
+      "depreciation_rate": 0.12,
+      "co2_per_km_petrol": 0.113,
+      "co2_per_km_cng": 0.073,
+      "category": "Sedan"
+    },
+    {
+      "make": "Maruti Suzuki",
+      "model": "Ertiga",
+      "year": 2024,
+      "fuel_types": ["CNG", "Petrol"],
+      "cng_efficiency": 26.08,
+      "petrol_efficiency": 19.01,
+      "price": 1100000,
+      "insurance_annual": 25000,
+      "maintenance_annual_cng": 13000,
+      "maintenance_annual_petrol": 15000,
+      "depreciation_rate": 0.13,
+      "co2_per_km_petrol": 0.135,
+      "co2_per_km_cng": 0.090,
+      "category": "MUV"
+    },
+    {
+      "make": "Hyundai",
+      "model": "Grand i10 Nios",
+      "year": 2024,
+      "fuel_types": ["CNG", "Petrol"],
+      "cng_efficiency": 29.38,
+      "petrol_efficiency": 20.70,
+      "price": 650000,
+      "insurance_annual": 17000,
+      "maintenance_annual_cng": 10000,
+      "maintenance_annual_petrol": 12000,
+      "depreciation_rate": 0.14,
+      "co2_per_km_petrol": 0.125,
+      "co2_per_km_cng": 0.082,
+      "category": "Hatchback"
+    },
+    {
+      "make": "Hyundai",
+      "model": "Aura",
+      "year": 2024,
+      "fuel_types": ["CNG", "Petrol"],
+      "cng_efficiency": 28.40,
+      "petrol_efficiency": 20.50,
+      "price": 750000,
+      "insurance_annual": 19000,
+      "maintenance_annual_cng": 11000,
+      "maintenance_annual_petrol": 13000,
+      "depreciation_rate": 0.13,
+      "co2_per_km_petrol": 0.126,
+      "co2_per_km_cng": 0.083,
+      "category": "Sedan"
+    },
+    {
+      "make": "Hyundai",
+      "model": "Exter",
+      "year": 2024,
+      "fuel_types": ["CNG", "Petrol"],
+      "cng_efficiency": 27.10,
+      "petrol_efficiency": 19.20,
+      "price": 750000,
+      "insurance_annual": 19000,
+      "maintenance_annual_cng": 11000,
+      "maintenance_annual_petrol": 13000,
+      "depreciation_rate": 0.14,
+      "co2_per_km_petrol": 0.134,
+      "co2_per_km_cng": 0.088,
+      "category": "SUV"
+    },
+    {
+      "make": "Tata",
+      "model": "Tiago",
+      "year": 2024,
+      "fuel_types": ["CNG", "Petrol"],
+      "cng_efficiency": 28.06,
+      "petrol_efficiency": 19.00,
+      "price": 600000,
+      "insurance_annual": 16000,
+      "maintenance_annual_cng": 9500,
+      "maintenance_annual_petrol": 11500,
+      "depreciation_rate": 0.15,
+      "co2_per_km_petrol": 0.136,
+      "co2_per_km_cng": 0.089,
+      "category": "Hatchback"
+    },
+    {
+      "make": "Tata",
+      "model": "Tigor",
+      "year": 2024,
+      "fuel_types": ["CNG", "Petrol"],
+      "cng_efficiency": 26.49,
+      "petrol_efficiency": 19.50,
+      "price": 700000,
+      "insurance_annual": 18000,
+      "maintenance_annual_cng": 10500,
+      "maintenance_annual_petrol": 12500,
+      "depreciation_rate": 0.14,
+      "co2_per_km_petrol": 0.132,
+      "co2_per_km_cng": 0.087,
+      "category": "Sedan"
+    },
+    {
+      "make": "Tata",
+      "model": "Altroz",
+      "year": 2024,
+      "fuel_types": ["CNG", "Petrol"],
+      "cng_efficiency": 26.20,
+      "petrol_efficiency": 18.60,
+      "price": 850000,
+      "insurance_annual": 20000,
+      "maintenance_annual_cng": 11500,
+      "maintenance_annual_petrol": 13500,
+      "depreciation_rate": 0.13,
+      "co2_per_km_petrol": 0.138,
+      "co2_per_km_cng": 0.091,
+      "category": "Hatchback"
+    },
+    {
+      "make": "Honda",
+      "model": "Amaze",
+      "year": 2024,
+      "fuel_types": ["Petrol"],
+      "cng_efficiency": 0,
+      "petrol_efficiency": 18.30,
+      "price": 800000,
+      "insurance_annual": 19000,
+      "maintenance_annual_cng": 0,
+      "maintenance_annual_petrol": 13000,
+      "depreciation_rate": 0.12,
+      "co2_per_km_petrol": 0.141,
+      "co2_per_km_cng": 0,
+      "category": "Sedan"
+    },
+    {
+      "make": "Honda",
+      "model": "City",
+      "year": 2024,
+      "fuel_types": ["Petrol"],
+      "cng_efficiency": 0,
+      "petrol_efficiency": 17.80,
+      "price": 1250000,
+      "insurance_annual": 28000,
+      "maintenance_annual_cng": 0,
+      "maintenance_annual_petrol": 16000,
+      "depreciation_rate": 0.11,
+      "co2_per_km_petrol": 0.145,
+      "co2_per_km_cng": 0,
+      "category": "Sedan"
+    },
+    {
+      "make": "Volkswagen",
+      "model": "Polo",
+      "year": 2024,
+      "fuel_types": ["Petrol"],
+      "cng_efficiency": 0,
+      "petrol_efficiency": 17.24,
+      "price": 900000,
+      "insurance_annual": 22000,
+      "maintenance_annual_cng": 0,
+      "maintenance_annual_petrol": 15000,
+      "depreciation_rate": 0.13,
+      "co2_per_km_petrol": 0.149,
+      "co2_per_km_cng": 0,
+      "category": "Hatchback"
+    },
+    {
+      "make": "Volkswagen",
+      "model": "Virtus",
+      "year": 2024,
+      "fuel_types": ["Petrol"],
+      "cng_efficiency": 0,
+      "petrol_efficiency": 17.91,
+      "price": 1200000,
+      "insurance_annual": 27000,
+      "maintenance_annual_cng": 0,
+      "maintenance_annual_petrol": 16000,
+      "depreciation_rate": 0.12,
+      "co2_per_km_petrol": 0.144,
+      "co2_per_km_cng": 0,
+      "category": "Sedan"
+    },
+    {
+      "make": "Mahindra",
+      "model": "Bolero",
+      "year": 2024,
+      "fuel_types": ["Diesel"],
+      "cng_efficiency": 0,
+      "petrol_efficiency": 0,
+      "diesel_efficiency": 16.70,
+      "price": 1050000,
+      "insurance_annual": 24000,
+      "maintenance_annual_diesel": 18000,
+      "depreciation_rate": 0.14,
+      "co2_per_km_diesel": 0.169,
+      "category": "SUV"
+    },
+    {
+      "make": "Mahindra",
+      "model": "Scorpio",
+      "year": 2024,
+      "fuel_types": ["Diesel"],
+      "cng_efficiency": 0,
+      "petrol_efficiency": 0,
+      "diesel_efficiency": 15.30,
+      "price": 1350000,
+      "insurance_annual": 30000,
+      "maintenance_annual_diesel": 20000,
+      "depreciation_rate": 0.13,
+      "co2_per_km_diesel": 0.184,
+      "category": "SUV"
+    },
+    {
+      "make": "Mahindra",
+      "model": "XUV700",
+      "year": 2024,
+      "fuel_types": ["Diesel"],
+      "cng_efficiency": 0,
+      "petrol_efficiency": 0,
+      "diesel_efficiency": 16.90,
+      "price": 1850000,
+      "insurance_annual": 38000,
+      "maintenance_annual_diesel": 22000,
+      "depreciation_rate": 0.12,
+      "co2_per_km_diesel": 0.167,
+      "category": "SUV"
+    }
+  ],
+  "fuel_prices": {
+    "CNG": {
+      "current_price": 75.61,
+      "unit": "kg",
+      "last_updated": "2025-10-13",
+      "city_prices": {
+        "Delhi": 75.61,
+        "Mumbai": 78.50,
+        "Pune": 77.80,
+        "Bangalore": 79.20,
+        "Hyderabad": 76.90,
+        "Ahmedabad": 74.50,
+        "Lucknow": 76.20,
+        "Kanpur": 75.80
+      }
+    },
+    "Petrol": {
+      "current_price": 96.72,
+      "unit": "liter",
+      "last_updated": "2025-10-13",
+      "city_prices": {
+        "Delhi": 96.72,
+        "Mumbai": 106.31,
+        "Pune": 104.50,
+        "Bangalore": 101.94,
+        "Hyderabad": 109.66,
+        "Ahmedabad": 96.63,
+        "Lucknow": 96.57,
+        "Kanpur": 96.45
+      }
+    },
+    "Diesel": {
+      "current_price": 89.62,
+      "unit": "liter",
+      "last_updated": "2025-10-13",
+      "city_prices": {
+        "Delhi": 89.62,
+        "Mumbai": 94.27,
+        "Pune": 92.80,
+        "Bangalore": 87.89,
+        "Hyderabad": 97.82,
+        "Ahmedabad": 92.17,
+        "Lucknow": 89.50,
+        "Kanpur": 89.38
+      }
+    }
+  },
+  "cng_conversion_costs": {
+    "sequential_kit": {
+      "name": "Sequential CNG Kit",
+      "cost": 45000,
+      "installation": 3000,
+      "cylinder_type": "Type 1 (Steel)",
+      "warranty_years": 5,
+      "suitable_for": ["Hatchback", "Sedan"]
+    },
+    "venturi_kit": {
+      "name": "Venturi CNG Kit",
+      "cost": 35000,
+      "installation": 2500,
+      "cylinder_type": "Type 1 (Steel)",
+      "warranty_years": 3,
+      "suitable_for": ["Hatchback"]
+    },
+    "premium_sequential": {
+      "name": "Premium Sequential Kit",
+      "cost": 65000,
+      "installation": 4000,
+      "cylinder_type": "Type 3 (Composite)",
+      "warranty_years": 7,
+      "suitable_for": ["Sedan", "SUV", "MUV"]
+    }
+  },
+  "maintenance_schedule": {
+    "cng_specific": [
+      {
+        "service": "CNG Kit Inspection",
+        "frequency_km": 5000,
+        "frequency_months": 6,
+        "cost": 1500
+      },
+      {
+        "service": "Cylinder Hydro Test",
+        "frequency_km": null,
+        "frequency_months": 36,
+        "cost": 2500,
+        "mandatory": true
+      },
+      {
+        "service": "Pressure Regulator Service",
+        "frequency_km": 10000,
+        "frequency_months": 12,
+        "cost": 2000
+      },
+      {
+        "service": "CNG Filter Replacement",
+        "frequency_km": 15000,
+        "frequency_months": 12,
+        "cost": 800
+      },
+      {
+        "service": "Valve Replacement",
+        "frequency_km": 50000,
+        "frequency_months": null,
+        "cost": 3000
+      },
+      {
+        "service": "Leak Test",
+        "frequency_km": 10000,
+        "frequency_months": 12,
+        "cost": 500
+      }
+    ],
+    "regular_service": [
+      {
+        "service": "Engine Oil Change",
+        "frequency_km": 5000,
+        "frequency_months": 6,
+        "cost": 2000
+      },
+      {
+        "service": "Air Filter Replacement",
+        "frequency_km": 10000,
+        "frequency_months": 12,
+        "cost": 800
+      },
+      {
+        "service": "Spark Plug Replacement",
+        "frequency_km": 20000,
+        "frequency_months": 24,
+        "cost": 1500
+      },
+      {
+        "service": "Brake Pad Replacement",
+        "frequency_km": 30000,
+        "frequency_months": 36,
+        "cost": 4000
+      },
+      {
+        "service": "Tire Rotation",
+        "frequency_km": 10000,
+        "frequency_months": 12,
+        "cost": 500
+      }
+    ]
+  }
+}
