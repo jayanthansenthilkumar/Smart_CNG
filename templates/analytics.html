@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuickFill - Analytics Dashboard</title>
+    <link rel="icon" href="{{ url_for('static', filename='images/logo.png') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/analytics.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="title-bar">
+        <div class="logo-container">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="QuickFill Logo" class="logo">
+        </div>
+        <div class="profile-section">
+            <button class="about-btn">
+                <i class="fas fa-info-circle"></i>
+            </button>
+            <div class="profile-menu">
+                <button class="profile-button" onclick="toggleProfileDropdown()">
+                    <i class="fas fa-user"></i>
+                    <span class="username">{{ username }}</span>
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="profile-dropdown" id="profileDropdown">
+                    <div class="dropdown-content">
+                        <div class="user-info">
+                            <i class="fas fa-user-circle"></i>
+                            <span>{{ username }}</span>
+                        </div>
+                        <a href="{{ url_for('logout') }}" class="dropdown-item logout">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Logout</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="analytics-container">
+        <!-- Header -->
+        <div class="page-header">
+            <a href="{{ url_for('dashboard') }}" class="back-link">
+                <i class="fas fa-arrow-left"></i>
+                Back to Dashboard
+            </a>
+            <h1><i class="fas fa-chart-line"></i> Analytics Dashboard</h1>
+            <p class="subtitle">Track your CNG usage, savings, and environmental impact</p>
+        </div>
+
+        <!-- Overview Stats -->
+        <div class="overview-section">
+            <div class="stat-card">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #6366f1, #a5b4fc);">
+                    <i class="fas fa-gas-pump"></i>
+                </div>
+                <div class="stat-content">
+                    <h3>Total Charges</h3>
+                    <p class="stat-value" id="totalCharges">0</p>
+                    <small id="periodDays">Last 90 days</small>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #14b8a6, #5eead4);">
+                    <i class="fas fa-rupee-sign"></i>
+                </div>
+                <div class="stat-content">
+                    <h3>Total Spent</h3>
+                    <p class="stat-value" id="totalSpent">₹0</p>
+                    <small id="avgPerCharge">Avg per charge: ₹0</small>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #10b981, #6ee7b7);">
+                    <i class="fas fa-leaf"></i>
+                </div>
+                <div class="stat-content">
+                    <h3>CO₂ Saved</h3>
+                    <p class="stat-value" id="co2Saved">0 kg</p>
+                    <small id="treesEquiv">Trees equivalent: 0</small>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #f97316, #fb923c);">
+                    <i class="fas fa-piggy-bank"></i>
+                </div>
+                <div class="stat-content">
+                    <h3>Savings vs Petrol</h3>
+                    <p class="stat-value" id="totalSavings">₹0</p>
+                    <small id="savingsPercent">0% saved</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recommendations -->
+        <div class="recommendations-section" id="recommendationsSection">
+            <h2><i class="fas fa-lightbulb"></i> Personalized Recommendations</h2>
+            <div class="recommendations-grid" id="recommendationsGrid">
+                <!-- Dynamically loaded -->
+            </div>
+        </div>
+
+        <!-- Charts Grid -->
+        <div class="charts-grid">
+            <!-- Usage Pattern Chart -->
+            <div class="chart-card">
+                <h3><i class="fas fa-clock"></i> Daily Usage Pattern</h3>
+                <div id="dailyPattern" class="chart-container"></div>
+            </div>
+
+            <!-- Weekly Distribution Chart -->
+            <div class="chart-card">
+                <h3><i class="fas fa-calendar-week"></i> Weekly Distribution</h3>
+                <div id="weeklyDistribution" class="chart-container"></div>
+            </div>
+
+            <!-- Efficiency Trend Chart -->
+            <div class="chart-card">
+                <h3><i class="fas fa-tachometer-alt"></i> Fuel Efficiency</h3>
+                <div id="efficiencyTrend" class="chart-container">
+                    <div class="efficiency-stats">
+                        <div class="efficiency-stat">
+                            <span class="label">Average</span>
+                            <span class="value" id="avgEfficiency">0 km/kg</span>
+                        </div>
+                        <div class="efficiency-stat">
+                            <span class="label">Best</span>
+                            <span class="value" id="bestEfficiency">0 km/kg</span>
+                        </div>
+                        <div class="efficiency-stat">
+                            <span class="label">Trend</span>
+                            <span class="value trend-indicator" id="trendIndicator">
+                                <i class="fas fa-minus"></i> Stable
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Monthly Cost Chart -->
+            <div class="chart-card">
+                <h3><i class="fas fa-chart-bar"></i> Monthly Spending</h3>
+                <div id="monthlySpending" class="chart-container"></div>
+            </div>
+        </div>
+
+        <!-- Wait Time Analysis -->
+        <div class="analysis-section">
+            <h2><i class="fas fa-hourglass-half"></i> Wait Time Analysis</h2>
+            <div class="wait-time-grid">
+                <div class="wait-time-card">
+                    <h4>Average Wait Time</h4>
+                    <p class="big-number" id="avgWaitTime">0 min</p>
+                </div>
+                <div class="wait-time-card">
+                    <h4>Best Time to Charge</h4>
+                    <p class="big-number" id="bestTimeToCharge">--:--</p>
+                </div>
+                <div class="wait-time-card">
+                    <h4>Peak Hours</h4>
+                    <p class="big-number" id="peakHours">--</p>
+                </div>
+            </div>
+            <div class="hourly-wait-chart" id="hourlyWaitChart"></div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="recent-activity-section">
+            <h2><i class="fas fa-history"></i> Recent Activity</h2>
+            <div class="activity-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Amount (kg)</th>
+                            <th>Cost</th>
+                            <th>Station Type</th>
+                            <th>Wait Time</th>
+                            <th>Efficiency</th>
+                        </tr>
+                    </thead>
+                    <tbody id="recentActivityTable">
+                        <!-- Dynamically loaded -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/analytics.js') }}"></script>
+</body>
+</html> 

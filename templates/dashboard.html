@@ -8,68 +8,8 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
 </head>
 <body>
-    <!-- Animated Background -->
-    <div class="animated-background">
-        <div class="floating-elements">
-            <div class="floating-shape shape-1">
-                <div class="geometric-pump"></div>
-            </div>
-            <div class="floating-shape shape-2">
-                <div class="geometric-pump"></div>
-            </div>
-            <div class="floating-shape shape-3">
-                <div class="geometric-pump"></div>
-            </div>
-            <div class="floating-shape shape-4">
-                <div class="geometric-pump"></div>
-            </div>
-            <div class="floating-shape shape-5">
-                <div class="geometric-pump"></div>
-            </div>
-            <div class="floating-shape shape-6">
-                <div class="geometric-pump"></div>
-            </div>
-        </div>
-        <div class="particle-container">
-            <div class="particle particle-1"></div>
-            <div class="particle particle-2"></div>
-            <div class="particle particle-3"></div>
-            <div class="particle particle-4"></div>
-            <div class="particle particle-5"></div>
-            <div class="particle particle-6"></div>
-            <div class="particle particle-7"></div>
-            <div class="particle particle-8"></div>
-        </div>
-        <div class="gradient-overlay"></div>
-        <div class="pattern-overlay">
-            <div class="pattern-grid">
-                <div class="grid-line horizontal line-1"></div>
-                <div class="grid-line horizontal line-2"></div>
-                <div class="grid-line horizontal line-3"></div>
-                <div class="grid-line vertical line-4"></div>
-                <div class="grid-line vertical line-5"></div>
-                <div class="grid-line vertical line-6"></div>
-            </div>
-            <div class="floating-dots">
-                <div class="dot dot-1"></div>
-                <div class="dot dot-2"></div>
-                <div class="dot dot-3"></div>
-                <div class="dot dot-4"></div>
-                <div class="dot dot-5"></div>
-                <div class="dot dot-6"></div>
-                <div class="dot dot-7"></div>
-                <div class="dot dot-8"></div>
-            </div>
-            <div class="dynamic-waves">
-                <div class="wave wave-1"></div>
-                <div class="wave wave-2"></div>
-                <div class="wave wave-3"></div>
-            </div>
-        </div>
-    </div>
     <div class="title-bar">
         <div class="logo-container">
             <img src="{{ url_for('static', filename='images/logo.png') }}" alt="QuickFill Logo" class="logo">
@@ -102,7 +42,7 @@
 
     <div class="dashboard-container">
         <!-- Hero Section -->
-        <div class="hero-section animate__animated animate__fadeIn">
+        <div class="hero-section">
             <div class="hero-content">
                 <h1 class="hero-title">Welcome back, <span class="highlight">{{ username }}</span>!</h1>
                 <p class="hero-subtitle">Your sustainable journey starts here with smart CNG solutions</p>
@@ -134,7 +74,7 @@
         </div>
 
         <!-- Main Features Grid (Unified) -->
-        <div class="features-grid animate__animated animate__fadeInUp">
+        <div class="features-grid">
             <a href="{{ url_for('stations') }}" class="feature-item">
                 <div class="feature-icon">
                     <i class="fas fa-map-marker-alt"></i>
@@ -183,7 +123,7 @@
         
 
         <!-- Tips & Insights Section -->
-        <div class="insights-section animate__animated animate__fadeInUp" style="animation-delay: 0.3s;">
+        <div class="insights-section">
             <h2 class="section-title">Tips & Insights</h2>
             <div class="insights-grid">
                 <div class="insight-card">
@@ -361,6 +301,8 @@
     </script>
 
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
     
     <!-- New Interactive Functions -->
     <script>

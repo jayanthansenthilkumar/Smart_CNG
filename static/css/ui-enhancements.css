@@ -1,0 +1,395 @@
+/* ===================================
+   QuickFill - UI Enhancement Styles
+   Supporting styles for JavaScript effects
+   =================================== */
+
+/* === LOADING OVERLAY === */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    transition: opacity 0.3s ease;
+}
+
+.loading-spinner {
+    text-align: center;
+}
+
+.spinner {
+    width: 50px;
+    height: 50px;
+    margin: 0 auto 20px;
+    border: 4px solid rgba(2, 62, 138, 0.1);
+    border-top: 4px solid #023E8A;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.loading-spinner p {
+    color: #023E8A;
+    font-weight: 600;
+}
+
+/* === TOAST NOTIFICATIONS === */
+.toast {
+    position: fixed;
+    top: 90px;
+    right: 20px;
+    min-width: 300px;
+    max-width: 400px;
+    padding: 16px 20px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    z-index: 10000;
+    border-left: 4px solid;
+}
+
+.toast i {
+    font-size: 20px;
+}
+
+.toast span {
+    flex: 1;
+    font-weight: 500;
+}
+
+.toast-close {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px 8px;
+    color: #666;
+    transition: color 0.2s;
+}
+
+.toast-close:hover {
+    color: #333;
+}
+
+.toast-success {
+    border-color: #22c55e;
+}
+
+.toast-success i {
+    color: #22c55e;
+}
+
+.toast-error {
+    border-color: #ef4444;
+}
+
+.toast-error i {
+    color: #ef4444;
+}
+
+.toast-warning {
+    border-color: #f59e0b;
+}
+
+.toast-warning i {
+    color: #f59e0b;
+}
+
+.toast-info {
+    border-color: #3b82f6;
+}
+
+.toast-info i {
+    color: #3b82f6;
+}
+
+@keyframes slideInTop {
+    from {
+        transform: translateY(-100px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOutTop {
+    to {
+        transform: translateY(-100px);
+        opacity: 0;
+    }
+}
+
+/* === RIPPLE EFFECT === */
+.ripple-effect {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    transform: scale(0);
+    animation: rippleAnimation 0.6s ease-out;
+    pointer-events: none;
+}
+
+@keyframes rippleAnimation {
+    to {
+        transform: scale(4);
+        opacity: 0;
+    }
+}
+
+/* === CUSTOM CURSOR === */
+.custom-cursor {
+    width: 40px;
+    height: 40px;
+    border: 2px solid rgba(2, 62, 138, 0.5);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 10001;
+    transform: translate(-50%, -50%);
+    transition: all 0.15s ease;
+    mix-blend-mode: difference;
+}
+
+.custom-cursor.expand {
+    width: 60px;
+    height: 60px;
+    background: rgba(2, 62, 138, 0.1);
+}
+
+.custom-cursor-dot {
+    width: 8px;
+    height: 8px;
+    background: #023E8A;
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 10002;
+    transform: translate(-50%, -50%);
+    transition: all 0.1s ease;
+}
+
+/* === PAGE TRANSITIONS === */
+body {
+    transition: opacity 0.4s ease;
+}
+
+body.page-transition-out {
+    opacity: 0;
+}
+
+/* === ENHANCED INPUT STYLES === */
+.input-wrapper {
+    position: relative;
+}
+
+.input-wrapper.focused label {
+    transform: translateY(-24px) scale(0.85);
+    color: #023E8A;
+}
+
+.input-wrapper label {
+    position: absolute;
+    left: 12px;
+    top: 12px;
+    transition: all 0.2s ease;
+    pointer-events: none;
+    color: #666;
+}
+
+/* === LAZY LOADED IMAGES === */
+img[data-src] {
+    filter: blur(20px);
+    transition: filter 0.3s ease;
+}
+
+img[data-src].loaded {
+    filter: blur(0);
+}
+
+/* === SCROLL PROGRESS BAR === */
+.scroll-progress {
+    position: fixed;
+    top: 70px;
+    left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #023E8A, #48CAE4);
+    z-index: 1000;
+    transform-origin: left;
+    transition: transform 0.1s ease;
+}
+
+/* === FLOATING ACTION BUTTON === */
+.fab {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #023E8A, #48CAE4);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 30px rgba(2, 62, 138, 0.3);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 999;
+    font-size: 24px;
+}
+
+.fab:hover {
+    transform: translateY(-5px) scale(1.1);
+    box-shadow: 0 12px 40px rgba(2, 62, 138, 0.4);
+}
+
+.fab:active {
+    transform: translateY(-2px) scale(1.05);
+}
+
+/* === DARK MODE === */
+body.dark-mode {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #1a1a2e 100%);
+    color: #e4e4e4;
+}
+
+body.dark-mode .title-bar {
+    background: rgba(26, 26, 46, 0.95);
+    border-bottom-color: rgba(228, 228, 228, 0.1);
+}
+
+body.dark-mode .station-card {
+    background: linear-gradient(145deg, #252540 0%, #2a2a45 100%);
+    border-color: rgba(228, 228, 228, 0.1);
+}
+
+body.dark-mode button {
+    background: linear-gradient(135deg, #0056b3, #3a9dd5);
+}
+
+body.dark-mode .hero-section {
+    background: 
+        radial-gradient(1200px 600px at 10% -10%, rgba(58, 157, 213, 0.15) 0%, transparent 60%),
+        linear-gradient(135deg, rgba(37, 37, 64, 0.98) 0%, rgba(42, 42, 69, 0.95) 100%);
+}
+
+/* === ENHANCED HOVER STATES === */
+.hover-zoom {
+    transition: transform 0.3s ease;
+}
+
+.hover-zoom:hover {
+    transform: scale(1.05);
+}
+
+.hover-brightness {
+    transition: filter 0.3s ease;
+}
+
+.hover-brightness:hover {
+    filter: brightness(1.2);
+}
+
+/* === STAGGER ANIMATIONS === */
+.stagger-container > * {
+    opacity: 0;
+    animation: fadeInUp 0.6s ease forwards;
+}
+
+.stagger-container > *:nth-child(1) { animation-delay: 0.1s; }
+.stagger-container > *:nth-child(2) { animation-delay: 0.2s; }
+.stagger-container > *:nth-child(3) { animation-delay: 0.3s; }
+.stagger-container > *:nth-child(4) { animation-delay: 0.4s; }
+.stagger-container > *:nth-child(5) { animation-delay: 0.5s; }
+.stagger-container > *:nth-child(6) { animation-delay: 0.6s; }
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* === SKELETON LOADERS === */
+.skeleton-card {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: loading 1.5s infinite;
+    border-radius: 12px;
+}
+
+@keyframes loading {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+/* === TOOLTIP === */
+[data-tooltip] {
+    position: relative;
+}
+
+[data-tooltip]::before {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-8px);
+    padding: 8px 12px;
+    background: rgba(0, 0, 0, 0.9);
+    color: white;
+    border-radius: 6px;
+    font-size: 12px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+[data-tooltip]:hover::before {
+    opacity: 1;
+    transform: translateX(-50%) translateY(-4px);
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 768px) {
+    .custom-cursor,
+    .custom-cursor-dot {
+        display: none;
+    }
+    
+    .toast {
+        right: 10px;
+        left: 10px;
+        max-width: none;
+    }
+    
+    .fab {
+        bottom: 20px;
+        right: 20px;
+        width: 50px;
+        height: 50px;
+        font-size: 20px;
+    }
+}

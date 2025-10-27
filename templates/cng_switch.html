@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuickFill - CNG Switch Calculator</title>
+    <link rel="icon" href="{{ url_for('static', filename='images/logo.png') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/cng_switch.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Title Bar -->
+    <div class="title-bar">
+        <div class="logo-container">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="QuickFill Logo" class="logo">
+        </div>
+        <div class="profile-section">
+            <button class="about-btn">
+                <i class="fas fa-info-circle"></i>
+            </button>
+            <div class="profile-menu">
+                <button class="profile-button" onclick="toggleProfileDropdown()">
+                    <i class="fas fa-user"></i>
+                    <span class="username">{{ username }}</span>
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="profile-dropdown" id="profileDropdown">
+                    <div class="dropdown-content">
+                        <div class="user-info">
+                            <i class="fas fa-user-circle"></i>
+                            <span>{{ username }}</span>
+                        </div>
+                        <a href="{{ url_for('logout') }}" class="dropdown-item logout">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Logout</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="calculator-container">
+        <!-- Header -->
+        <div class="page-header">
+            <a href="{{ url_for('dashboard') }}" class="back-link">
+                <i class="fas fa-arrow-left"></i>
+                Back to Dashboard
+            </a>
+            <h1><i class="fas fa-calculator"></i> CNG Switch Calculator</h1>
+            <p class="subtitle">Calculate your savings and environmental impact by switching to CNG</p>
+        </div>
+
+        <!-- Calculator Form -->
+        <div class="calculator-card">
+            <h2><i class="fas fa-gas-pump"></i> Vehicle Information</h2>
+            <form id="cngCalculatorForm">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="vehicleType">
+                            <i class="fas fa-car"></i>
+                            Vehicle Type
+                        </label>
+                        <select id="vehicleType" required>
+                            <option value="">Select vehicle type...</option>
+                            <option value="hatchback">Hatchback</option>
+                            <option value="sedan">Sedan</option>
+                            <option value="suv">SUV</option>
+                            <option value="commercial">Commercial Vehicle</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="currentFuel">
+                            <i class="fas fa-gas-pump"></i>
+                            Current Fuel Type
+                        </label>
+                        <select id="currentFuel" required>
+                            <option value="">Select fuel type...</option>
+                            <option value="petrol">Petrol</option>
+                            <option value="diesel">Diesel</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="dailyKm">
+                            <i class="fas fa-road"></i>
+                            Daily Kilometers
+                        </label>
+                        <input type="number" id="dailyKm" min="1" max="1000" placeholder="e.g., 50" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="currentMileage">
+                            <i class="fas fa-tachometer-alt"></i>
+                            Current Mileage (km/L)
+                        </label>
+                        <input type="number" id="currentMileage" min="1" max="50" step="0.1" placeholder="e.g., 15">
+                        <small>Leave empty for average mileage</small>
+                    </div>
+                </div>
+
+                <button type="submit" class="calculate-btn">
+                    <i class="fas fa-calculator"></i>
+                    Calculate Savings
+                </button>
+            </form>
+        </div>
+
+        <!-- Results Section -->
+        <div id="resultsSection" class="results-section" style="display: none;">
+            <!-- Recommendation Card -->
+            <div class="recommendation-card">
+                <div class="recommendation-header">
+                    <h2><i class="fas fa-lightbulb"></i> Recommendation</h2>
+                    <div class="rating" id="rating"></div>
+                </div>
+                <p class="recommendation-message" id="recommendationMessage"></p>
+                <ul class="recommendation-reasons" id="recommendationReasons"></ul>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: linear-gradient(135deg, #6366f1, #a5b4fc);">
+                        <i class="fas fa-rupee-sign"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3>Annual Savings</h3>
+                        <p class="stat-value" id="annualSavings">₹0</p>
+                        <small>Total yearly savings</small>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: linear-gradient(135deg, #14b8a6, #5eead4);">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3>Payback Period</h3>
+                        <p class="stat-value" id="paybackPeriod">0 months</p>
+                        <small>Time to recover investment</small>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: linear-gradient(135deg, #10b981, #6ee7b7);">
+                        <i class="fas fa-leaf"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3>CO₂ Reduction</h3>
+                        <p class="stat-value" id="co2Reduction">0 kg</p>
+                        <small>Annual emissions saved</small>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: linear-gradient(135deg, #f97316, #fb923c);">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3>5-Year ROI</h3>
+                        <p class="stat-value" id="fiveYearROI">₹0</p>
+                        <small>Return on investment</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detailed Breakdown -->
+            <div class="breakdown-grid">
+                <div class="breakdown-card">
+                    <h3><i class="fas fa-money-bill-wave"></i> Cost Comparison</h3>
+                    <div class="comparison-table">
+                        <div class="comparison-row">
+                            <span>Current Fuel Cost</span>
+                            <span id="currentFuelCost">₹0</span>
+                        </div>
+                        <div class="comparison-row">
+                            <span>CNG Fuel Cost</span>
+                            <span id="cngFuelCost">₹0</span>
+                        </div>
+                        <div class="comparison-row">
+                            <span>Conversion Kit Cost</span>
+                            <span id="conversionCost">₹0</span>
+                        </div>
+                        <div class="comparison-row highlight">
+                            <span><strong>Net Annual Savings</strong></span>
+                            <span id="netSavings"><strong>₹0</strong></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="breakdown-card">
+                    <h3><i class="fas fa-leaf"></i> Environmental Impact</h3>
+                    <div class="environmental-stats">
+                        <div class="env-stat">
+                            <i class="fas fa-tree"></i>
+                            <div>
+                                <strong id="treesEquivalent">0</strong>
+                                <span>Trees Equivalent</span>
+                            </div>
+                        </div>
+                        <div class="env-stat">
+                            <i class="fas fa-percent"></i>
+                            <div>
+                                <strong id="emissionReduction">0%</strong>
+                                <span>Emission Reduction</span>
+                            </div>
+                        </div>
+                        <div class="env-stat">
+                            <i class="fas fa-tint"></i>
+                            <div>
+                                <strong id="petrolSaved">0 L</strong>
+                                <span>Petrol Saved (5 years)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Savings Chart -->
+            <div class="chart-card">
+                <h3><i class="fas fa-chart-area"></i> Cumulative Savings Over Time</h3>
+                <div id="savingsChart" class="savings-chart"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/cng_calculator.js') }}"></script>
+</body>
+</html> 

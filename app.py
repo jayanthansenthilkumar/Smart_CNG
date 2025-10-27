@@ -6,6 +6,8 @@ import numpy as np
 import time
 from models.location_optimizer import LocationOptimizer
 from models.wait_time_predictor import WaitTimePredictor
+from models.cng_switch_calculator import CNGSwitchCalculator
+from models.user_analytics import UserAnalytics
 from dataclasses import dataclass
 from typing import Dict, Any
 from models.station_calculating_model import ChargingStationCalculator
@@ -18,6 +20,8 @@ app = Flask(__name__, static_url_path='/static')
 # Initialize models
 station_calculator = ChargingStationCalculator()
 wait_time_predictor = WaitTimePredictor()
+cng_calculator = CNGSwitchCalculator()
+user_analytics = UserAnalytics()
 try:
     wt_path_candidates = [
         os.path.join(os.path.dirname(__file__), 'CNG_pumps_with_Erlang-C_waiting_times.csv'),
@@ -600,13 +604,13 @@ def favorites():
 def analytics():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
-    return render_template('analytics_soon.html', username=session.get('username'))
+    return render_template('analytics.html', username=session.get('username'))
 
 @app.route('/cng-switch')
 def cng_switch():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
-    return render_template('cng_switch_soon.html', username=session.get('username'))
+    return render_template('cng_switch.html', username=session.get('username'))
 
 @app.route('/ev-switcher')
 def ev_switcher():
@@ -832,6 +836,121 @@ def stations_from_file():
     if data.get('error'):
         status = 400 if 'not found' not in data['error'].lower() else 404
     return jsonify(data), status
+
+# CNG Switch Calculator API
+@app.route('/api/cng-calculator/calculate', methods=['POST'])
+def calculate_cng_savings():
+    """Calculate CNG switch savings"""
+    try:
+        data = request.json
+        
+        vehicle_type = data.get('vehicleType')
+        current_fuel = data.get('currentFuel')
+        daily_km = float(data.get('dailyKm'))
+        current_mileage = float(data.get('currentMileage')) if data.get('currentMileage') else None
+        
+        # Calculate savings
+        results = cng_calculator.calculate_savings(
+            vehicle_type=vehicle_type,
+            current_fuel=current_fuel,
+            daily_km=daily_km,
+            current_mileage=current_mileage
+        )
+        
+        return jsonify(results)
+        
+    except Exception as e:
+        print(f"Error in CNG calculator: {e}")
+        return jsonify({'error': str(e)}), 400
+
+@app.route('/api/cng-calculator/vehicle-types')
+def get_vehicle_types():
+    """Get available vehicle types"""
+    try:
+        return jsonify(cng_calculator.get_vehicle_types())
+    except Exception as e:
+        return jsonify({'error': str(e)}), 400
+
+@app.route('/api/cng-calculator/fuel-prices')
+def get_fuel_prices():
+    """Get current fuel prices"""
+    try:
+        return jsonify(cng_calculator.get_fuel_prices())
+    except Exception as e:
+        return jsonify({'error': str(e)}), 400
+
+# Analytics API
+@app.route('/api/analytics/overview')
+def get_analytics_overview():
+    """Get analytics overview"""
+    try:
+        username = session.get('username', 'User')
+        stats = user_analytics.get_overview_stats(username)
+        return jsonify(stats)
+    except Exception as e:
+        print(f"Error in analytics overview: {e}")
+        return jsonify({'error': str(e)}), 400
+
+@app.route('/api/analytics/usage-patterns')
+def get_usage_patterns():
+    """Get usage patterns"""
+    try:
+        patterns = user_analytics.get_usage_patterns()
+        return jsonify(patterns)
+    except Exception as e:
+        print(f"Error in usage patterns: {e}")
+        return jsonify({'error': str(e)}), 400
+
+@app.route('/api/analytics/efficiency')
+def get_efficiency_analysis():
+    """Get efficiency analysis"""
+    try:
+        efficiency = user_analytics.get_efficiency_analysis()
+        return jsonify(efficiency)
+    except Exception as e:
+        print(f"Error in efficiency analysis: {e}")
+        return jsonify({'error': str(e)}), 400
+
+@app.route('/api/analytics/cost-analysis')
+def get_cost_analysis():
+    """Get cost analysis"""
+    try:
+        cost_analysis = user_analytics.get_cost_analysis()
+        return jsonify(cost_analysis)
+    except Exception as e:
+        print(f"Error in cost analysis: {e}")
+        return jsonify({'error': str(e)}), 400
+
+@app.route('/api/analytics/wait-time-analysis')
+def get_wait_time_analysis_api():
+    """Get wait time analysis"""
+    try:
+        wait_analysis = user_analytics.get_wait_time_analysis()
+        return jsonify(wait_analysis)
+    except Exception as e:
+        print(f"Error in wait time analysis: {e}")
+        return jsonify({'error': str(e)}), 400
+
+@app.route('/api/analytics/recommendations')
+def get_analytics_recommendations():
+    """Get personalized recommendations"""
+    try:
+        recommendations = user_analytics.get_recommendations()
+        return jsonify({'recommendations': recommendations})
+    except Exception as e:
+        print(f"Error in recommendations: {e}")
+        return jsonify({'error': str(e)}), 400
+
+@app.route('/api/analytics/recent-activity')
+def get_recent_activity():
+    """Get recent charging activity"""
+    try:
+        limit = int(request.args.get('limit', 10))
+        activity = user_analytics.get_recent_activity(limit)
+        return jsonify({'activity': activity})
+    except Exception as e:
+        print(f"Error in recent activity: {e}")
+        return jsonify({'error': str(e)}), 400
 
 if __name__ == '__main__':
     app.run(debug=True)

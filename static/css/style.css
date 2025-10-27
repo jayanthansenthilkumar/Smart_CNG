@@ -1,52 +1,95 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+/* ===================================
+   QuickFill - Modern Design System
+   Enhanced UI with animations & effects
+   =================================== */
+
+/* === ROOT VARIABLES === */
+:root {
+    /* New Color Scheme - Purple & Teal */
+    --primary-color: #6366f1;
+    --primary-light: #a5b4fc;
+    --primary-dark: #4338ca;
+    --secondary-color: #14b8a6;
+    --accent-color: #f97316;
+    --success-color: #10b981;
+    --warning-color: #f59e0b;
+    --error-color: #ef4444;
+    
+    /* Neutral Colors */
+    --gray-50: #f9fafb;
+    --gray-100: #f3f4f6;
+    --gray-200: #e5e7eb;
+    --gray-300: #d1d5db;
+    --gray-400: #9ca3af;
+    --gray-500: #6b7280;
+    --gray-600: #4b5563;
+    --gray-700: #374151;
+    --gray-800: #1f2937;
+    --gray-900: #111827;
+    
+    /* Shadows */
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+    
+    /* Spacing */
+    --spacing-xs: 0.5rem;
+    --spacing-sm: 1rem;
+    --spacing-md: 1.5rem;
+    --spacing-lg: 2rem;
+    --spacing-xl: 3rem;
+    
+    /* Border Radius */
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+}
 
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Inter', 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 body, html {
     height: 100%;
     width: 100%;
+    scroll-behavior: smooth;
 }
 
 body {
-    background: #f8f9fa;
+    background: var(--gray-50);
     position: relative;
     min-height: 100vh;
     margin: 0;
     padding: 0;
+    overflow-x: hidden;
+    color: var(--gray-900);
 }
 
-/* Add texture overlay */
-body::before {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-    pointer-events: none;
-    z-index: 0;
-}
-
-/* Update container to work with the texture */
+/* === CONTAINER SYSTEM === */
 .container {
     position: relative;
     z-index: 1;
     width: 100%;
-    max-width: 1200px;
+    max-width: 1400px;
     margin: 0 auto;
-    padding: 20px;
+    padding: var(--spacing-md);
     height: 100%;
 }
 
+.container-fluid {
+    width: 100%;
+    padding: var(--spacing-md);
+}
+
+/* === HEADER STYLES === */
 header {
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: var(--spacing-lg);
 }
 
 .search-container {
@@ -71,24 +114,54 @@ header {
     height: 42px;
 }
 
+/* === BUTTON STYLES === */
 button {
     padding: 10px 20px;
-    background-color: #023E8A;
+    background: var(--primary-color);
     color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: var(--radius-md);
     cursor: pointer;
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    box-shadow: var(--shadow-sm);
 }
 
 button:hover {
-    background-color: #023E8A;
+    background: var(--primary-dark);
+}
+
+button:active {
+    background: var(--primary-dark);
+    box-shadow: none;
 }
 
 button i {
     font-size: 16px;
+}
+
+/* Button Variants */
+.btn-secondary {
+    background: var(--secondary-color);
+}
+
+.btn-secondary:hover {
+    background: #0d9488;
+}
+
+.btn-outline {
+    background: transparent;
+    border: 2px solid var(--primary-color);
+    color: var(--primary-color);
+}
+
+.btn-outline:hover {
+    background: var(--primary-color);
+    color: white;
 }
 
 .map-container {
@@ -283,20 +356,28 @@ button i {
 .slider::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
-    width: 16px;
-    height: 16px;
-    background: #023E8A;
+    width: 18px;
+    height: 18px;
+    background: var(--primary-color);
     border-radius: 50%;
     cursor: pointer;
 }
 
+.slider::-webkit-slider-thumb:hover {
+    background: var(--primary-dark);
+}
+
 .slider::-moz-range-thumb {
-    width: 16px;
-    height: 16px;
-    background: #023E8A;
+    width: 18px;
+    height: 18px;
+    background: var(--primary-color);
     border-radius: 50%;
     cursor: pointer;
     border: none;
+}
+
+.slider::-moz-range-thumb:hover {
+    background: var(--primary-dark);
 }
 
 #station-list {
@@ -341,51 +422,51 @@ button i {
     padding: 20px;
 }
 
+/* === MODERN STATION CARD STYLES === */
 .station-card {
     background: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    padding: 15px;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    padding: 16px;
     cursor: pointer;
-    transition: all 0.3s ease;
     position: relative;
-    z-index: 1;
+    border: 1px solid var(--gray-200);
 }
 
 .station-card:hover {
-    transform: scale(1.03);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-    z-index: 2;
-}
-
-/* Add a smooth transition for child elements */
-.station-card * {
-    transition: all 0.3s ease;
-}
-
-/* Optional: Add subtle background color change on hover */
-.station-card:hover {
-    background-color: #fafafa;
+    box-shadow: var(--shadow-md);
+    border-color: var(--primary-color);
 }
 
 .station-card-header {
-    padding: 15px;
-    border-bottom: 1px solid #eee;
+    padding: 12px;
+    border-bottom: 1px solid var(--gray-100);
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
 .station-type {
-    padding: 4px 8px;
-    border-radius: 4px;
-    font-size: 12px;
-    font-weight: bold;
+    padding: 4px 10px;
+    border-radius: var(--radius-sm);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
-.station-type.market { background: #e3f2fd; color: #1976d2; }
-.station-type.office { background: #E0F7FF; color: #023E8A; }
-.station-type.hospital { background: #ffebee; color: #d32f2f; }
+.station-type.market { 
+    background: #dbeafe; 
+    color: #1e40af; 
+}
+.station-type.office { 
+    background: #e0e7ff; 
+    color: #4338ca; 
+}
+.station-type.hospital { 
+    background: #fee2e2; 
+    color: #991b1b; 
+}
 
 .station-card-body {
     padding: 15px;
@@ -450,18 +531,20 @@ button i {
     height: 50%;
 }
 
+/* === TITLE BAR === */
 .title-bar {
-    background: #fff;
+    background: white;
     height: 70px;
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 20px;
-    border-bottom: 1px solid #dee2e6;
+    padding: 0 24px;
+    border-bottom: 1px solid var(--gray-200);
     position: fixed;
     top: 0;
     z-index: 1000;
+    box-shadow: var(--shadow-sm);
 }
 
 
@@ -472,9 +555,13 @@ button i {
 }
 
 .title-bar .logo {
-    height: 60px;
+    height: 50px;
     width: auto;
-    max-height: 60px;
+    max-height: 50px;
+}
+
+.title-bar .logo:hover {
+    opacity: 0.8;
 }
 
 .profile-section {
