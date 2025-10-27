@@ -1,22 +1,11 @@
-"""
-Library - All data classes and business logic in one file
-Simple, clean, easy to understand
-"""
 from dataclasses import dataclass
 from typing import List, Dict, Optional
 from datetime import datetime
 import json
 from pathlib import Path
 from math import radians, sin, cos, sqrt, atan2
-
-
-# ============================================================================
-# DATA CLASSES
-# ============================================================================
-
 @dataclass
 class Station:
-    """CNG Station"""
     id: int
     name: str
     lat: float
@@ -35,7 +24,6 @@ class Station:
     rating: float
     
     def distance_to(self, lat: float, lng: float) -> float:
-        """Calculate distance in km using Haversine formula"""
         R = 6371  # Earth radius in km
         lat1, lon1 = radians(self.lat), radians(self.lng)
         lat2, lon2 = radians(lat), radians(lng)
@@ -47,7 +35,6 @@ class Station:
 
 @dataclass
 class Car:
-    """Vehicle"""
     make: str
     model: str
     year: int
@@ -59,7 +46,6 @@ class Car:
 
 @dataclass
 class Route:
-    """Trip Route"""
     id: str
     name: str
     start_lat: float
@@ -68,14 +54,7 @@ class Route:
     end_lng: float
     distance: float
     time: int
-
-
-# ============================================================================
-# DATA LOADER (Singleton)
-# ============================================================================
-
 class Data:
-    """Load and manage all data - Singleton pattern"""
     _instance = None
     
     def __new__(cls):
@@ -171,20 +150,11 @@ class Data:
     def get_all_routes(self) -> List[Route]:
         """Get all routes"""
         return self.routes
-
-
-# ============================================================================
-# CALCULATOR
-# ============================================================================
-
 class Calculator:
-    """All cost calculations in one place"""
-    
     def __init__(self, prices: Dict[str, float] = None):
         self.prices = prices or {'cng': 75.61, 'petrol': 96.72, 'diesel': 89.62}
     
     def trip_cost(self, car: Car, distance: float, fuel: str = 'cng') -> Dict:
-        """Calculate trip cost"""
         if fuel == 'cng':
             fuel_used = distance / car.cng_km_per_kg
             cost = fuel_used * self.prices['cng']
@@ -200,7 +170,6 @@ class Calculator:
         }
     
     def monthly_cost(self, car: Car, monthly_km: float, fuel: str = 'cng') -> Dict:
-        """Calculate monthly cost"""
         trip = self.trip_cost(car, monthly_km, fuel)
         return {
             'monthly_km': monthly_km,
@@ -210,7 +179,7 @@ class Calculator:
         }
     
     def savings(self, car: Car, monthly_km: float, conversion_cost: float = 50000) -> Dict:
-        """Calculate CNG conversion savings"""
+
         petrol_cost = self.monthly_cost(car, monthly_km, 'petrol')
         cng_cost = self.monthly_cost(car, monthly_km, 'cng')
         
@@ -228,7 +197,6 @@ class Calculator:
         }
     
     def compare_cars(self, car1: Car, car2: Car, yearly_km: float = 15000) -> Dict:
-        """Compare two cars"""
         c1_cng = self.monthly_cost(car1, yearly_km / 12, 'cng')
         c2_cng = self.monthly_cost(car2, yearly_km / 12, 'cng')
         

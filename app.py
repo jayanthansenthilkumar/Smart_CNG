@@ -45,6 +45,12 @@ def nearby_stations():
 def route_planner():
     return render_template('route_planner.html')
 
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('index'))
+
 @app.route('/api/stations/nearby')
 def api_nearby_stations():
     lat = float(request.args.get('lat'))

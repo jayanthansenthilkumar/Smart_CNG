@@ -1,6 +1,3 @@
-"""
-Database Models - Simple consolidated file
-"""
 from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
@@ -9,9 +6,7 @@ db = SQLAlchemy()
 
 
 class User(UserMixin, db.Model):
-    """User model"""
     __tablename__ = 'users'
-    
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
@@ -19,9 +14,7 @@ class User(UserMixin, db.Model):
     phone = db.Column(db.String(20))
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
-
 class Vehicle(db.Model):
-    """Vehicle model"""
     __tablename__ = 'vehicles'
     
     id = db.Column(db.Integer, primary_key=True)
@@ -32,10 +25,7 @@ class Vehicle(db.Model):
     fuel_type = db.Column(db.String(20))
     efficiency = db.Column(db.Float)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
-
-
 class FuelLog(db.Model):
-    """Fuel log model"""
     __tablename__ = 'fuel_logs'
     
     id = db.Column(db.Integer, primary_key=True)
@@ -48,7 +38,6 @@ class FuelLog(db.Model):
 
 
 class Station(db.Model):
-    """Station model"""
     __tablename__ = 'stations'
     
     id = db.Column(db.Integer, primary_key=True)
