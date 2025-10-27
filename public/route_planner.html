@@ -3,11 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<<<<<<< HEAD:public/route_planner.html
     <title>Fuelexa - CNG Route Planner</title>
     <link rel="icon" href="/logo.png">
     <link rel="stylesheet" href="/styles.css">
     <link rel="stylesheet" href="/styles.css">
     <link rel="stylesheet" href="/styles.css">
+=======
+    <title>QuickFill - CNG Route Planner</title>
+    <link rel="icon" href="{{ url_for('static', filename='images/logo.png') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/route_planner.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+>>>>>>> parent of cce0c35 (Analytics Performed):templates/route_planner.html
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="/scripts.js"></script>
@@ -63,7 +71,11 @@
     <!-- Reuse the same header as main page -->
     <div class="title-bar">
         <div class="logo-container">
+<<<<<<< HEAD:public/route_planner.html
             <img src="/logo.png" alt="Fuelexa Logo" class="logo">
+=======
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="QuickFill Logo" class="logo">
+>>>>>>> parent of cce0c35 (Analytics Performed):templates/route_planner.html
         </div>
         <nav class="nav-links">
             <h1 class="nav-link active">Route Planner</h1>

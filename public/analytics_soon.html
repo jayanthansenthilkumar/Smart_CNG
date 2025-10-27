@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuickFill - Analytics Coming Soon</title>
+    <link rel="icon" href="{{ url_for('static', filename='images/logo.png') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/analytics_soon.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="title-bar">
+        <div class="logo-container">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="QuickFill Logo" class="logo">
+        </div>
+        <div class="profile-section">
+            <button class="about-btn">
+                <i class="fas fa-info-circle"></i>
+            </button>
+            <div class="profile-menu">
+                <button class="profile-button" onclick="toggleProfileDropdown()">
+                    <i class="fas fa-user"></i>
+                    <span class="username">{{ username }}</span>
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="profile-dropdown" id="profileDropdown">
+                    <div class="dropdown-content">
+                        <div class="user-info">
+                            <i class="fas fa-user-circle"></i>
+                            <span>{{ username }}</span>
+                        </div>
+                        <a href="{{ url_for('logout') }}" class="dropdown-item logout">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Logout</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="coming-soon-container">
+        <div class="content">
+            <div class="analytics-icon">
+                <i class="fas fa-chart-line"></i>
+            </div>
+            <h1>Analytics Dashboard</h1>
+            <div class="coming-soon">
+                <span>C</span>
+                <span>o</span>
+                <span>m</span>
+                <span>i</span>
+                <span>n</span>
+                <span>g</span>
+                <span>&nbsp;</span>
+                <span>S</span>
+                <span>o</span>
+                <span>o</span>
+                <span>n</span>
+            </div>
+            <div class="features-preview">
+                <div class="feature">
+                    <i class="fas fa-charging-station"></i>
+                    <p>Charging Statistics</p>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-clock"></i>
+                    <p>Usage Patterns</p>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-leaf"></i>
+                    <p>Environmental Impact</p>
+                </div>
+            </div>
+            <a href="{{ url_for('dashboard') }}" class="back-button">
+                <i class="fas fa-arrow-left"></i>
+                Back to Dashboard
+            </a>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html> 
