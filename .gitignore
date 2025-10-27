@@ -37,6 +37,7 @@ ENV/
 *.sublime-project
 
 # Project specific
+instance/
 .webassets-cache
 *.log
 logs/
@@ -110,11 +111,11 @@ models/*.h5
 models/*.joblib
 
 # Data files
-# *.csv
-# *.xlsx
-# *.xls
-# *.json
-# *.xml
+*.csv
+*.xlsx
+*.xls
+*.json
+*.xml
 
 # Temporary files
 *.tmp

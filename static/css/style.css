@@ -473,7 +473,6 @@ button i {
     height: 60px;
     width: auto;
     max-height: 60px;
-    mix-blend-mode: multiply;
 }
 
 .profile-section {
@@ -605,14 +604,6 @@ button i {
     height: auto;
     margin-bottom: 15px;
     object-fit: contain;
-}
-
-/* Reduce visible white boxes around logo in various placements */
-.footer-logo img,
-.login-logo,
-.logo-container img,
-img[alt="QuickFill Logo"] {
-    mix-blend-mode: multiply;
 }
 
 .modal-content {
